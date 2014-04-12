@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DbScriptDeploy.UI.Resources;
 
 namespace DbScriptDeploy.UI.Controls
 {
@@ -33,7 +34,8 @@ namespace DbScriptDeploy.UI.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                this.DatabaseInstance = new DatabaseInstance();
+				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
+				this.DatabaseInstance = new DatabaseInstance();
 
                 lblMessage.Content = String.Empty;
             }

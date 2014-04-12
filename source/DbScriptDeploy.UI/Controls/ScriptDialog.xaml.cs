@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DbScriptDeploy.UI.Resources;
 
 namespace DbScriptDeploy.UI.Controls
 {
@@ -35,7 +36,8 @@ namespace DbScriptDeploy.UI.Controls
             {
                 _scintilla = ScintillaUtils.InitSqlEditor();
                 scintillaHost.Child = _scintilla;
-            }
+				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
+			}
 
             this.Script = new Script();
         }

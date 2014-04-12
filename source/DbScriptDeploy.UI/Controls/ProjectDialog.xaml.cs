@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using DbScriptDeploy.UI.Resources;
 
 namespace DbScriptDeploy.UI.Views
 {
@@ -23,7 +24,8 @@ namespace DbScriptDeploy.UI.Views
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                _defaultBorderBrush = txtName.BorderBrush;
+				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
+				_defaultBorderBrush = txtName.BorderBrush;
                 this.Project = new Project();
                 InitializeDialogs();
 				tbScriptFolderInfo.FontSize = tbScriptFolderInfo.FontSize - 2;

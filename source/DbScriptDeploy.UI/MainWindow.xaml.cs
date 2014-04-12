@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DbScriptDeploy.UI.Utils;
+using DbScriptDeploy.UI.Resources;
 
 namespace DbScriptDeploy.UI
 {
@@ -41,6 +42,7 @@ namespace DbScriptDeploy.UI
             {
                 _projectService = ObjectFactory.GetInstance<IProjectService>();
 				this.Title = this.Title + AppUtils.AppVersion();
+				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
             }
 
         }

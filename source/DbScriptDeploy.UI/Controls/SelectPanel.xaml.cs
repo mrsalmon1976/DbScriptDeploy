@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DbScriptDeploy.UI.Resources;
+using DbScriptDeploy.UI.Utils;
 
 namespace DbScriptDeploy.UI.Controls
 {
@@ -33,18 +34,8 @@ namespace DbScriptDeploy.UI.Controls
 
 			if (!DesignerProperties.GetIsInDesignMode(this))
 			{
-
-				System.Windows.Media.ImageSource imgSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
-							Images.db.Handle,
-							Int32Rect.Empty,
-							BitmapSizeOptions.FromEmptyOptions());
-				imgIcon.Source = imgSource;
-
-				System.Windows.Media.ImageSource imgSource2 = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
-					Images.delete.Handle,
-					Int32Rect.Empty,
-					BitmapSizeOptions.FromEmptyOptions());
-				imgR.Source = imgSource2;
+				imgIcon.Source = ImageUtils.ImageSourceFromIcon(Images.db); ;
+				imgR.Source = ImageUtils.ImageSourceFromIcon(Images.delete);
 
 			}
 

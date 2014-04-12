@@ -134,6 +134,7 @@
       <DependentUpon>ProjectDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\FileUtils.cs" />
+    <Compile Include="Utils\ImageUtils.cs" />
     <Compile Include="Utils\ScintillaUtils.cs" />
     <Compile Include="Utils\ValidationUtils.cs" />
     <Page Include="Controls\CompareDialog.xaml">
@@ -233,6 +234,7 @@
     <Folder Include="Commands\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\app.ico" />
     <Content Include="Resources\ComparisonReport.html" />
     <None Include="Resources\db.ico" />
     <None Include="Resources\db_delete.ico" />
