@@ -1,0 +1,21 @@
+﻿<Window x:Class="DbScriptDeploy.UI.Controls.ScriptDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ScriptDialog" Height="400" Width="600">
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <DockPanel DockPanel.Dock="Top">
+                <Label Content="Name:" />
+                <TextBox Name="txtName" />
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+                <Button Name="btnCancel" Content="Cancel" DockPanel.Dock="Right" IsCancel="True" IsDefault="True" />
+                <Button Name="btnParse" Content="Parse" DockPanel.Dock="Right" Click="btnParse_Click" />
+                <Button Name="btnSave" Content="Save" DockPanel.Dock="Right" Click="btnSave_Click" />
+            </DockPanel>
+            <WindowsFormsHost Name="scintillaHost"></WindowsFormsHost>
+
+        </DockPanel>
+        
+    </Grid>
+</Window>

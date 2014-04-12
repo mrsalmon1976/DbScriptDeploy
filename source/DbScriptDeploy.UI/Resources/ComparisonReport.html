@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+            color: black;
+        }
+        h2 {
+            font-size: 16pt;
+            font-weight: normal;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+        h3 {
+            font-size: 14pt;
+            font-weight: normal;
+        }
+        li 
+        {
+            list-style: square;
+        }
+    </style>
+</head>
+<body>
+    <h2>Comparison Report: {SOURCE} vs. {TARGET}</h2>
+    <h3>Objects that differ</h3>
+    <ul>
+        {DIFFER}
+    </ul>
+    <h3>Objects on {SOURCE} but not on {TARGET}</h3>
+    <ul>
+        {SOURCE_NOT_TARGET}
+    </ul>
+    <h3>Objects on {TARGET} but not on {SOURCE}</h3>
+    <ul>
+        {TARGET_NOT_SOURCE}
+    </ul>
+    <h3>Objects that are the same on both</h3>
+    <ul>
+        {SAME}
+    </ul>
+</body>
+</html>

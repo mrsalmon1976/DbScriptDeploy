@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="DbScriptDeploy.UI.Controls.ScriptCheckBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="400">
+    <Grid>
+        <CheckBox Name="cbScript" Content="Script name" HorizontalAlignment="Stretch" Margin="5,4,21,0" VerticalAlignment="Top" />
+
+    </Grid>
+</UserControl>

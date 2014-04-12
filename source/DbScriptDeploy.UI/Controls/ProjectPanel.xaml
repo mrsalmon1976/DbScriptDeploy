@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="DbScriptDeploy.UI.Controls.ProjectPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="1"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Stretch"
+              Background="Silver" 
+              ShowsPreview="True"
+              Width="3"
+              />
+        <DockPanel HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" LastChildFill="True" Grid.Column="0" Grid.Row="0">
+            <Label Content="Select Environment:" Margin="5,5,5,5" DockPanel.Dock="Top"/>
+            <ComboBox Name="cbDatabaseInstances" Margin="5,0,5,5" DockPanel.Dock="Top" SelectionChanged="cbDatabaseInstances_SelectionChanged">
+                <Label Content=""/>
+            </ComboBox>
+            <Button Name="btnAddDbInstance" Content="Add Database Instance" DockPanel.Dock="Bottom" Margin="5,0,5,10" Click="btnAddDbInstance_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" HorizontalAlignment="Stretch"></Button>
+            <Button Name="btnCompare" Content="Compare" DockPanel.Dock="Bottom" IsEnabled="False" Click="btnCompare_Click" />
+            <Label />
+        </DockPanel>
+        <DockPanel LastChildFill="True" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Label Name="lblHeader" Content="Project : DbInstance" HorizontalAlignment="Stretch" DockPanel.Dock="Top" FontSize="18" VerticalAlignment="Top" Margin="3,3,3,3" BorderThickness="0,0,0,2" BorderBrush="Silver"/>
+            
+            <DockPanel HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
+                <Button Name="btnSelectAll" Content="Select All" DockPanel.Dock="Left" IsEnabled="False" Click="btnSelectAll_Click" />
+                <Button Name="btnExecuteScripts" Content="Execute Scripts" DockPanel.Dock="Right" IsEnabled="False" Click="btnExecuteScripts_Click" />
+                <Button Name="btnAddScript" Content="New Script" DockPanel.Dock="Right" Click="btnAddScript_Click" IsEnabled="False" />
+            </DockPanel>
+            <StackPanel Name="pnlScripts">
+                
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>
