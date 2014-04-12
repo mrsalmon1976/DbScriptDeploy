@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DbScriptDeploy.UI.Utils;
 
 namespace DbScriptDeploy.UI
 {
@@ -39,12 +40,9 @@ namespace DbScriptDeploy.UI
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 _projectService = ObjectFactory.GetInstance<IProjectService>();
+				this.Title = this.Title + AppUtils.AppVersion();
             }
 
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
         }
 
         public void AddProject()

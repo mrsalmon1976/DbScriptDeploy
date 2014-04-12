@@ -26,6 +26,7 @@ namespace DbScriptDeploy.UI.Views
                 _defaultBorderBrush = txtName.BorderBrush;
                 this.Project = new Project();
                 InitializeDialogs();
+				tbScriptFolderInfo.FontSize = tbScriptFolderInfo.FontSize - 2;
             }
 
         }
@@ -75,13 +76,6 @@ namespace DbScriptDeploy.UI.Views
         #endregion
 
         #region Events
-
-        protected override void OnActivated(EventArgs e)
-        {
-            base.OnActivated(e);
-
-
-        }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {

@@ -116,6 +116,11 @@
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\SchemaComparisonResult.cs" />
     <Compile Include="Models\Script.cs" />
+    <Compile Include="Resources\Images.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Images.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Scripts.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -206,6 +211,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Images.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Scripts.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Scripts.Designer.cs</LastGenOutput>
@@ -225,7 +234,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\ComparisonReport.html" />
+    <None Include="Resources\db.ico" />
+    <None Include="Resources\db_delete.ico" />
+    <None Include="Resources\delete.ico" />
     <Content Include="Resources\InitScriptLogTable.sql" />
+    <None Include="Resources\question.ico" />
     <Content Include="schemazen.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

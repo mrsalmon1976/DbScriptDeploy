@@ -101,7 +101,21 @@ namespace DbScriptDeploy.UI.Controls
 
         private void InitializeEvents()
         {
+			_projectService.ProjectDeleted += _projectService_ProjectDeleted;
         }
+
+		void _projectService_ProjectDeleted(object sender, ProjectEventArgs e)
+		{
+			foreach (TabItem tabItem in tabMain.Items)
+			{
+				Project p = tabItem.Tag as Project;
+				if (p != null && tabItem.Header.ToString() == e.Project.Name && p.Id == e.Project.Id)
+				{
+					tabMain.Items.Remove(tabItem);
+					return;
+				}
+			}
+		}
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

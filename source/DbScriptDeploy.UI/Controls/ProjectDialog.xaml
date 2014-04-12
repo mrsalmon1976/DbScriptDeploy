@@ -4,15 +4,16 @@
         Title="Add a New Project" Height="200" Width="500">
     <Grid>
         <DockPanel Name="pnlMain" HorizontalAlignment="Stretch" LastChildFill="True" VerticalAlignment="Stretch" Margin="0,0,0,0">
-            <DockPanel Name="pnlBottom" Background="Aqua" HorizontalAlignment="Stretch" LastChildFill="True" VerticalAlignment="Stretch" Margin="0,0,0,0" DockPanel.Dock="Bottom">
-                <Button Name="btnCancel" Content="Cancel" DockPanel.Dock="Right" Margin="0,10,10,10" Padding="20,0,20,0" FontSize="14" Click="btnCancel_Click" />
-                <Button Name="btnSave" Content="Save" DockPanel.Dock="Right" Margin="0,10,15,10" Padding="20,0,20,0" FontSize="14" Click="btnSave_Click" />
-                <DockPanel Name="pnlInfo" Background="Orange" HorizontalAlignment="Stretch" LastChildFill="False" VerticalAlignment="Stretch" Margin="0,0,0,0" DockPanel.Dock="Left">
+            <DockPanel Name="pnlBottom" HorizontalAlignment="Stretch" LastChildFill="True" VerticalAlignment="Stretch" Margin="0,0,0,0" DockPanel.Dock="Bottom">
+                <Button Name="btnCancel" Content="Cancel" DockPanel.Dock="Right" Margin="0,10,10,10" Padding="20,0,20,0" Click="btnCancel_Click" />
+                <Button Name="btnSave" Content="Save" DockPanel.Dock="Right" Margin="0,10,15,10" Padding="20,0,20,0" Click="btnSave_Click" />
+                <DockPanel Name="pnlInfo" HorizontalAlignment="Stretch" LastChildFill="False" VerticalAlignment="Stretch" Margin="0,0,0,0" DockPanel.Dock="Left">
                 </DockPanel>
             </DockPanel>
             <Grid HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -28,6 +29,9 @@
                 <Label Grid.Row="2" Grid.Column="0" Content="Script Folder:"/>
                 <TextBox Grid.Row="2" Grid.Column="1" Name="txtScriptFolder" Margin="3" HorizontalAlignment="Stretch" TextChanged="txtScriptFolder_TextChanged"  />
                 <Button Grid.Row="2" Grid.Column="2" Content="..." Padding="10,0,10,0" HorizontalAlignment="Center" Height="28" Margin="6,0" VerticalAlignment="Bottom" Click="Button_Click" />
+                <TextBlock Name="tbScriptFolderInfo" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap">
+                    The script folder is where all database scripts for the project are stored.  This is usually a folder stored in source control and shared between developers.
+                </TextBlock>
             </Grid>
         </DockPanel>
     </Grid>

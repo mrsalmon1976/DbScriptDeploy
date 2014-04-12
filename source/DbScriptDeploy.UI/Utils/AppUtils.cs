@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,12 @@ namespace DbScriptDeploy.UI.Utils
 {
     public class AppUtils
     {
+		public static string AppVersion()
+		{
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			return FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+		}
+
         public static string BaseDirectory()
         {
             Uri uri = new Uri(Path.GetDirectoryName(Assembly.GetAssembly(typeof(AppUtils)).CodeBase));
@@ -22,5 +29,6 @@ namespace DbScriptDeploy.UI.Utils
             WindowsIdentity identity = WindowsIdentity.GetCurrent();
             return (identity == null ? String.Empty : identity.Name);
         }
+
     }
 }

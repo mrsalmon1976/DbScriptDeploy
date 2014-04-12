@@ -48,23 +48,34 @@ namespace DbScriptDeploy.UI.Controls
             SelectPanel pnl = new SelectPanel();
             pnl.Text = prj.Name;
             pnl.HorizontalAlignment = HorizontalAlignment.Stretch;
+			pnl.Margin = new Thickness(0,5,0,0);
+			pnl.FontSize = this.FontSize + 4;
             DockPanel.SetDock(pnl, Dock.Top);
-            pnl.Background = Brushes.BlueViolet;
             pnl.Tag = prj;
             this.pnlMain.Children.Add(pnl);
 
-            pnl.MouseUp += pnl_MouseUp;
-        }
+			pnl.MouseUp += delegate(object sender, MouseButtonEventArgs e)
+			{
+				SelectPanel panel = (SelectPanel)sender;
+				Project project = (Project)panel.Tag;
 
-        void pnl_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            SelectPanel panel = (SelectPanel)sender;
-            Project project = (Project)panel.Tag;
+				if (this.ProjectPanelClick != null)
+				{
+					this.ProjectPanelClick(panel, new ProjectEventArgs(project));
+				}
+			};
 
-            if (this.ProjectPanelClick != null)
-            {
-                this.ProjectPanelClick(panel, new ProjectEventArgs(project));
-            }
+			pnl.DeleteButtonMouseUp += delegate(object sender, MouseButtonEventArgs e)
+			{
+				if (MessageBox.Show(MainWindow.Instance, "Are you sure you want to delete this project?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+				{
+					SelectPanel sp = (SelectPanel)sender;
+					Project p = (Project)sp.Tag;
+					_projectService.DeleteProject(p);
+					this.pnlMain.Children.Remove(sp);
+				}
+				e.Handled = true;
+			};
         }
 
         private void InitializeEvents()

@@ -15,6 +15,14 @@ namespace DbScriptDeploy.UI.Services
     public interface IProjectService
     {
         event EventHandler<ProjectEventArgs> ProjectAdded;
+		event EventHandler<ProjectEventArgs> ProjectDeleted;
+		event EventHandler<ProjectEventArgs> ProjectUpdated;
+
+		/// <summary>
+		/// Deletes a project.
+		/// </summary>
+		/// <param name="project"></param>
+		void DeleteProject(Project project);
 
         /// <summary>
         /// Loads all projects opened previously by the user.
@@ -35,6 +43,7 @@ namespace DbScriptDeploy.UI.Services
         private List<Project> _projects = new List<Project>();
 
         public event EventHandler<ProjectEventArgs> ProjectAdded;
+		public event EventHandler<ProjectEventArgs> ProjectDeleted;
         public event EventHandler<ProjectEventArgs> ProjectUpdated;
 
         public ProjectService() 
@@ -66,6 +75,21 @@ namespace DbScriptDeploy.UI.Services
             return _projects;
         }
 
+		public void DeleteProject(Project project)
+		{
+			Project p = this._projects.FirstOrDefault(x => x.Id == project.Id);
+			if (p == null)
+			{
+				return;
+			}
+			_projects.Remove(p);
+			this.Save();
+			if (this.ProjectDeleted!= null)
+			{
+				this.ProjectDeleted(this, new ProjectEventArgs(project));
+			}
+		}
+
         public void SaveProject(Project project)
         {
             bool isNew = true;
@@ -76,10 +100,7 @@ namespace DbScriptDeploy.UI.Services
                 isNew = false;
             }
             _projects.Add(project);
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.Formatting = Formatting.Indented;
-            string projects = JsonConvert.SerializeObject(_projects, settings);
-            File.WriteAllText(_projectFilePath, projects);
+			this.Save();
 
             if (isNew && this.ProjectAdded != null)
             {
@@ -91,6 +112,14 @@ namespace DbScriptDeploy.UI.Services
             }
 
         }
+
+		private void Save()
+		{
+			JsonSerializerSettings settings = new JsonSerializerSettings();
+			settings.Formatting = Formatting.Indented;
+			string projects = JsonConvert.SerializeObject(_projects, settings);
+			File.WriteAllText(_projectFilePath, projects);
+		}
 
     }
 }

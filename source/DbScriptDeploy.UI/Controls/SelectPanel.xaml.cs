@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DbScriptDeploy.UI.Resources;
 
 namespace DbScriptDeploy.UI.Controls
 {
@@ -20,15 +22,32 @@ namespace DbScriptDeploy.UI.Controls
     /// </summary>
     public partial class SelectPanel : UserControl
     {
-        private Brush _borderDefault;
-        //public event EventHandler<MouseButtonEventArgs> MouseUp;
-        //public event EventHandler<MouseButtonEventArgs> MouseDown;
+		private static Brush _borderDefault = Brushes.LightGray;
+		public event EventHandler<MouseButtonEventArgs> DeleteButtonMouseUp;
 
         public SelectPanel()
         {
             InitializeComponent();
 
-            this._borderDefault = this.BorderBrush;
+			this.BorderBrush = _borderDefault;
+
+			if (!DesignerProperties.GetIsInDesignMode(this))
+			{
+
+				System.Windows.Media.ImageSource imgSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+							Images.db.Handle,
+							Int32Rect.Empty,
+							BitmapSizeOptions.FromEmptyOptions());
+				imgIcon.Source = imgSource;
+
+				System.Windows.Media.ImageSource imgSource2 = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+					Images.delete.Handle,
+					Int32Rect.Empty,
+					BitmapSizeOptions.FromEmptyOptions());
+				imgR.Source = imgSource2;
+
+			}
+
         }
 
         /// <summary>
@@ -44,16 +63,22 @@ namespace DbScriptDeploy.UI.Controls
         {
             txtText.TextDecorations.Add(TextDecorations.Underline);
             this.Cursor = Cursors.Hand;
-            this.BorderBrush = Brushes.Blue;
-            
-            //this.BorderThickness.Top = this.BorderThickness.Top + 2;//
+            this.BorderBrush = Brushes.SlateBlue;
         }
+
         private void OnMouseLeave(object sender, MouseEventArgs e)
         {
             txtText.TextDecorations.Clear();
             this.Cursor = Cursors.Arrow;
             this.BorderBrush = _borderDefault;
         }
+
+		private void imgR_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			if (this.DeleteButtonMouseUp != null) {
+				DeleteButtonMouseUp(this, e);
+			}
+		}
 
     }
 }
