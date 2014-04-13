@@ -24,24 +24,24 @@ namespace DbScriptDeploy.UI.Controls
     /// <summary>
     /// Interaction logic for EnvironmentDialog.xaml
     /// </summary>
-    public partial class DatabaseInstanceDialog : Window
+    public partial class EnvironmentDialog : Window
     {
         private BackgroundWorker bgWorker;
 
-        public DatabaseInstanceDialog()
+        public EnvironmentDialog()
         {
             InitializeComponent();
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
 				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
-				this.DatabaseInstance = new DatabaseInstance();
+				this.DbEnvironment = new DbEnvironment();
 
                 lblMessage.Content = String.Empty;
             }
         }
 
-        public DatabaseInstance DatabaseInstance { get; set; }
+        public DbEnvironment DbEnvironment { get; set; }
 
         private void ToggleCredentials(bool enabled)
         {
@@ -80,7 +80,7 @@ namespace DbScriptDeploy.UI.Controls
             }
 
             bool isChanged = false;
-            if (this.DatabaseInstance.Name != txtName.Text)
+            if (this.DbEnvironment.Name != txtName.Text)
             {
                 isChanged = true;
             }
@@ -98,22 +98,22 @@ namespace DbScriptDeploy.UI.Controls
         {
             pnlMain.IsEnabled = false;
 
-            this.DatabaseInstance.Name = txtName.Text;
-            this.DatabaseInstance.Host = txtServer.Text;
-            this.DatabaseInstance.Port = Convert.ToInt32(txtPort.Text);
-            this.DatabaseInstance.Catalog = txtCatalog.Text;
+            this.DbEnvironment.Name = txtName.Text;
+            this.DbEnvironment.Host = txtServer.Text;
+            this.DbEnvironment.Port = Convert.ToInt32(txtPort.Text);
+            this.DbEnvironment.Catalog = txtCatalog.Text;
 
             if (radAuthTypeWindows.IsChecked == true)
             {
-                this.DatabaseInstance.AuthType = AuthType.Windows;
-                this.DatabaseInstance.UserName = String.Empty;
-                this.DatabaseInstance.Password = String.Empty;
+                this.DbEnvironment.AuthType = AuthType.Windows;
+                this.DbEnvironment.UserName = String.Empty;
+                this.DbEnvironment.Password = String.Empty;
             }
             else
             {
-                this.DatabaseInstance.AuthType = AuthType.SqlServer;
-                this.DatabaseInstance.UserName = txtUserName.Text;
-                this.DatabaseInstance.Password = txtPassword.Password;
+                this.DbEnvironment.AuthType = AuthType.SqlServer;
+                this.DbEnvironment.UserName = txtUserName.Text;
+                this.DbEnvironment.Password = txtPassword.Password;
             }
 
             lblMessage.Content = "Testing connection...";
@@ -128,7 +128,7 @@ namespace DbScriptDeploy.UI.Controls
         {
             try
             {
-                using (IDbConnection conn = DbHelper.GetDbConnection(this.DatabaseInstance))
+                using (IDbConnection conn = DbHelper.GetDbConnection(this.DbEnvironment))
                 {
                     conn.Open();
                 }

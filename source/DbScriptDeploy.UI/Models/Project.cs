@@ -11,7 +11,7 @@ namespace DbScriptDeploy.UI.Models
         public Project()
         {
             this.Id = Guid.NewGuid();
-            this.DatabaseInstances = new List<DatabaseInstance>();
+            this.DatabaseInstances = new List<DbEnvironment>();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace DbScriptDeploy.UI.Models
         /// <summary>
         /// Gets or sets the database environments associated with the project.
         /// </summary>
-        public List<DatabaseInstance> DatabaseInstances { get; set; }
+        public List<DbEnvironment> DatabaseInstances { get; set; }
 
     }
 }

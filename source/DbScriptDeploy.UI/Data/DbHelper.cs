@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using System.Transactions;
+using DbScriptDeploy.UI.Utils;
 
 namespace DbScriptDeploy.UI.Data
 {
@@ -19,14 +20,14 @@ namespace DbScriptDeploy.UI.Data
 
         private IDbConnection _conn;
 
-        public DbHelper(DatabaseInstance dbInstance)
+        public DbHelper(DbEnvironment dbInstance)
         {
             DbInstance = dbInstance;
             _conn = GetDbConnection(dbInstance);
             _conn.Open();
         }
 
-        public DatabaseInstance DbInstance { get; set; }
+        public DbEnvironment DbInstance { get; set; }
 
         public void ArchiveLogs(IEnumerable<Guid> ids)
         {
@@ -58,14 +59,20 @@ namespace DbScriptDeploy.UI.Data
         {
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.MaxValue))
             {
+				using (IDbCommand cmd = _conn.CreateCommand())
+				{
+					cmd.CommandText = script.ScriptText;
+					cmd.ExecuteNonQuery();
+				}
+
                 using (IDbCommand cmd = _conn.CreateCommand())
                 {
-                    cmd.Parameters.Add(new SqlParameter("id", script.Id));
+                    cmd.Parameters.Add(new SqlParameter("id", Guid.NewGuid()));
                     cmd.Parameters.Add(new SqlParameter("name", script.Name));
                     cmd.Parameters.Add(new SqlParameter("scriptText", script.ScriptText));
                     cmd.Parameters.Add(new SqlParameter("createdOn", DateTime.UtcNow));
-                    cmd.Parameters.Add(new SqlParameter("createdUser", script.CreatedUser));
-                    cmd.Parameters.Add(new SqlParameter("createdAccount", script.CreatedAccount));
+                    cmd.Parameters.Add(new SqlParameter("createdUser", this.DbInstance.UserName));
+                    cmd.Parameters.Add(new SqlParameter("createdAccount", AppUtils.CurrentWindowsIdentity()));
 
                     const string sql = "INSERT INTO ScriptLog (Id, Name, ScriptText, CreatedOn, CreatedUser, CreatedAccount) VALUES (@id, @name, @scriptText, @createdOn, @createdUser, @createdAccount)";
                     cmd.CommandText = sql;
@@ -90,7 +97,7 @@ namespace DbScriptDeploy.UI.Data
             }
         }
 
-        public static IDbConnection GetDbConnection(DatabaseInstance dbInstance)
+        public static IDbConnection GetDbConnection(DbEnvironment dbInstance)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
             builder.ApplicationName = "DbScriptDeploy";

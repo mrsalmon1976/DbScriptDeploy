@@ -23,7 +23,7 @@ namespace DbScriptDeploy.UI.Services
         /// <returns></returns>
         SchemaComparisonResult CompareSchemas(string basePath, string schemaPath1, string schemaPath2);
 
-        void ExtractSchema(string path, DatabaseInstance dbInstance);
+        void ExtractSchema(string path, DbEnvironment dbInstance);
     }
 
     public class DatabaseComparisonService : IDatabaseComparisonService
@@ -101,7 +101,7 @@ namespace DbScriptDeploy.UI.Services
             return result;
         }
 
-        public void ExtractSchema(string path, DatabaseInstance dbInstance)
+        public void ExtractSchema(string path, DbEnvironment dbInstance)
         {
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 

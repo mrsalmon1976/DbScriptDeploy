@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DbScriptDeploy.UI.Utils;
+using DbScriptDeploy.UI.Resources;
 
 namespace DbScriptDeploy.UI.Controls
 {
@@ -28,15 +30,16 @@ namespace DbScriptDeploy.UI.Controls
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
 
-                this.Loaded += CompareDialog_Loaded;
+				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
+				this.Loaded += CompareDialog_Loaded;
             }
         }
 
         void CompareDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            IEnumerable<DatabaseInstance> instances = this.Project.DatabaseInstances.OrderBy(x => x.Name);
+            IEnumerable<DbEnvironment> instances = this.Project.DatabaseInstances.OrderBy(x => x.Name);
             cbDatabaseInstances.Items.Add("");
-            foreach (DatabaseInstance dbInstance in instances)
+            foreach (DbEnvironment dbInstance in instances)
             {
                 // TODO: Need to add an ID rather than this
                 if (dbInstance.Host == this.SourceInstance.Host && dbInstance.Catalog == this.SourceInstance.Catalog)
@@ -47,9 +50,9 @@ namespace DbScriptDeploy.UI.Controls
 
         }
 
-        public DatabaseInstance SourceInstance { get; set; }
+        public DbEnvironment SourceInstance { get; set; }
 
-        public DatabaseInstance TargetInstance { get; set; }
+        public DbEnvironment TargetInstance { get; set; }
 
         public Project Project { get; set; }
 
@@ -57,7 +60,7 @@ namespace DbScriptDeploy.UI.Controls
 
         private void btnCompare_Click(object sender, RoutedEventArgs e)
         {
-            this.TargetInstance = (DatabaseInstance)cbDatabaseInstances.SelectedItem;
+            this.TargetInstance = (DbEnvironment)cbDatabaseInstances.SelectedItem;
             this.DialogResult = true;
         }
 

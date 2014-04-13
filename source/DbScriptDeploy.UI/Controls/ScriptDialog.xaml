@@ -4,14 +4,14 @@
         Title="ScriptDialog" Height="400" Width="600">
     <Grid>
         <DockPanel LastChildFill="True">
-            <DockPanel DockPanel.Dock="Top">
-                <Label Content="Name:" />
+            <DockPanel DockPanel.Dock="Top" Margin="3,5,5,5">
+                <Label Content="Name:" Margin="0,0,20,0" />
                 <TextBox Name="txtName" />
             </DockPanel>
             <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
-                <Button Name="btnCancel" Content="Cancel" DockPanel.Dock="Right" IsCancel="True" IsDefault="True" />
-                <Button Name="btnParse" Content="Parse" DockPanel.Dock="Right" Click="btnParse_Click" />
-                <Button Name="btnSave" Content="Save" DockPanel.Dock="Right" Click="btnSave_Click" />
+                <Button Name="btnCancel" Content="Cancel" DockPanel.Dock="Right" IsCancel="True" IsDefault="True" Margin="5" Padding="15,0,15,0" />
+                <Button Name="btnParse" Content="Parse" DockPanel.Dock="Right" Click="btnParse_Click" Margin="5" Padding="15,0,15,0" />
+                <Button Name="btnSave" Content="Save" DockPanel.Dock="Right" Click="btnSave_Click" Margin="5" Padding="15,0,15,0" />
             </DockPanel>
             <WindowsFormsHost Name="scintillaHost"></WindowsFormsHost>
 

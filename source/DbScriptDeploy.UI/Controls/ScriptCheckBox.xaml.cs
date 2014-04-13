@@ -24,13 +24,12 @@ namespace DbScriptDeploy.UI.Controls
     public partial class ScriptCheckBox : UserControl
     {
 
-        private Script _scriptLog = null;
         public event EventHandler<CheckedEventArgs> CheckedChanged;
+		private Script _scriptLog;
 
         public ScriptCheckBox()
         {
             InitializeComponent();
-
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 this.cbScript.Unchecked += OnCheckedChanged;

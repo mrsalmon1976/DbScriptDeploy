@@ -52,16 +52,21 @@ namespace DbScriptDeploy.UI.Controls
             }
         }
 
-        private DatabaseInstance CurrentDbInstance
+        private DbEnvironment CurrentDbInstance
         {
             get
             {
-                return (cbDatabaseInstances.SelectedItem as DatabaseInstance);
+                return (cbDatabaseInstances.SelectedItem as DbEnvironment);
             }
         }
 
         private void AddScript(Script script)
         {
+			if (pnlScripts.Children.Count > 0 && pnlScripts.Children[0] is Label)
+			{
+				pnlScripts.Children.Clear();
+			}
+
             ScriptCheckBox scb = new ScriptCheckBox();
             scb.ScriptLog = script;
             scb.CheckedChanged += scb_CheckedChanged;
@@ -90,10 +95,10 @@ namespace DbScriptDeploy.UI.Controls
 
         private void ReloadDatabaseInstances()
         {
-            IEnumerable<DatabaseInstance> instances = this.Project.DatabaseInstances.OrderBy(x => x.Name);
+            IEnumerable<DbEnvironment> instances = this.Project.DatabaseInstances.OrderBy(x => x.Name);
             cbDatabaseInstances.Items.Clear();
             cbDatabaseInstances.Items.Add("");
-            foreach (DatabaseInstance dbInstance in instances)
+            foreach (DbEnvironment dbInstance in instances)
             {
                 cbDatabaseInstances.Items.Add(dbInstance);
             }
@@ -102,10 +107,10 @@ namespace DbScriptDeploy.UI.Controls
 
         private void btnAddDbInstance_Click(object sender, RoutedEventArgs e)
         {
-            DatabaseInstanceDialog dlg = new DatabaseInstanceDialog();
+            EnvironmentDialog dlg = new EnvironmentDialog();
             if (dlg.ShowDialog() == true)
             {
-                DatabaseInstance dbInstance = dlg.DatabaseInstance;
+                DbEnvironment dbInstance = dlg.DbEnvironment;
                 this.Project.DatabaseInstances.Add(dbInstance);
                 _projectService.SaveProject(this.Project);
                 this.ReloadDatabaseInstances();
@@ -115,6 +120,11 @@ namespace DbScriptDeploy.UI.Controls
 
         private void cbDatabaseInstances_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+			ReloadScripts();
+		}
+
+		private void ReloadScripts()
+		{
             // clear the project pane
             pnlScripts.Children.Clear();
             btnCompare.IsEnabled = false;
@@ -122,7 +132,7 @@ namespace DbScriptDeploy.UI.Controls
             btnExecuteScripts.IsEnabled = false;
             btnSelectAll.IsEnabled = false;
 
-            DatabaseInstance dbInstance = CurrentDbInstance;
+            DbEnvironment dbInstance = CurrentDbInstance;
             if (dbInstance == null)
             {
                 return;
@@ -215,7 +225,7 @@ namespace DbScriptDeploy.UI.Controls
 
                     foreach (Script log in executedScripts)
                     {
-                        string script = scripts.FirstOrDefault(x => x == log.Name);
+                        string script = scripts.FirstOrDefault(x => x.EndsWith("\\" + log.Name));
                         if (script == null)
                         {
                             // script is no longer in the folder, archive it
@@ -234,9 +244,6 @@ namespace DbScriptDeploy.UI.Controls
                     {
                         Script log = new Script();
                         log.Id = Guid.NewGuid();
-                        log.CreatedAccount = AppUtils.CurrentWindowsIdentity();
-                        log.CreatedOn = DateTime.UtcNow;
-                        log.CreatedUser = dbHelper.DbInstance.UserName;
                         log.Name = new FileInfo(file).Name;
                         log.ScriptText = File.ReadAllText(file);
 
@@ -244,8 +251,11 @@ namespace DbScriptDeploy.UI.Controls
                     }
 
                     // archive the logs that have been removed
-                    bgw.ReportProgress(-1, "Marking removed scripts as archived...");
-                    dbHelper.ArchiveLogs(scriptsToArchive);
+					if (scriptsToArchive.Any())
+					{
+						bgw.ReportProgress(-1, "Marking removed scripts as archived...");
+						dbHelper.ArchiveLogs(scriptsToArchive);
+					}
                 }
 
             }
@@ -257,16 +267,16 @@ namespace DbScriptDeploy.UI.Controls
 
         private class WorkerInfo
         {
-            public WorkerInfo(DatabaseInstance dbInstance, Project project)
+            public WorkerInfo(DbEnvironment dbInstance, Project project)
             {
                 this.DbInstance = dbInstance;
                 this.Project = project;
                 this.Scripts = new List<Script>();
             }
 
-            public DatabaseInstance DbInstance { get; set; }
+            public DbEnvironment DbInstance { get; set; }
 
-            public DatabaseInstance DbInstance2 { get; set; }
+            public DbEnvironment DbInstance2 { get; set; }
 
             public Project Project { get; set; }
 
@@ -279,7 +289,7 @@ namespace DbScriptDeploy.UI.Controls
             dlg.Owner = MainWindow.Instance;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ShowInTaskbar = false;
-            dlg.DbInstance = this.CurrentDbInstance;
+            dlg.DbEnvironment = this.CurrentDbInstance;
             dlg.Project = this.Project;
 
             if ((dlg.ShowDialog() ?? false) == true)
@@ -322,13 +332,22 @@ namespace DbScriptDeploy.UI.Controls
 
         void _bgWorkerExecute_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _progressDlg.Close();
+			_progressDlg.Close();
+
+			Exception ex = e.Result as Exception;
+			if (ex != null)
+			{
+				MessageBox.Show(MainWindow.Instance, ex.Message, "Execution failed", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+			
+			ReloadScripts();
         }
 
         void _bgWorkerExecute_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker bgw = (BackgroundWorker)sender;
             WorkerInfo workerInfo = (WorkerInfo)e.Argument;
+			string scriptFolder = workerInfo.Project.ScriptFolder;
 
             using (DbHelper dbHelper = new DbHelper(workerInfo.DbInstance))
             {
@@ -336,14 +355,16 @@ namespace DbScriptDeploy.UI.Controls
                 {
                     try
                     {
+						string scriptPath = Path.Combine(scriptFolder, script.Name);
                         bgw.ReportProgress(-1, String.Format("Executing {0}...", script.Name));
+						// reload script in case it's been changed on disk
+						script.ScriptText = File.ReadAllText(scriptPath);
                         dbHelper.ExecuteScript(script);
                     }
                     catch (Exception ex)
                     {
                         string msg = String.Format("Failed to execute script '{0}':{1}{1}{2}.", script.Name, Environment.NewLine, ex.Message);
-                        Exception exReport = new Exception(msg, ex);
-                        bgw.ReportProgress(-1, exReport);
+						e.Result = new Exception(msg, ex);
                         return;
                     }
                 }
@@ -370,7 +391,7 @@ namespace DbScriptDeploy.UI.Controls
             dlg.Close();
         }
 
-        private void CompareInstances(DatabaseInstance databaseInstance1, DatabaseInstance databaseInstance2)
+        private void CompareInstances(DbEnvironment databaseInstance1, DbEnvironment databaseInstance2)
         {
             _progressDlg = new ProgressDialog();
             _progressDlg.Message = String.Format("Comparing {0} and {1}...", databaseInstance1.Name, databaseInstance2.Name);

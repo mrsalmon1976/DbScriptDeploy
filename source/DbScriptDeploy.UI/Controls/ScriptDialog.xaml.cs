@@ -34,7 +34,7 @@ namespace DbScriptDeploy.UI.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                _scintilla = ScintillaUtils.InitSqlEditor();
+                _scintilla = ScintillaUtils.InitSqlEditor(this.FontSize);
                 scintillaHost.Child = _scintilla;
 				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
 			}
@@ -44,7 +44,7 @@ namespace DbScriptDeploy.UI.Controls
 
         public Script Script { get; set; }
 
-        public DatabaseInstance DbInstance { get; set; }
+        public DbEnvironment DbEnvironment { get; set; }
 
         public Project Project { get; set; }
 
@@ -52,7 +52,7 @@ namespace DbScriptDeploy.UI.Controls
 
         private void btnParse_Click(object sender, RoutedEventArgs e)
         {
-            using (DbHelper dbHelper = new DbHelper(this.DbInstance))
+            using (DbHelper dbHelper = new DbHelper(this.DbEnvironment))
             {
                 IEnumerable<string> errors = dbHelper.ParseScript(_scintilla.Text);
                 if (errors.Any())
@@ -84,7 +84,8 @@ namespace DbScriptDeploy.UI.Controls
                 string fileName = String.Format("{0}_{1}.sql", DateTime.UtcNow.ToString("yyyyMMdd_HHmmss"), txtName.Text);
                 string fullPath = System.IO.Path.Combine(this.Project.ScriptFolder, fileName);
                 File.WriteAllText(fullPath, _scintilla.Text);
-                this.Hide();
+				this.DialogResult = true;
+				this.Hide();
             }
             catch (Exception ex)
             {

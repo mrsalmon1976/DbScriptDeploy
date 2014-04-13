@@ -13,9 +13,9 @@ namespace DbScriptDeploy.UI.Models
         SqlServer = 1
     }
 
-    public class DatabaseInstance
+    public class DbEnvironment
     {
-        public DatabaseInstance()
+        public DbEnvironment()
         {
             this.AuthType = Models.AuthType.Windows;
         }

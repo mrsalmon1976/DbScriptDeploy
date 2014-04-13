@@ -83,8 +83,8 @@
     <Compile Include="Controls\CompareReport.xaml.cs">
       <DependentUpon>CompareReport.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DatabaseInstanceDialog.xaml.cs">
-      <DependentUpon>DatabaseInstanceDialog.xaml</DependentUpon>
+    <Compile Include="Controls\EnvironmentDialog.xaml.cs">
+      <DependentUpon>EnvironmentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MainPanel.xaml.cs">
       <DependentUpon>MainPanel.xaml</DependentUpon>
@@ -112,7 +112,7 @@
     <Compile Include="Events\CompareReportEventArgs.cs" />
     <Compile Include="Events\NotificationEventArgs.cs" />
     <Compile Include="Events\ProjectEventArgs.cs" />
-    <Compile Include="Models\DatabaseInstance.cs" />
+    <Compile Include="Models\DbEnvironment.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\SchemaComparisonResult.cs" />
     <Compile Include="Models\Script.cs" />
@@ -145,9 +145,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DatabaseInstanceDialog.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Controls\EnvironmentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\MainPanel.xaml">
       <SubType>Designer</SubType>
