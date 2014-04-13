@@ -12,6 +12,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace DbScriptDeploy.UI.Controls
 {
@@ -460,6 +461,19 @@ namespace DbScriptDeploy.UI.Controls
             }
 
         }
+
+		private void btnOpenFolder_Click(object sender, RoutedEventArgs e)
+		{
+			string scriptFolder = this.Project.ScriptFolder;
+			if (Directory.Exists(scriptFolder))
+			{
+				Process.Start(scriptFolder);
+			}
+			else
+			{
+				MessageBox.Show(MainWindow.Instance, String.Format("The folder '{0}' does not exist.", scriptFolder), "Invalid Folder", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
 
     }
 }
