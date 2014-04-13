@@ -83,6 +83,9 @@ namespace DbScriptDeploy.UI.Controls
             {
                 string fileName = String.Format("{0}_{1}.sql", DateTime.UtcNow.ToString("yyyyMMdd_HHmmss"), txtName.Text);
                 string fullPath = System.IO.Path.Combine(this.Project.ScriptFolder, fileName);
+
+				this.Script.Name = fileName;
+
                 File.WriteAllText(fullPath, _scintilla.Text);
 				this.DialogResult = true;
 				this.Hide();

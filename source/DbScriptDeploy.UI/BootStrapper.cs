@@ -12,7 +12,8 @@ namespace DbScriptDeploy.UI
     {
         public static void Boot()
         {
-            ObjectFactory.Configure(x => x.For<IProjectService>().Singleton().Use<ProjectService>());
+			ObjectFactory.Configure(x => x.For<IScriptExecutionService>().Use<ScriptExecutionService>());
+			ObjectFactory.Configure(x => x.For<IProjectService>().Singleton().Use<ProjectService>());
             ObjectFactory.Configure(x => x.For<IDatabaseComparisonService>().Singleton().Use<DatabaseComparisonService>());
         
         }

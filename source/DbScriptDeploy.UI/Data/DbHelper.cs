@@ -18,16 +18,22 @@ namespace DbScriptDeploy.UI.Data
         public const int DefaultPort = 1433;
         public const string ScriptLogTable = "ScriptLog";
 
-        private IDbConnection _conn;
+        private SqlConnection _conn;
 
         public DbHelper(DbEnvironment dbInstance)
         {
-            DbInstance = dbInstance;
+            //DbInstance = dbInstance;
             _conn = GetDbConnection(dbInstance);
             _conn.Open();
         }
 
-        public DbEnvironment DbInstance { get; set; }
+		public DbHelper(string connString)
+		{
+			_conn = new SqlConnection(connString);
+			_conn.Open();
+		}
+
+        //public DbEnvironment DbInstance { get; set; }
 
         public void ArchiveLogs(IEnumerable<Guid> ids)
         {
@@ -55,30 +61,51 @@ namespace DbScriptDeploy.UI.Data
             }
         }
 
+		public void ExecuteScripts(IEnumerable<Script> scripts)
+		{
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+			{
+				_conn.EnlistTransaction(Transaction.Current);
+				foreach (Script script in scripts)
+				{
+					ExecuteScriptEx(script, GetUserId());
+				}
+				scope.Complete();
+			}
+		}
+
+		private void ExecuteScriptEx(Script script, string userId)
+		{
+
+			using (IDbCommand cmd = _conn.CreateCommand())
+			{
+				cmd.CommandText = script.ScriptText;
+				cmd.CommandTimeout = 0;
+				cmd.ExecuteNonQuery();
+			}
+
+			using (IDbCommand cmd = _conn.CreateCommand())
+			{
+				cmd.Parameters.Add(new SqlParameter("id", Guid.NewGuid()));
+				cmd.Parameters.Add(new SqlParameter("name", script.Name));
+				cmd.Parameters.Add(new SqlParameter("scriptText", script.ScriptText));
+				cmd.Parameters.Add(new SqlParameter("createdOn", DateTime.UtcNow));
+				cmd.Parameters.Add(new SqlParameter("createdUser", userId));
+				cmd.Parameters.Add(new SqlParameter("createdAccount", AppUtils.CurrentWindowsIdentity()));
+
+				const string sql = "INSERT INTO ScriptLog (Id, Name, ScriptText, CreatedOn, CreatedUser, CreatedAccount) VALUES (@id, @name, @scriptText, @createdOn, @createdUser, @createdAccount)";
+				cmd.CommandText = sql;
+				cmd.ExecuteNonQuery();
+			}
+		}
+
         public void ExecuteScript(Script script)
         {
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.MaxValue))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
             {
-				using (IDbCommand cmd = _conn.CreateCommand())
-				{
-					cmd.CommandText = script.ScriptText;
-					cmd.ExecuteNonQuery();
-				}
-
-                using (IDbCommand cmd = _conn.CreateCommand())
-                {
-                    cmd.Parameters.Add(new SqlParameter("id", Guid.NewGuid()));
-                    cmd.Parameters.Add(new SqlParameter("name", script.Name));
-                    cmd.Parameters.Add(new SqlParameter("scriptText", script.ScriptText));
-                    cmd.Parameters.Add(new SqlParameter("createdOn", DateTime.UtcNow));
-                    cmd.Parameters.Add(new SqlParameter("createdUser", this.DbInstance.UserName));
-                    cmd.Parameters.Add(new SqlParameter("createdAccount", AppUtils.CurrentWindowsIdentity()));
-
-                    const string sql = "INSERT INTO ScriptLog (Id, Name, ScriptText, CreatedOn, CreatedUser, CreatedAccount) VALUES (@id, @name, @scriptText, @createdOn, @createdUser, @createdAccount)";
-                    cmd.CommandText = sql;
-                    cmd.ExecuteNonQuery();
-                }
-                scope.Complete();
+				_conn.EnlistTransaction(Transaction.Current);
+				ExecuteScriptEx(script, GetUserId());
+				scope.Complete();
             }
         }
 
@@ -86,6 +113,12 @@ namespace DbScriptDeploy.UI.Data
         {
             return _conn.Query<Script>("SELECT * FROM ScriptLog WHERE Archived = 0");
         }
+
+		private string GetUserId()
+		{
+			SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_conn.ConnectionString);
+			return builder.UserID;
+		}
 
 
         public void InitScriptLogTable()
@@ -97,7 +130,7 @@ namespace DbScriptDeploy.UI.Data
             }
         }
 
-        public static IDbConnection GetDbConnection(DbEnvironment dbInstance)
+        public static SqlConnection GetDbConnection(DbEnvironment dbInstance)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
             builder.ApplicationName = "DbScriptDeploy";
