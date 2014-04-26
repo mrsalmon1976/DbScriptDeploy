@@ -47,9 +47,10 @@ namespace DbScriptDeploy.UI
 
         }
 
-        public void AddProject()
+		public void AddUpdateProject(Project project)
         {
             ProjectDialog dlg = new ProjectDialog();
+			dlg.Project = project;
             bool result = dlg.ShowDialog() ?? false;
             if (result)
             {
@@ -60,14 +61,14 @@ namespace DbScriptDeploy.UI
         }
 
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void OnMnuFileCloseClick(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void mnuFile_NewProject_Click(object sender, RoutedEventArgs e)
+        private void OnMnuFileNewProjectClick(object sender, RoutedEventArgs e)
         {
-            AddProject();
+            AddUpdateProject(new Project());
         }
 
 

@@ -67,6 +67,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="SystemWrapper">
+      <HintPath>..\packages\SystemWrapper.0.4\lib\SystemWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
@@ -130,6 +133,7 @@
       <DependentUpon>Scripts.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\DatabaseComparisonService.cs" />
+    <Compile Include="Services\JsonPersistenceService.cs" />
     <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\ScriptExecutionService.cs" />
     <Compile Include="Utils\AppUtils.cs" />

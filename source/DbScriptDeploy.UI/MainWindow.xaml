@@ -7,8 +7,8 @@
         <DockPanel LastChildFill="True">
             <Menu Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" DockPanel.Dock="Top" >
                 <MenuItem Header="_File">
-                    <MenuItem Name="mnuFile_NewProject" Header="_New Project" Click="mnuFile_NewProject_Click"/>
-                    <MenuItem Header="_Exit" Click="MenuItem_Click"/>
+                    <MenuItem x:Name="mnuFileNewProject" Header="_New Project" Click="OnMnuFileNewProjectClick"/>
+                    <MenuItem Name="mnuFileClose"  Header="_Exit" Click="OnMnuFileCloseClick"/>
                 </MenuItem>
             </Menu>
             <Grid>

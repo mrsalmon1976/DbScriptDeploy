@@ -17,6 +17,7 @@ namespace DbScriptDeploy.UI.Views
     {
         private System.Windows.Forms.FolderBrowserDialog dlgFolder = null;
         private Brush _defaultBorderBrush;
+		private Project _project = null;
 
         public ProjectDialog()
         {
@@ -35,7 +36,19 @@ namespace DbScriptDeploy.UI.Views
 
         #region Properties
 
-        public Project Project { get; set; }
+		public Project Project
+		{
+			get
+			{
+				return _project;
+			}
+			set
+			{
+				_project = value;
+				txtName.Text = _project.Name;
+				txtScriptFolder.Text = _project.ScriptFolder;
+			}
+		}
 
         #endregion
 

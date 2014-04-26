@@ -13,6 +13,15 @@ using DbScriptDeploy.UI.Utils;
 
 namespace DbScriptDeploy.UI.Data
 {
+	public interface IDbHelper
+	{
+
+		void ExecuteScript(Script script);
+
+		void ExecuteScripts(IEnumerable<Script> scripts);
+
+	}
+
     public class DbHelper : IDisposable
     {
         public const int DefaultPort = 1433;

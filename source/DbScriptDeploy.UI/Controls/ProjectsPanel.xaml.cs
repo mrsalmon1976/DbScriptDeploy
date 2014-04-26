@@ -80,10 +80,10 @@ namespace DbScriptDeploy.UI.Controls
 
         private void InitializeEvents()
         {
-            _projectService.ProjectAdded += _projectService_ProjectAdded;
+            _projectService.ProjectAdded += OnProjectAdded;
         }
 
-        void _projectService_ProjectAdded(object sender, ProjectEventArgs e)
+        void OnProjectAdded(object sender, ProjectEventArgs e)
         {
             ReloadProjects();
         }
@@ -101,12 +101,6 @@ namespace DbScriptDeploy.UI.Controls
 
             this.pnlMain.Children.Add(new Label());
 
-        }
-
-        private void OnMainWindowProjectAdded(object sender, ProjectEventArgs ea)
-        {
-            _projectService.SaveProject(ea.Project);
-            ReloadProjects();
         }
 
     }

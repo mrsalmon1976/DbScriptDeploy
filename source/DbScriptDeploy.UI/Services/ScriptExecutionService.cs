@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DbScriptDeploy.UI.Data;
 using DbScriptDeploy.UI.Models;
+using StructureMap;
 
 namespace DbScriptDeploy.UI.Services
 {
@@ -20,7 +21,7 @@ namespace DbScriptDeploy.UI.Services
 		public void ExecuteScripts(string connString, string folder)
 		{
 			DbHelper dbHelper = new DbHelper(connString);
-
+			
 			// make sure the folder exists
 			if (!Directory.Exists(folder))
 			{

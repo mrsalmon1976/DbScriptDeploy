@@ -9,6 +9,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DbScriptDeploy.UI.Events;
+using SystemWrapper.IO;
+using StructureMap;
 
 namespace DbScriptDeploy.UI.Services
 {
@@ -40,15 +42,17 @@ namespace DbScriptDeploy.UI.Services
     public class ProjectService : IProjectService
     {
         private readonly string _projectFilePath = null;
+		private readonly IJsonPersistenceService _jsonPersistenceService = null;
         private List<Project> _projects = new List<Project>();
 
         public event EventHandler<ProjectEventArgs> ProjectAdded;
 		public event EventHandler<ProjectEventArgs> ProjectDeleted;
         public event EventHandler<ProjectEventArgs> ProjectUpdated;
 
-        public ProjectService() 
+        public ProjectService(string projectFilePath, IJsonPersistenceService persistenceService) 
         {
-            _projectFilePath = Path.Combine(AppUtils.BaseDirectory(), Constants.UserProjectFileName);
+			_jsonPersistenceService = persistenceService;
+			_projectFilePath = projectFilePath;
         }
 
 
@@ -63,11 +67,12 @@ namespace DbScriptDeploy.UI.Services
                 return _projects;
             }
 
-            if (!File.Exists(_projectFilePath))
+			IFileWrap fileWrap = ObjectFactory.GetInstance<IFileWrap>();
+            if (!fileWrap.Exists(_projectFilePath))
             {
                 return Enumerable.Empty<Project>();
             }
-            string projects = File.ReadAllText(_projectFilePath);
+            string projects = fileWrap.ReadAllText(_projectFilePath);
 
             _projects = JsonConvert.DeserializeObject<IEnumerable<Project>>(projects)
                 .OrderBy(x => x.Name)
@@ -83,8 +88,9 @@ namespace DbScriptDeploy.UI.Services
 				return;
 			}
 			_projects.Remove(p);
-			this.Save();
-			if (this.ProjectDeleted!= null)
+			_jsonPersistenceService.WriteFile(_projectFilePath, _projects);
+
+			if (this.ProjectDeleted != null)
 			{
 				this.ProjectDeleted(this, new ProjectEventArgs(project));
 			}
@@ -100,7 +106,7 @@ namespace DbScriptDeploy.UI.Services
                 isNew = false;
             }
             _projects.Add(project);
-			this.Save();
+			_jsonPersistenceService.WriteFile(_projectFilePath, _projects);
 
             if (isNew && this.ProjectAdded != null)
             {
@@ -112,14 +118,6 @@ namespace DbScriptDeploy.UI.Services
             }
 
         }
-
-		private void Save()
-		{
-			JsonSerializerSettings settings = new JsonSerializerSettings();
-			settings.Formatting = Formatting.Indented;
-			string projects = JsonConvert.SerializeObject(_projects, settings);
-			File.WriteAllText(_projectFilePath, projects);
-		}
 
     }
 }

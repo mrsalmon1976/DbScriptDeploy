@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DbScriptDeploy.UI.Models
 {
+	/// <summary>
+	/// Represents a project.
+	/// </summary>
     public class Project
     {
         public Project()
