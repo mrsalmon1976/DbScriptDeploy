@@ -20,8 +20,8 @@ namespace DbScriptDeploy.UI.Utils
 
         public static string BaseDirectory()
         {
-            Uri uri = new Uri(Path.GetDirectoryName(Assembly.GetAssembly(typeof(AppUtils)).CodeBase));
-            return uri.PathAndQuery.Replace("/", Path.DirectorySeparatorChar.ToString());
+            string loc = Assembly.GetExecutingAssembly().Location;
+            return Path.GetDirectoryName(loc);
         }
 
         public static string CurrentWindowsIdentity()

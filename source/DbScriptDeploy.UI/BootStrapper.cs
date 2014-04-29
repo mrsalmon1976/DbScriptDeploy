@@ -22,7 +22,9 @@ namespace DbScriptDeploy.UI
             ObjectFactory.Configure(x => x.For<IDatabaseComparisonService>().Singleton().Use<DatabaseComparisonService>());
 
 			// set up the project service - for now we'll default the project file path
-			string projectFilePath = Path.Combine(AppUtils.BaseDirectory(), Constants.UserProjectFileName);
+            string projectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DbScriptDeploy");
+            if (!Directory.Exists(projectFolder)) Directory.CreateDirectory(projectFolder);
+			string projectFilePath = Path.Combine(projectFolder, Constants.UserProjectFileName);
 			ObjectFactory.Configure(x => x.For<IProjectService>().Singleton().Use(() => { 
 				return new ProjectService(projectFilePath, ObjectFactory.GetInstance<IJsonPersistenceService>()); 
 			}));

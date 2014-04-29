@@ -27,6 +27,8 @@ namespace DbScriptDeploy.UI.Controls
     public partial class ScriptDialog : Window
     {
         private Scintilla _scintilla = null;
+        private BackgroundWorker _bgWorkerParse;
+        private ProgressDialog _progressDlg;
 
         public ScriptDialog()
         {
@@ -52,19 +54,53 @@ namespace DbScriptDeploy.UI.Controls
 
         private void btnParse_Click(object sender, RoutedEventArgs e)
         {
+            _progressDlg = new ProgressDialog();
+            _progressDlg.Message = "Initializing...";
+            _progressDlg.Owner = MainWindow.Instance;
+
+            _bgWorkerParse = new BackgroundWorker();
+            _bgWorkerParse.WorkerReportsProgress = true;
+            _bgWorkerParse.DoWork += _bgWorkerParse_DoWork;
+            _bgWorkerParse.RunWorkerCompleted += _bgWorkerParse_RunWorkerCompleted;
+            _bgWorkerParse.RunWorkerAsync(_scintilla.Text);
+
+            _progressDlg.Message = "Parsing script...";
+            _progressDlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            _progressDlg.ShowDialog();
+
+
+        }
+
+        void _bgWorkerParse_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _progressDlg.Close();
+
+            IEnumerable<string> errors = e.Result as IEnumerable<string>;
+            if (errors.Any())
+            {
+                MessageBox.Show(this, String.Join(Environment.NewLine + Environment.NewLine, errors), "Parse Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show(this, "SQL parsed without any errors.", "Parse Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+        }
+
+        void _bgWorkerParse_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker bgw = (BackgroundWorker)sender;
+            string script = (string)e.Argument;
+
             using (DbHelper dbHelper = new DbHelper(this.DbEnvironment))
             {
-                IEnumerable<string> errors = dbHelper.ParseScript(_scintilla.Text);
-                if (errors.Any())
-                {
-                    MessageBox.Show(this, String.Join(Environment.NewLine + Environment.NewLine, errors), "Parse Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else
-                {
-                    MessageBox.Show(this, "SQL parsed without any errors.", "Parse Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                IEnumerable<string> errors = dbHelper.ParseScript(script);
+                e.Result = errors;
             }
+
+
         }
+
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {

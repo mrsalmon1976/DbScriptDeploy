@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using DbScriptDeploy.UI.Events;
 using SystemWrapper.IO;
 using StructureMap;
+using NLog;
 
 namespace DbScriptDeploy.UI.Services
 {
@@ -41,6 +42,8 @@ namespace DbScriptDeploy.UI.Services
 
     public class ProjectService : IProjectService
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly string _projectFilePath = null;
 		private readonly IJsonPersistenceService _jsonPersistenceService = null;
         private List<Project> _projects = new List<Project>();
@@ -107,6 +110,7 @@ namespace DbScriptDeploy.UI.Services
             }
             _projects.Add(project);
 			_jsonPersistenceService.WriteFile(_projectFilePath, _projects);
+            logger.Info("Saved project file {0}", _projectFilePath);
 
             if (isNew && this.ProjectAdded != null)
             {
