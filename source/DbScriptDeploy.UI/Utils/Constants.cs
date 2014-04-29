@@ -11,7 +11,7 @@ namespace DbScriptDeploy.UI.Utils
         /// <summary>
         /// The name of the file used to store the user's project paths.
         /// </summary>
-        public const string UserProjectFileName = "DbScriptDeploy.user.projects";
+        public const string UserProjectFileName = "user.projects";
 
         /// <summary>
         /// Default file extension for project files.

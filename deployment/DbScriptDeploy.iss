@@ -19,13 +19,14 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={userappdata}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputBaseFilename=DbScriptDeploy_{#MyAppVersion}
 SetupIconFile=..\source\DbScriptDeploy.UI\Resources\app.ico
 Compression=lzma
 SolidCompression=yes
 PrivilegesRequired=admin
+DisableDirPage=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -35,7 +36,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\source\DbScriptDeploy.UI\bin\Release\DbScriptDeploy.UI.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\source\DbScriptDeploy.UI\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\source\DbScriptDeploy.UI\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
