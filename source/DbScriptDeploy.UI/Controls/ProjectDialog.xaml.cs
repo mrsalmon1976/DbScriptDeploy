@@ -36,6 +36,9 @@ namespace DbScriptDeploy.UI.Views
 
         #region Properties
 
+        /// <summary>
+        /// Gets/sets the project object associated with the dialog.
+        /// </summary>
 		public Project Project
 		{
 			get
@@ -64,28 +67,37 @@ namespace DbScriptDeploy.UI.Views
         private void UpdateProject()
         {
             this.Project.Name = txtName.Text;
+            this.Project.ScriptFolder = txtScriptFolder.Text;
         }
 
-        private void ValidateInput()
+        private void HandleInputChanges()
         {
-            // validate input
-            if (!ValidationUtils.ValidateMandatoryInput(txtName, btnSave)) return;
-
-            if (!Directory.Exists(txtScriptFolder.Text))
+            bool isValid = this.ValidateInput();
+            if (!isValid)
             {
-                txtScriptFolder.BorderBrush = Brushes.Red;
                 btnSave.IsEnabled = false;
                 return;
             }
 
             bool isChanged = false;
-            
-            if (this.Project.Name != txtName.Text)
+            if (this.Project.Name != txtName.Text
+                || this.Project.ScriptFolder != txtScriptFolder.Text)
             {
                 isChanged = true;
             }
 
             btnSave.IsEnabled = isChanged;
+        }
+
+        private bool ValidateInput()
+        {
+            // validate input
+            if (!ValidationUtils.ValidateMandatoryInput(txtName)) return false;
+            if (!ValidationUtils.ValidateMandatoryInput(txtScriptFolder)) return false;
+
+            bool isDirectoryValid = Directory.Exists(txtScriptFolder.Text);
+            ValidationUtils.ToggleControlValidIndicator(txtScriptFolder, isDirectoryValid);
+            return isDirectoryValid;
         }
 
         #endregion
@@ -100,20 +112,20 @@ namespace DbScriptDeploy.UI.Views
 
         }
 
-        private void txtName_TextChanged(object sender, TextChangedEventArgs e)
+        private void OnNameTextChanged(object sender, TextChangedEventArgs e)
         {
-            this.ValidateInput();
+            this.HandleInputChanges();
         }
 
         #endregion
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void OnCancelButtonClick(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
             this.Hide();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void OnBrowseButtonClick(object sender, RoutedEventArgs e)
         {
             var result = dlgFolder.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
@@ -123,9 +135,9 @@ namespace DbScriptDeploy.UI.Views
             }
         }
 
-        private void txtScriptFolder_TextChanged(object sender, TextChangedEventArgs e)
+        private void OnScriptFolderTextChanged(object sender, TextChangedEventArgs e)
         {
-            this.ValidateInput();
+            this.HandleInputChanges();
         }
 
 
