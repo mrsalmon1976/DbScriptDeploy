@@ -72,49 +72,46 @@ namespace DbScriptDeploy.UI.Data
 
 		public void ExecuteScripts(IEnumerable<Script> scripts)
 		{
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+			foreach (Script script in scripts)
 			{
-				_conn.EnlistTransaction(Transaction.Current);
-				foreach (Script script in scripts)
-				{
-					ExecuteScriptEx(script, GetUserId());
-				}
-				scope.Complete();
+				ExecuteScript(script);
 			}
 		}
 
-		private void ExecuteScriptEx(Script script, string userId)
-		{
-
-			using (IDbCommand cmd = _conn.CreateCommand())
-			{
-				cmd.CommandText = script.ScriptText;
-				cmd.CommandTimeout = 0;
-				cmd.ExecuteNonQuery();
-			}
-
-			using (IDbCommand cmd = _conn.CreateCommand())
-			{
-				cmd.Parameters.Add(new SqlParameter("id", Guid.NewGuid()));
-				cmd.Parameters.Add(new SqlParameter("name", script.Name));
-				cmd.Parameters.Add(new SqlParameter("scriptText", script.ScriptText));
-				cmd.Parameters.Add(new SqlParameter("createdOn", DateTime.UtcNow));
-				cmd.Parameters.Add(new SqlParameter("createdUser", userId));
-				cmd.Parameters.Add(new SqlParameter("createdAccount", AppUtils.CurrentWindowsIdentity()));
-
-				const string sql = "INSERT INTO ScriptLog (Id, Name, ScriptText, CreatedOn, CreatedUser, CreatedAccount) VALUES (@id, @name, @scriptText, @createdOn, @createdUser, @createdAccount)";
-				cmd.CommandText = sql;
-				cmd.ExecuteNonQuery();
-			}
-		}
-
-        public void ExecuteScript(Script script)
+        public void ExecuteScript(Script script, string user = null)
         {
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+            string userId = user;
+            if (userId == null)
             {
-				_conn.EnlistTransaction(Transaction.Current);
-				ExecuteScriptEx(script, GetUserId());
-				scope.Complete();
+                userId = GetUserId();
+            }
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(1, 0, 0)))
+            {
+                _conn.EnlistTransaction(Transaction.Current);
+
+                using (IDbCommand cmd = _conn.CreateCommand())
+                {
+                    cmd.CommandText = script.ScriptText;
+                    cmd.CommandTimeout = 0;
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (IDbCommand cmd = _conn.CreateCommand())
+                {
+                    cmd.Parameters.Add(new SqlParameter("id", Guid.NewGuid()));
+                    cmd.Parameters.Add(new SqlParameter("name", script.Name));
+                    cmd.Parameters.Add(new SqlParameter("scriptText", script.ScriptText));
+                    cmd.Parameters.Add(new SqlParameter("createdOn", DateTime.UtcNow));
+                    cmd.Parameters.Add(new SqlParameter("createdUser", userId));
+                    cmd.Parameters.Add(new SqlParameter("createdAccount", AppUtils.CurrentWindowsIdentity()));
+
+                    const string sql = "INSERT INTO ScriptLog (Id, Name, ScriptText, CreatedOn, CreatedUser, CreatedAccount) VALUES (@id, @name, @scriptText, @createdOn, @createdUser, @createdAccount)";
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+                }
+
+                scope.Complete();
             }
         }
 
