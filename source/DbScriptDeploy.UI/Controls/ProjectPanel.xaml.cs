@@ -63,35 +63,41 @@ namespace DbScriptDeploy.UI.Controls
 
         private void AddScript(Script script)
         {
-			if (pnlScripts.Children.Count > 0 && pnlScripts.Children[0] is Label)
+			if (lstScripts.Items.Count > 0 && lstScripts.Items[0] is Label)
 			{
-				pnlScripts.Children.Clear();
+				lstScripts.Items.Clear();
 			}
 
             ScriptCheckBox scb = new ScriptCheckBox();
             scb.ScriptLog = script;
             scb.CheckedChanged += scb_CheckedChanged;
-            pnlScripts.Children.Add(scb);
-            btnSelectAll.IsEnabled = true;
+			lstScripts.Items.Add(scb);
+			btnSelectAll.IsEnabled = true;
+
         }
 
         void scb_CheckedChanged(object sender, Events.CheckedEventArgs e)
         {
-            if (e.IsChecked)
-            {
-                btnExecuteScripts.IsEnabled = true;
-                return;
-            }
+			bool isExecuteEnabled = false;
+			lstScripts.SelectionChanged -= lstScripts_SelectionChanged;
 
-            foreach (ScriptCheckBox sbc in pnlScripts.Children)
+            for (int i=0; i<lstScripts.Items.Count; i++)
             {
-                if (sbc.IsChecked)
-                {
-                    btnExecuteScripts.IsEnabled = true;
-                    return;
-                }
+				
+				ScriptCheckBox sbc = (ScriptCheckBox)lstScripts.Items[i];
+				if (sbc.IsChecked)
+				{
+					lstScripts.SelectedItems.Add(sbc);
+					isExecuteEnabled = true;
+				}
+				else
+				{
+					lstScripts.SelectedItems.Remove(sbc);
+				}
             }
-            btnExecuteScripts.IsEnabled = false;
+			btnExecuteScripts.IsEnabled = isExecuteEnabled;
+			lstScripts.SelectionChanged += lstScripts_SelectionChanged;
+			
         }
 
         private void ReloadDatabaseInstances()
@@ -127,7 +133,7 @@ namespace DbScriptDeploy.UI.Controls
 		private void ReloadScripts()
 		{
             // clear the project pane
-            pnlScripts.Children.Clear();
+			lstScripts.Items.Clear();
             btnCompare.IsEnabled = false;
             btnAddScript.IsEnabled = false;
             btnExecuteScripts.IsEnabled = false;
@@ -161,11 +167,11 @@ namespace DbScriptDeploy.UI.Controls
             btnAddScript.IsEnabled = true;
             btnCompare.IsEnabled = (cbDatabaseInstances.Items.Count > 2);
 
-            if (pnlScripts.Children.Count == 0)
+			if (lstScripts.Items.Count == 0)
             {
                 Label lbl = new Label();
                 lbl.Content = "No scripts to run";
-                pnlScripts.Children.Add(lbl);
+				lstScripts.Items.Add(lbl);
             }
             else
             {
@@ -307,7 +313,7 @@ namespace DbScriptDeploy.UI.Controls
             btnSelectAll.IsEnabled = false;
             WorkerInfo workerInfo = new WorkerInfo(this.CurrentDbInstance, this.Project);
 
-            foreach (ScriptCheckBox sbc in pnlScripts.Children)
+			foreach (ScriptCheckBox sbc in lstScripts.Items)
             {
                 if (sbc.IsChecked) workerInfo.Scripts.Add(sbc.ScriptLog);
             }
@@ -374,7 +380,7 @@ namespace DbScriptDeploy.UI.Controls
 
         private void btnSelectAll_Click(object sender, RoutedEventArgs e)
         {
-            foreach (ScriptCheckBox sbc in pnlScripts.Children)
+			foreach (ScriptCheckBox sbc in lstScripts.Items)
             {
                 sbc.IsChecked = true;
             }
@@ -472,6 +478,18 @@ namespace DbScriptDeploy.UI.Controls
 			else
 			{
 				MessageBox.Show(MainWindow.Instance, String.Format("The folder '{0}' does not exist.", scriptFolder), "Invalid Folder", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
+
+		private void lstScripts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			foreach (ScriptCheckBox scb in e.RemovedItems)
+			{
+				scb.IsChecked = false;
+			}
+			foreach (ScriptCheckBox scb in e.AddedItems)
+			{
+				scb.IsChecked = true;
 			}
 		}
 

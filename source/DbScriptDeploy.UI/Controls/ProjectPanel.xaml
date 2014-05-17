@@ -37,9 +37,8 @@
                 <Button Name="btnAddScript" Content="New Script" DockPanel.Dock="Right" Click="btnAddScript_Click" IsEnabled="False" Margin="5,5,5,5" HorizontalAlignment="Right" Padding="15,0,15,0" />
             </DockPanel>
             <ScrollViewer>
-                <StackPanel Name="pnlScripts">
-
-                </StackPanel>
+                <ListView Name="lstScripts" SelectionChanged="lstScripts_SelectionChanged" Background="Transparent" BorderThickness="0">
+                </ListView>
             </ScrollViewer>
         </DockPanel>
     </Grid>
