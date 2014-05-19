@@ -15,7 +15,8 @@ namespace DbScriptDeploy.UI.Utils
 		public static string AppVersion()
 		{
 			Assembly assembly = Assembly.GetExecutingAssembly();
-			return FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+            FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return String.Format("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
 		}
 
         public static string BaseDirectory()
