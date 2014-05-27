@@ -70,7 +70,7 @@ namespace DbScriptDeploy.UI.Controls
             }
 
             TabItem tabItem = new TabItem();
-            tabItem.Name = project.Name;
+            tabItem.Name = String.Format("Project_{0}", tabMain.Items.Count);
             tabItem.Header = project.Name;
             tabItem.Tag = project;
 
