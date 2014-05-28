@@ -37,6 +37,8 @@ namespace DbScriptDeploy.UI.Controls
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 _scintilla = ScintillaUtils.InitSqlEditor(this.FontSize);
+                _scintilla.TabStop = true;
+                scintillaHost.TabIndex = 1;
                 scintillaHost.Child = _scintilla;
 				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
 			}
@@ -130,6 +132,10 @@ namespace DbScriptDeploy.UI.Controls
             {
                 MessageBox.Show(this, ex.Message, "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void txtName_LostFocus(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

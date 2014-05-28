@@ -30,6 +30,8 @@ namespace DbScriptDeploy.UI.Controls
 
         public event EventHandler<CompareReportEventArgs> ComparisonResultCompleted;
 
+        private const string Untagged = "Untagged";
+
         public ProjectPanel()
         {
             InitializeComponent();
@@ -63,7 +65,7 @@ namespace DbScriptDeploy.UI.Controls
 
         private void AddScript(Script script)
         {
-			if (lstScripts.Items.Count > 0 && lstScripts.Items[0] is Label)
+            if (lstScripts.Items.Count > 0 && lstScripts.Items[0] is Label && ((Label)lstScripts.Items[0]).Tag == null)
 			{
 				lstScripts.Items.Clear();
 			}
@@ -71,9 +73,28 @@ namespace DbScriptDeploy.UI.Controls
             ScriptCheckBox scb = new ScriptCheckBox();
             scb.ScriptLog = script;
             scb.CheckedChanged += scb_CheckedChanged;
-			lstScripts.Items.Add(scb);
+            scb.Tag = script.Tag ?? Untagged;
 			btnSelectAll.IsEnabled = true;
 
+            lstScripts.Items.Add(scb);
+
+        }
+
+        private void AddTagHeader(string tag)
+        {
+            tag = (tag ?? Untagged);
+
+            Label lblTag = new Label();
+            lblTag.Content = tag;
+            lblTag.Tag = tag;
+            lblTag.FontSize = this.FontSize + 2;
+
+            if (lstScripts.Items.Count > 0)
+            {
+                lblTag.Margin = new Thickness(0, 5, 0, 0);
+            }
+
+            lstScripts.Items.Add(lblTag);
         }
 
         void scb_CheckedChanged(object sender, Events.CheckedEventArgs e)
@@ -83,8 +104,10 @@ namespace DbScriptDeploy.UI.Controls
 
             for (int i=0; i<lstScripts.Items.Count; i++)
             {
-				
-				ScriptCheckBox sbc = (ScriptCheckBox)lstScripts.Items[i];
+
+                ScriptCheckBox sbc = lstScripts.Items[i] as ScriptCheckBox;
+                if (sbc == null) continue;
+
 				if (sbc.IsChecked)
 				{
 					lstScripts.SelectedItems.Add(sbc);
@@ -163,11 +186,26 @@ namespace DbScriptDeploy.UI.Controls
 
         void _bgWorkerLoad_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            List<Script> scripts = (List<Script>)e.Result;
+            string tag = Guid.NewGuid().ToString();
+
+            foreach (Script script in scripts.OrderBy(x => (x.Tag ?? String.Empty).ToUpper()))
+            {
+                string scriptTag = (script.Tag ?? String.Empty).ToUpper();
+                tag = (tag ?? String.Empty).ToUpper();
+                if (scriptTag != tag)
+                {
+                    this.AddTagHeader(script.Tag);
+                    tag = scriptTag;
+                }
+                this.AddScript(script);
+            }
+
             _progressDlg.Close();
             btnAddScript.IsEnabled = true;
             btnCompare.IsEnabled = (cbDatabaseInstances.Items.Count > 2);
 
-			if (lstScripts.Items.Count == 0)
+            if (scripts.Count == 0)
             {
                 Label lbl = new Label();
                 lbl.Content = "No scripts to run";
@@ -189,12 +227,6 @@ namespace DbScriptDeploy.UI.Controls
                 return;
             }
 
-            Script script = e.UserState as Script;
-            if (script != null)
-            {
-                this.AddScript(script);
-            }
-
             Exception ex = e.UserState as Exception;
             if (ex != null)
             {
@@ -207,6 +239,8 @@ namespace DbScriptDeploy.UI.Controls
         {
             BackgroundWorker bgw = (BackgroundWorker)sender;
             WorkerInfo workerInfo = (WorkerInfo)e.Argument;
+            IScriptExecutionService scriptExecutionService = ObjectFactory.GetInstance<IScriptExecutionService>();
+            List<Script> loadedScripts = new List<Script>();
 
             try
             {
@@ -249,11 +283,9 @@ namespace DbScriptDeploy.UI.Controls
                     bgw.ReportProgress(-1, "Loading scripts that have not been executed...");
                     foreach (string file in scripts)
                     {
-                        Script log = new Script();
-                        log.Id = Guid.NewGuid();
-                        log.Name = new FileInfo(file).Name;
-                        log.ScriptText = File.ReadAllText(file);
-
+                        // load the script up and add for processing at a later stage
+                        Script log = scriptExecutionService.LoadScriptFromFile(file);
+                        loadedScripts.Add(log);
                         bgw.ReportProgress(-1, log);
                     }
 
@@ -265,11 +297,14 @@ namespace DbScriptDeploy.UI.Controls
 					}
                 }
 
+                e.Result = loadedScripts;
+
             }
             catch (Exception ex)
             {
                 bgw.ReportProgress(-1, ex);
             }
+
         }
 
         private class WorkerInfo
@@ -301,7 +336,7 @@ namespace DbScriptDeploy.UI.Controls
 
             if ((dlg.ShowDialog() ?? false) == true)
             {
-                this.AddScript(dlg.Script);
+                this.ReloadScripts();
             }
 
             dlg.Close();
@@ -313,9 +348,10 @@ namespace DbScriptDeploy.UI.Controls
             btnSelectAll.IsEnabled = false;
             WorkerInfo workerInfo = new WorkerInfo(this.CurrentDbInstance, this.Project);
 
-			foreach (ScriptCheckBox sbc in lstScripts.Items)
+			foreach (Control c in lstScripts.Items)
             {
-                if (sbc.IsChecked) workerInfo.Scripts.Add(sbc.ScriptLog);
+                ScriptCheckBox scb = c as ScriptCheckBox;
+                if (scb != null && scb.IsChecked) workerInfo.Scripts.Add(scb.ScriptLog);
             }
 
 
@@ -380,9 +416,14 @@ namespace DbScriptDeploy.UI.Controls
 
         private void btnSelectAll_Click(object sender, RoutedEventArgs e)
         {
-			foreach (ScriptCheckBox sbc in lstScripts.Items)
+
+			foreach (Control c in lstScripts.Items)
             {
-                sbc.IsChecked = true;
+                ScriptCheckBox scb = c as ScriptCheckBox;
+                if (scb != null)
+                {
+                    scb.IsChecked = true;
+                }
             }
         }
 
@@ -483,13 +524,21 @@ namespace DbScriptDeploy.UI.Controls
 
 		private void lstScripts_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			foreach (ScriptCheckBox scb in e.RemovedItems)
+			foreach (object c in e.RemovedItems)
 			{
-				scb.IsChecked = false;
+                ScriptCheckBox scb = c as ScriptCheckBox;
+                if (scb != null)
+                {
+                    scb.IsChecked = false;
+                }
 			}
-			foreach (ScriptCheckBox scb in e.AddedItems)
+			foreach (object c in e.AddedItems)
 			{
-				scb.IsChecked = true;
+                ScriptCheckBox scb = c as ScriptCheckBox;
+                if (scb != null)
+                {
+                    scb.IsChecked = true;
+                }
 			}
 		}
 

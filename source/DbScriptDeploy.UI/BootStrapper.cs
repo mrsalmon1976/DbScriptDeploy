@@ -17,6 +17,7 @@ namespace DbScriptDeploy.UI
         public static void Boot()
         {
 			ObjectFactory.Configure(x => x.For<IFileWrap>().Use<FileWrap>());
+            ObjectFactory.Configure(x => x.For<IFileInfoWrap>().Use<FileInfoWrap>());
 			ObjectFactory.Configure(x => x.For<IJsonPersistenceService>().Use<JsonPersistenceService>());
 			ObjectFactory.Configure(x => x.For<IScriptExecutionService>().Use<ScriptExecutionService>());
             ObjectFactory.Configure(x => x.For<IDatabaseComparisonService>().Singleton().Use<DatabaseComparisonService>());
