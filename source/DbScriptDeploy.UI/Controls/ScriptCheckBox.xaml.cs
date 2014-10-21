@@ -72,8 +72,37 @@ namespace DbScriptDeploy.UI.Controls
             set
             {
                 _scriptLog = value;
-                cbScript.Content = value.Name;
+                lblScript.Content = value.Name;
             }
+        }
+
+        private void lblScript_MouseEnter(object sender, MouseEventArgs e)
+        {
+            lblScript.Foreground = Brushes.Blue;
+        }
+
+        private void lblScript_MouseLeave(object sender, MouseEventArgs e)
+        {
+            lblScript.Foreground = Brushes.Black;
+        }
+
+        private void lblScript_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ScriptDialog dlg = new ScriptDialog();
+            dlg.Owner = MainWindow.Instance;
+            dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            dlg.ShowInTaskbar = false;
+            dlg.IsReadOnly = true;
+            dlg.Script = this.ScriptLog;
+            //dlg.Project = this.Project;
+
+            if ((dlg.ShowDialog() ?? false) == true)
+            {
+                //this.ReloadScripts();
+            }
+
+            dlg.Close();
+
         }
 
     }

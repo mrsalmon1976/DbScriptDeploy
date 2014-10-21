@@ -33,6 +33,7 @@
             
             <DockPanel HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
                 <Button Name="btnSelectAll" Content="Select All" DockPanel.Dock="Left" IsEnabled="False" Click="btnSelectAll_Click" Margin="5,5,5,5" Padding="15,0,15,0" />
+                <Button Name="btnRefresh" Content="Refresh" DockPanel.Dock="Left" IsEnabled="False" Click="btnRefresh_Click" Margin="5,5,5,5" Padding="15,0,15,0" />
                 <Button Name="btnExecuteScripts" Content="Execute Scripts" DockPanel.Dock="Right" IsEnabled="False" Click="btnExecuteScripts_Click" Margin="5,5,5,5" HorizontalAlignment="Right" Padding="15,0,15,0" />
                 <Button Name="btnAddScript" Content="New Script" DockPanel.Dock="Right" Click="btnAddScript_Click" IsEnabled="False" Margin="5,5,5,5" HorizontalAlignment="Right" Padding="15,0,15,0" />
             </DockPanel>

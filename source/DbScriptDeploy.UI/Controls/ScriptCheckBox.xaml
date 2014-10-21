@@ -6,7 +6,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="400">
     <Grid>
-        <CheckBox Name="cbScript" Content="Script name" HorizontalAlignment="Stretch" Margin="5,4,21,0" VerticalAlignment="Top" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <CheckBox Name="cbScript" Grid.Column="0" Content="" HorizontalAlignment="Stretch" Margin="5,3,5,5" VerticalAlignment="Top" />
+        <Label Name="lblScript" Grid.Column="1" Content="Script name" HorizontalAlignment="Stretch" Margin="5,0,21,0" Padding="2,4,2,2" VerticalAlignment="Top" MouseEnter="lblScript_MouseEnter" MouseLeave="lblScript_MouseLeave" MouseDoubleClick="lblScript_MouseDoubleClick" />
 
     </Grid>
 </UserControl>

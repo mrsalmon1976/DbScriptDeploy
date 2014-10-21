@@ -34,6 +34,8 @@ namespace DbScriptDeploy.UI.Controls
         {
             InitializeComponent();
 
+            this.Script = new Script();
+
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 _scintilla = ScintillaUtils.InitSqlEditor(this.FontSize);
@@ -41,9 +43,19 @@ namespace DbScriptDeploy.UI.Controls
                 scintillaHost.TabIndex = 1;
                 scintillaHost.Child = _scintilla;
 				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
+                this.Activated += ScriptDialog_Activated;
 			}
 
-            this.Script = new Script();
+        }
+
+        void ScriptDialog_Activated(object sender, EventArgs e)
+        {
+            btnParse.Visibility = (this.IsReadOnly ? Visibility.Hidden : Visibility.Visible);
+            btnSave.Visibility = (this.IsReadOnly ? Visibility.Hidden : Visibility.Visible);
+            txtName.IsReadOnly = this.IsReadOnly;
+            txtName.Text = this.Script.Name;
+            _scintilla.Text = this.Script.ScriptText;
+            _scintilla.IsReadOnly = this.IsReadOnly;
         }
 
         public Script Script { get; set; }
@@ -52,7 +64,7 @@ namespace DbScriptDeploy.UI.Controls
 
         public Project Project { get; set; }
 
-        public bool IsEdit { get; set; }
+        public bool IsReadOnly { get; set; }
 
         private void btnParse_Click(object sender, RoutedEventArgs e)
         {

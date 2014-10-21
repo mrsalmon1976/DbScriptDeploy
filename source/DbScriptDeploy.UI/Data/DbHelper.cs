@@ -43,20 +43,6 @@ namespace DbScriptDeploy.UI.Data
 		}
 
         //public DbEnvironment DbInstance { get; set; }
-
-        public void ArchiveLogs(IEnumerable<Guid> ids)
-        {
-            if (!ids.Any()) return;
-
-            string inList = String.Join(",", ids.Select(x => String.Format("'{0}'", x)));
-            using (IDbCommand cmd = _conn.CreateCommand())
-            {
-                string sql = String.Format("UPDATE ScriptLog SET Archived = 1 WHERE Id IN ({0})", inList);
-                cmd.CommandText = sql;
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         public T ExecuteScalar<T>(string sql, params IDataParameter[] dbParameters)
         {
             using (IDbCommand cmd = _conn.CreateCommand())

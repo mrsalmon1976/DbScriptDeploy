@@ -161,6 +161,7 @@ namespace DbScriptDeploy.UI.Controls
             btnAddScript.IsEnabled = false;
             btnExecuteScripts.IsEnabled = false;
             btnSelectAll.IsEnabled = false;
+            btnRefresh.IsEnabled = false;
 
             DbEnvironment dbInstance = CurrentDbInstance;
             if (dbInstance == null)
@@ -202,6 +203,7 @@ namespace DbScriptDeploy.UI.Controls
             }
 
             _progressDlg.Close();
+            btnRefresh.IsEnabled = true;
             btnAddScript.IsEnabled = true;
             btnCompare.IsEnabled = (cbDatabaseInstances.Items.Count > 2);
 
@@ -254,7 +256,6 @@ namespace DbScriptDeploy.UI.Controls
 
                     // read the files in the folder
                     bgw.ReportProgress(-1, "Reading script files...");
-                    List<Guid> scriptsToArchive = new List<Guid>();
                     List<string> scripts = Directory.EnumerateFiles(workerInfo.Project.ScriptFolder, "*.sql")
                         .OrderBy(x => x)
                         .ToList();
@@ -267,12 +268,7 @@ namespace DbScriptDeploy.UI.Controls
                     foreach (Script log in executedScripts)
                     {
                         string script = scripts.FirstOrDefault(x => x.EndsWith("\\" + log.Name));
-                        if (script == null)
-                        {
-                            // script is no longer in the folder, archive it
-                            scriptsToArchive.Add(log.Id);
-                        }
-                        else
+                        if (script != null)
                         {
                             // this script has been run - we can skip it
                             scripts.Remove(script);
@@ -289,21 +285,16 @@ namespace DbScriptDeploy.UI.Controls
                         bgw.ReportProgress(-1, log);
                     }
 
-                    // archive the logs that have been removed
-					if (scriptsToArchive.Any())
-					{
-						bgw.ReportProgress(-1, "Marking removed scripts as archived...");
-						dbHelper.ArchiveLogs(scriptsToArchive);
-					}
                 }
 
-                e.Result = loadedScripts;
 
             }
             catch (Exception ex)
             {
                 bgw.ReportProgress(-1, ex);
             }
+
+            e.Result = loadedScripts;
 
         }
 
@@ -333,6 +324,7 @@ namespace DbScriptDeploy.UI.Controls
             dlg.ShowInTaskbar = false;
             dlg.DbEnvironment = this.CurrentDbInstance;
             dlg.Project = this.Project;
+            dlg.IsReadOnly = false;
 
             if ((dlg.ShowDialog() ?? false) == true)
             {
@@ -425,6 +417,11 @@ namespace DbScriptDeploy.UI.Controls
                     scb.IsChecked = true;
                 }
             }
+        }
+
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            this.ReloadScripts();
         }
 
         private void btnCompare_Click(object sender, RoutedEventArgs e)

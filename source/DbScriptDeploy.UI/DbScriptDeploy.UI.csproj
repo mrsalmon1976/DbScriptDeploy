@@ -251,6 +251,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Scripts.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="user.projects">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Resource Include="app.ico" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

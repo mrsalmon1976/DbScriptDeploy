@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DbScriptDeploy"
-#define MyAppVersion "1.0.3"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "Matt Salmon"
 #define MyAppURL "https://github.com/mrsalmon1976/DbScriptDeploy"
 #define MyAppExeName "DbScriptDeploy.UI.exe"
@@ -36,7 +36,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\source\DbScriptDeploy.UI\bin\Release\DbScriptDeploy.UI.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\source\DbScriptDeploy.UI\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion 
+Source: "..\source\DbScriptDeploy.UI\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion; Excludes: "user.projects" 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

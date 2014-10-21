@@ -1,0 +1,43 @@
+[
+  {
+    "Id": "f10edb4f-4022-4e03-8ecc-54ac17d44485",
+    "Name": "cadi_prod",
+    "ScriptFolder": "E:\\Development\\Sofari\\database\\Scripts\\cadi_prod",
+    "DatabaseInstances": [
+      {
+        "Name": "TITAN",
+        "Host": "TITAN",
+        "Port": 1433,
+        "Catalog": "cadi_prod",
+        "AuthType": 0,
+        "UserName": "",
+        "Password": ""
+      },
+      {
+        "Name": "localhost",
+        "Host": "localhost",
+        "Port": 1433,
+        "Catalog": "cadi_prod",
+        "AuthType": 0,
+        "UserName": "",
+        "Password": ""
+      }
+    ]
+  },
+  {
+    "Id": "006233f6-dbfe-40e7-b8ee-7ec44bc7bd2d",
+    "Name": "Test Project",
+    "ScriptFolder": "C:\\Temp\\DbScriptDeployTest",
+    "DatabaseInstances": [
+      {
+        "Name": "localhost",
+        "Host": "localhost",
+        "Port": 1433,
+        "Catalog": "DbScriptDeployTest",
+        "AuthType": 0,
+        "UserName": "",
+        "Password": ""
+      }
+    ]
+  }
+]
