@@ -5,10 +5,10 @@
     "ScriptFolder": "E:\\Development\\Sofari\\database\\Scripts\\cadi_prod",
     "DatabaseInstances": [
       {
-        "Name": "TITAN",
-        "Host": "TITAN",
+        "Name": "TEST",
+        "Host": "TEST",
         "Port": 1433,
-        "Catalog": "cadi_prod",
+        "Catalog": "eg_db",
         "AuthType": 0,
         "UserName": "",
         "Password": ""
@@ -17,7 +17,7 @@
         "Name": "localhost",
         "Host": "localhost",
         "Port": 1433,
-        "Catalog": "cadi_prod",
+        "Catalog": "eg_db2",
         "AuthType": 0,
         "UserName": "",
         "Password": ""
