@@ -49,7 +49,7 @@ namespace DbScriptDeploy.UI.Controls
             pnl.Text = prj.Name;
             pnl.HorizontalAlignment = HorizontalAlignment.Stretch;
 			pnl.Margin = new Thickness(0,5,0,0);
-			pnl.FontSize = this.FontSize + 4;
+			pnl.FontSize = this.FontSize + 3;
             DockPanel.SetDock(pnl, Dock.Top);
             pnl.Tag = prj;
             this.pnlMain.Children.Add(pnl);

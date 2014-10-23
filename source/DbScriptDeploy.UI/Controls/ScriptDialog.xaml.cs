@@ -29,6 +29,7 @@ namespace DbScriptDeploy.UI.Controls
         private Scintilla _scintilla = null;
         private BackgroundWorker _bgWorkerParse;
         private ProgressDialog _progressDlg;
+        private int _currentLineCount = -1;
 
         public ScriptDialog()
         {
@@ -43,12 +44,13 @@ namespace DbScriptDeploy.UI.Controls
                 scintillaHost.TabIndex = 1;
                 scintillaHost.Child = _scintilla;
 				this.Icon = ImageUtils.ImageSourceFromIcon(Images.app);
-                this.Activated += ScriptDialog_Activated;
+                this.Loaded += OnScriptDialogLoaded;
+                _scintilla.TextChanged += OnScintillaTextChanged;
 			}
 
         }
 
-        void ScriptDialog_Activated(object sender, EventArgs e)
+        void OnScriptDialogLoaded(object sender, RoutedEventArgs e)
         {
             btnParse.Visibility = (this.IsReadOnly ? Visibility.Hidden : Visibility.Visible);
             btnSave.Visibility = (this.IsReadOnly ? Visibility.Hidden : Visibility.Visible);
@@ -56,6 +58,16 @@ namespace DbScriptDeploy.UI.Controls
             txtName.Text = this.Script.Name;
             _scintilla.Text = this.Script.ScriptText;
             _scintilla.IsReadOnly = this.IsReadOnly;
+        }
+
+        void OnScintillaTextChanged(object sender, EventArgs e)
+        {
+            int lines = _scintilla.Lines.Count;
+            if (lines != _currentLineCount)
+            {
+                _currentLineCount = lines;
+                _scintilla.Margins[0].Width = System.Windows.Forms.TextRenderer.MeasureText(lines.ToString(), _scintilla.Font).Width;
+            }
         }
 
         public Script Script { get; set; }
