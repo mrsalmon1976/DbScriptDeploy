@@ -136,6 +136,7 @@
     <Compile Include="Controls\SelectPanel.xaml.cs">
       <DependentUpon>SelectPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WatermarkTextBox.cs" />
     <Compile Include="Data\DbHelper.cs" />
     <Compile Include="Events\CheckedEventArgs.cs" />
     <Compile Include="Events\CompareReportEventArgs.cs" />

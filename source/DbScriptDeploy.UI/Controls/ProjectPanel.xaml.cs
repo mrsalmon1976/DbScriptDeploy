@@ -63,6 +63,14 @@ namespace DbScriptDeploy.UI.Controls
             }
         }
 
+        private void UpdateScriptVisibility(ScriptCheckBox scb)
+        {
+            string filter = txtFilter.Text;
+            if (filter.Length == 0) return;
+
+            scb.Visibility = (scb.ScriptLog.Name.Contains(filter) ? Visibility.Visible : Visibility.Collapsed);
+        }
+
         private void AddScript(Script script)
         {
             if (lstScripts.Items.Count > 0 && lstScripts.Items[0] is Label && ((Label)lstScripts.Items[0]).Tag == null)
@@ -76,6 +84,7 @@ namespace DbScriptDeploy.UI.Controls
             scb.Tag = script.Tag ?? Untagged;
 			btnSelectAll.IsEnabled = true;
 
+            UpdateScriptVisibility(scb);
             lstScripts.Items.Add(scb);
 
         }
@@ -178,7 +187,7 @@ namespace DbScriptDeploy.UI.Controls
             _bgWorkerLoad.DoWork += _bgWorkerLoad_DoWork;
             _bgWorkerLoad.RunWorkerCompleted += _bgWorkerLoad_RunWorkerCompleted;
             _bgWorkerLoad.ProgressChanged += _bgWorkerLoad_ProgressChanged;
-            _bgWorkerLoad.RunWorkerAsync(new WorkerInfo(dbInstance, this.Project));
+            _bgWorkerLoad.RunWorkerAsync(new WorkerInfo(dbInstance, this.Project, txtFilter.Text));
 
             _progressDlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             _progressDlg.ShowDialog();
@@ -218,6 +227,7 @@ namespace DbScriptDeploy.UI.Controls
                 btnSelectAll.IsEnabled = true;
             }
 
+            ApplyFilter();
         }
 
         void _bgWorkerLoad_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -256,6 +266,8 @@ namespace DbScriptDeploy.UI.Controls
 
                     // read the files in the folder
                     bgw.ReportProgress(-1, "Reading script files...");
+
+                    //string filter = String.Format("{0}*.sql" workerInfo.Filter
                     List<string> scripts = Directory.EnumerateFiles(workerInfo.Project.ScriptFolder, "*.sql")
                         .OrderBy(x => x)
                         .ToList();
@@ -300,11 +312,12 @@ namespace DbScriptDeploy.UI.Controls
 
         private class WorkerInfo
         {
-            public WorkerInfo(DbEnvironment dbInstance, Project project)
+            public WorkerInfo(DbEnvironment dbInstance, Project project, string filter)
             {
                 this.DbInstance = dbInstance;
                 this.Project = project;
                 this.Scripts = new List<Script>();
+                this.Filter = filter;
             }
 
             public DbEnvironment DbInstance { get; set; }
@@ -314,6 +327,8 @@ namespace DbScriptDeploy.UI.Controls
             public Project Project { get; set; }
 
             public List<Script> Scripts { get; private set; }
+
+            public string Filter { get; set; }
         }
 
         private void btnAddScript_Click(object sender, RoutedEventArgs e)
@@ -338,7 +353,7 @@ namespace DbScriptDeploy.UI.Controls
         {
             btnExecuteScripts.IsEnabled = false;
             btnSelectAll.IsEnabled = false;
-            WorkerInfo workerInfo = new WorkerInfo(this.CurrentDbInstance, this.Project);
+            WorkerInfo workerInfo = new WorkerInfo(this.CurrentDbInstance, this.Project, txtFilter.Text);
 
 			foreach (Control c in lstScripts.Items)
             {
@@ -442,7 +457,7 @@ namespace DbScriptDeploy.UI.Controls
             _progressDlg.Message = String.Format("Comparing {0} and {1}...", databaseInstance1.Name, databaseInstance2.Name);
             _progressDlg.Owner = MainWindow.Instance;
 
-            WorkerInfo workerInfo = new WorkerInfo(databaseInstance1, this.Project);
+            WorkerInfo workerInfo = new WorkerInfo(databaseInstance1, this.Project, txtFilter.Text);
             workerInfo.DbInstance2 = databaseInstance2;
 
             _bgWorkerCompare = new BackgroundWorker();
@@ -538,6 +553,26 @@ namespace DbScriptDeploy.UI.Controls
                 }
 			}
 		}
+
+        private void ApplyFilter()
+        {
+            string filter = txtFilter.Text;
+            if (filter.Length == 0) return;
+
+            foreach (object item in lstScripts.Items)
+            {
+                ScriptCheckBox scb = item as ScriptCheckBox;
+                if (scb != null)
+                {
+                    UpdateScriptVisibility(scb);
+                }
+            }
+        }
+
+        private void OnTxtFilterTextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyFilter();
+        }
 
     }
 }
