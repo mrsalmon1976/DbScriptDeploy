@@ -1,6 +1,7 @@
 ﻿using DbScriptDeploy.UI.Events;
 using DbScriptDeploy.UI.Models;
 using DbScriptDeploy.UI.Services;
+using DbScriptDeploy.UI.Views;
 using StructureMap;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,22 @@ namespace DbScriptDeploy.UI.Controls
 				}
 				e.Handled = true;
 			};
+
+            pnl.EditButtonMouseUp += delegate(object sender, MouseButtonEventArgs e)
+            {
+                SelectPanel panel = (SelectPanel)sender;
+                Project project = (Project)panel.Tag;
+
+                ProjectDialog dlg = new ProjectDialog();
+                dlg.Project = project;
+                if (dlg.ShowDialog() == true)
+                {
+                    _projectService.SaveProject(project);
+                    panel.Text = project.Name;
+                }
+
+                e.Handled = true;
+            };
         }
 
         private void InitializeEvents()

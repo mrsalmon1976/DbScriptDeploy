@@ -142,6 +142,7 @@
     <Compile Include="Events\CompareReportEventArgs.cs" />
     <Compile Include="Events\NotificationEventArgs.cs" />
     <Compile Include="Events\ProjectEventArgs.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\DbEnvironment.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\SchemaComparisonResult.cs" />
@@ -156,10 +157,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Scripts.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\DatabaseComparisonService.cs" />
     <Compile Include="Services\JsonPersistenceService.cs" />
     <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\ScriptExecutionService.cs" />
+    <Compile Include="Services\UI\ScriptArchiveService.cs" />
     <Compile Include="Utils\AppUtils.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Controls\ProjectDialog.xaml.cs">
@@ -278,6 +281,7 @@
     <None Include="Resources\db.ico" />
     <None Include="Resources\db_delete.ico" />
     <None Include="Resources\delete.ico" />
+    <None Include="Resources\edit.ico" />
     <Content Include="Resources\InitScriptLogTable.sql" />
     <None Include="Resources\question.ico" />
     <Content Include="schemazen.exe">

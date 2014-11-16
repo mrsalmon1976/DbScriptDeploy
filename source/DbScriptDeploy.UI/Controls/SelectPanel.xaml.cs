@@ -25,6 +25,7 @@ namespace DbScriptDeploy.UI.Controls
     {
 		private static Brush _borderDefault = Brushes.LightGray;
 		public event EventHandler<MouseButtonEventArgs> DeleteButtonMouseUp;
+        public event EventHandler<MouseButtonEventArgs> EditButtonMouseUp;
 
         public SelectPanel()
         {
@@ -36,7 +37,7 @@ namespace DbScriptDeploy.UI.Controls
 			{
 				imgIcon.Source = ImageUtils.ImageSourceFromIcon(Images.db); ;
 				imgR.Source = ImageUtils.ImageSourceFromIcon(Images.delete);
-
+                imgEdit.Source = ImageUtils.ImageSourceFromIcon(Images.edit);
 			}
 
         }
@@ -70,6 +71,14 @@ namespace DbScriptDeploy.UI.Controls
 				DeleteButtonMouseUp(this, e);
 			}
 		}
+
+        private void imgEdit_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (this.EditButtonMouseUp != null)
+            {
+                EditButtonMouseUp(this, e);
+            }
+        }
 
     }
 }

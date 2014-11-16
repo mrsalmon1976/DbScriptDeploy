@@ -24,8 +24,10 @@
             <ComboBox Name="cbDatabaseInstances" Margin="5,0,5,5" DockPanel.Dock="Top" SelectionChanged="cbDatabaseInstances_SelectionChanged">
                 <Label Content=""/>
             </ComboBox>
+            <Button Name="btnArchive" Content="Archive" DockPanel.Dock="Bottom" IsEnabled="False" Click="btnArchive_Click" Margin="5,0,5,5" />
             <Button Name="btnCompare" Content="Compare" DockPanel.Dock="Bottom" IsEnabled="False" Click="btnCompare_Click" Margin="5,0,5,5" />
             <Button Name="btnOpenFolder" Content="Open Folder" DockPanel.Dock="Bottom" Margin="5,0,5,5" Click="btnOpenFolder_Click" />
+            <Button Name="btnEditDbInstance" Content="Edit Environment" IsEnabled="False" DockPanel.Dock="Bottom" Margin="5,0,5,5" Click="btnEditDbInstance_Click" HorizontalAlignment="Stretch"></Button>
             <Button Name="btnAddDbInstance" Content="Add Environment" DockPanel.Dock="Bottom" Margin="5,0,5,5" Click="btnAddDbInstance_Click" HorizontalAlignment="Stretch"></Button>
             <Label />
         </DockPanel>

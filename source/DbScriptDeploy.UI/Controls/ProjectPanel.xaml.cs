@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Diagnostics;
+using DbScriptDeploy.UI.Services.UI;
 
 namespace DbScriptDeploy.UI.Controls
 {
@@ -40,8 +41,18 @@ namespace DbScriptDeploy.UI.Controls
             {
                 _projectService = ObjectFactory.GetInstance<IProjectService>();
 
+                _projectService.ProjectUpdated += OnProjectServiceProjectUpdated;
+
             }
 
+        }
+
+        void OnProjectServiceProjectUpdated(object sender, ProjectEventArgs e)
+        {
+            if (e.Project.Id == this._project.Id)
+            {
+                this.Project = e.Project;
+            }
         }
 
         public Project Project
@@ -167,6 +178,8 @@ namespace DbScriptDeploy.UI.Controls
             // clear the project pane
 			lstScripts.Items.Clear();
             btnCompare.IsEnabled = false;
+            btnArchive.IsEnabled = false;
+            btnEditDbInstance.IsEnabled = false;
             btnAddScript.IsEnabled = false;
             btnExecuteScripts.IsEnabled = false;
             btnSelectAll.IsEnabled = false;
@@ -215,6 +228,8 @@ namespace DbScriptDeploy.UI.Controls
             btnRefresh.IsEnabled = true;
             btnAddScript.IsEnabled = true;
             btnCompare.IsEnabled = (cbDatabaseInstances.Items.Count > 2);
+            btnEditDbInstance.IsEnabled = (this.CurrentDbInstance != null);
+            btnArchive.IsEnabled = btnEditDbInstance.IsEnabled;
 
             if (scripts.Count == 0)
             {
@@ -266,6 +281,11 @@ namespace DbScriptDeploy.UI.Controls
 
                     // read the files in the folder
                     bgw.ReportProgress(-1, "Reading script files...");
+
+                    if (!Directory.Exists(workerInfo.Project.ScriptFolder))
+                    {
+                        throw new Exception("Project folder no longer exists.");
+                    }
 
                     //string filter = String.Format("{0}*.sql" workerInfo.Filter
                     List<string> scripts = Directory.EnumerateFiles(workerInfo.Project.ScriptFolder, "*.sql")
@@ -572,6 +592,40 @@ namespace DbScriptDeploy.UI.Controls
         private void OnTxtFilterTextChanged(object sender, TextChangedEventArgs e)
         {
             ApplyFilter();
+        }
+
+        private void btnEditDbInstance_Click(object sender, RoutedEventArgs e)
+        {
+            EnvironmentDialog dlg = new EnvironmentDialog();
+            dlg.DbEnvironment = this.CurrentDbInstance;
+            if (dlg.ShowDialog() == true)
+            {
+                DbEnvironment dbInstance = dlg.DbEnvironment;
+                this.Project.DatabaseInstances.Remove(this.CurrentDbInstance);
+                this.Project.DatabaseInstances.Add(dbInstance);
+                _projectService.SaveProject(this.Project);
+                this.ReloadDatabaseInstances();
+            }
+            dlg.Close();
+        }
+
+        private void btnArchive_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show(MainWindow.Instance, "Are you sure you want to archive executed scripts?", "Archive Scripts", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                Action<int> callback = (cnt) =>
+                {
+                    string info = "No scripts archived.";
+                    if (cnt > 0)
+                    {
+                        info = "{0} scripts were archived - please make sure you commit the changes if your scripts are under source control.";
+                    }
+                    MessageBox.Show(MainWindow.Instance, String.Format(info, cnt), "Archive Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                };
+                ScriptArchiveService sas = new ScriptArchiveService(this.Project, this.CurrentDbInstance, callback);
+                sas.Execute();
+            }
         }
 
     }

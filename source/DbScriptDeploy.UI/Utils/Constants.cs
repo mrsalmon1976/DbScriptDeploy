@@ -14,6 +14,11 @@ namespace DbScriptDeploy.UI.Utils
         public const string UserProjectFileName = "user.projects";
 
         /// <summary>
+        /// The name of the file used to store the user's settings.
+        /// </summary>
+        public const string UserSettingsFileName = "user.settings";
+
+        /// <summary>
         /// Default file extension for project files.
         /// </summary>
         public const string ProjectFileExtension = ".scrpt";

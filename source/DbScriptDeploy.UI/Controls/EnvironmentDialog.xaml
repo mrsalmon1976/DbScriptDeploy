@@ -38,8 +38,8 @@
                 <TextBox Grid.Row="4" Grid.Column="1" Name="txtCatalog" Margin="3" TextChanged="txtCatalog_TextChanged" />
                 <Label Grid.Row="5" Grid.Column="0" Content="Authentication Type:"/>
                 <DockPanel Grid.Row="5" Grid.Column="1">
-                    <RadioButton Name="radAuthTypeWindows" GroupName="radAuthType" Content="Windows" Checked="radAuthTypeWindows_Checked" IsChecked="True" />
-                    <RadioButton Name="radAuthTypeSqlServer" GroupName="radAuthType" Content="SQL Server" Checked="radAuthTypeSqlServer_Checked" />
+                    <RadioButton Name="radAuthTypeWindows" GroupName="radAuthType" Content="Windows" Click="radAuthTypeWindows_Checked" IsChecked="True" />
+                    <RadioButton Name="radAuthTypeSqlServer" GroupName="radAuthType" Content="SQL Server" Click="radAuthTypeSqlServer_Checked"  />
                 </DockPanel>
                 <Label Name="lblUserName" Grid.Row="6" Grid.Column="0" Content="User name:" IsEnabled="False"/>
                 <TextBox Grid.Row="6" Grid.Column="1" Name="txtUserName" Margin="3" TextChanged="txtUserName_TextChanged" IsEnabled="False" />

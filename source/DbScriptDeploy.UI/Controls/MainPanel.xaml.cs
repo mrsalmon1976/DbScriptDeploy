@@ -37,8 +37,19 @@ namespace DbScriptDeploy.UI.Controls
 
                 InitializeControls();
                 InitializeEvents();
+
+                _projectService.ProjectUpdated += OnProjectServiceProjectUpdated;
             }
 
+        }
+
+        void OnProjectServiceProjectUpdated(object sender, ProjectEventArgs e)
+        {
+            TabItem ti = FindProjectPanel(e.Project);
+            if (ti != null) 
+            {
+                ti.Header = e.Project.Name;
+            }
         }
 
         private void InitializeControls()
@@ -55,18 +66,28 @@ namespace DbScriptDeploy.UI.Controls
             tabMain.SelectedItem = tabItem;
         }
 
-        void projectsPanel_ProjectPanelClick(object sender, ProjectEventArgs e)
+        private TabItem FindProjectPanel(Project project)
         {
-            Project project = e.Project;
-
             foreach (TabItem ti in tabMain.Items)
             {
                 Project p = ti.Tag as Project;
                 if (p != null && p.Id == project.Id)
                 {
-                    ti.IsSelected = true;
-                    return;
+                    return ti;
                 }
+            }
+            return null;
+        }
+
+        void projectsPanel_ProjectPanelClick(object sender, ProjectEventArgs e)
+        {
+            Project project = e.Project;
+
+            TabItem ti = FindProjectPanel(project);
+            if (ti != null)
+            {
+                ti.IsSelected = true;
+                return;
             }
 
             TabItem tabItem = new TabItem();

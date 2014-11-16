@@ -28,6 +28,13 @@ namespace DbScriptDeploy.UI
                 return new ProjectService(projectFilePath, ObjectFactory.GetInstance<IJsonPersistenceService>()); 
 			}));
 
+            // set up the settings service - for now we'll default the project file path
+            ObjectFactory.Configure(x => x.For<ISettingsService>().Singleton().Use(() =>
+            {
+                string settingsFilePath = Path.Combine(AppUtils.BaseDirectory(), Constants.UserSettingsFileName);
+                return new SettingsService(settingsFilePath, ObjectFactory.GetInstance<IJsonPersistenceService>());
+            }));
+
         
         }
     }

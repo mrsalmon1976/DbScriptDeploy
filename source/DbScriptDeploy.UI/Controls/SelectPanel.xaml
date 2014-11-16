@@ -9,7 +9,10 @@
         <DockPanel HorizontalAlignment="Stretch" LastChildFill="True" Margin="0" VerticalAlignment="Stretch">
             <Image Name="imgIcon" VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/question.ico" Margin="3,3,3,3"/>
             <TextBlock Name="txtText" HorizontalAlignment="Stretch" Margin="10,0,0,0" VerticalAlignment="Center" Text="Default" />
-            <Image Name="imgR" HorizontalAlignment="Right" VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/delete.ico" Width="16" Height="16" Margin="0,4,4,0" MouseUp="imgR_MouseUp"/>
+            <DockPanel HorizontalAlignment="Right" DockPanel.Dock="Right" VerticalAlignment="Top" LastChildFill="False">
+                <Image Name="imgR" HorizontalAlignment="Right" DockPanel.Dock="Right" VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/delete.ico" Width="16" Height="16" Margin="0,4,4,0" MouseUp="imgR_MouseUp" />
+                <Image Name="imgEdit" HorizontalAlignment="Right" DockPanel.Dock="Right" VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/edit.ico" Width="16" Height="16" Margin="0,4,4,0" MouseUp="imgEdit_MouseUp"/>
+            </DockPanel>
         </DockPanel>
 
     </Grid>

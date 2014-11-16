@@ -27,6 +27,7 @@ namespace DbScriptDeploy.UI.Controls
     public partial class EnvironmentDialog : Window
     {
         private BackgroundWorker bgWorker;
+        private DbEnvironment _environment;
 
         public EnvironmentDialog()
         {
@@ -41,7 +42,25 @@ namespace DbScriptDeploy.UI.Controls
             }
         }
 
-        public DbEnvironment DbEnvironment { get; set; }
+        public DbEnvironment DbEnvironment 
+        {
+            get
+            {
+                return this._environment;
+            }
+            set
+            {
+                this._environment = value;
+                txtName.Text = _environment.Name;
+                txtServer.Text = _environment.Host;
+                txtPort.Text = _environment.Port.ToString();
+                txtCatalog.Text = _environment.Catalog;
+                radAuthTypeSqlServer.IsChecked = (_environment.AuthType == AuthType.SqlServer);
+                radAuthTypeWindows.IsChecked = (_environment.AuthType == AuthType.Windows);
+                txtUserName.Text = _environment.UserName;
+                txtPassword.Password = _environment.Password;
+            }
+        }
 
         private void ToggleCredentials(bool enabled)
         {
@@ -80,7 +99,15 @@ namespace DbScriptDeploy.UI.Controls
             }
 
             bool isChanged = false;
-            if (this.DbEnvironment.Name != txtName.Text)
+            if (
+                this.DbEnvironment.AuthType != GetSelectedAuthType()
+                || this.DbEnvironment.Catalog != txtCatalog.Text
+                || this.DbEnvironment.Host != txtServer.Text
+                || this.DbEnvironment.Name != txtName.Text
+                || this.DbEnvironment.Password != txtPassword.Password
+                || this.DbEnvironment.Port.ToString() != txtPort.Text
+                || this.DbEnvironment.UserName != txtUserName.Text
+                )
             {
                 isChanged = true;
             }
@@ -88,6 +115,11 @@ namespace DbScriptDeploy.UI.Controls
             btnSave.IsEnabled = isChanged;
         }
 
+        private AuthType GetSelectedAuthType()
+        {
+            if (radAuthTypeWindows.IsChecked == true) return AuthType.Windows;
+            return AuthType.SqlServer;
+        }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
