@@ -74,12 +74,18 @@ namespace DbScriptDeploy.UI.Controls
             }
         }
 
-        private void UpdateScriptVisibility(ScriptCheckBox scb)
+        private Visibility UpdateScriptVisibility(ScriptCheckBox scb)
         {
             string filter = txtFilter.Text;
-            if (filter.Length == 0) return;
-
-            scb.Visibility = (scb.ScriptLog.Name.Contains(filter) ? Visibility.Visible : Visibility.Collapsed);
+            if (filter.Length == 0)
+            {
+                scb.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                scb.Visibility = (scb.ScriptLog.Name.Contains(filter) ? Visibility.Visible : Visibility.Collapsed);
+            }
+            return scb.Visibility;
         }
 
         private void AddScript(Script script)
@@ -577,16 +583,41 @@ namespace DbScriptDeploy.UI.Controls
         private void ApplyFilter()
         {
             string filter = txtFilter.Text;
-            if (filter.Length == 0) return;
+
+            Dictionary<Label, int> headerTracker = new Dictionary<Label, int>();
+            Label currentHeader = null;
+            int filterCount = 0;
 
             foreach (object item in lstScripts.Items)
             {
+                Label header = item as Label;
+                if (header != null)
+                {
+                    headerTracker.Add(header, 0);
+                    currentHeader = header;
+                    continue;
+                }
+
                 ScriptCheckBox scb = item as ScriptCheckBox;
                 if (scb != null)
                 {
-                    UpdateScriptVisibility(scb);
+                    Visibility vis = UpdateScriptVisibility(scb);
+                    if (vis != Visibility.Visible) filterCount++;
+                    if (vis == Visibility.Visible && headerTracker.Count > 0)
+                    {
+                        headerTracker[currentHeader] = headerTracker[currentHeader] + 1;
+                    }
                 }
+
             }
+
+            // now show/hide the tag headers
+            foreach (KeyValuePair<Label, int> kvp in headerTracker)
+            {
+                kvp.Key.Visibility = (kvp.Value > 0 ? Visibility.Visible : Visibility.Collapsed);
+            }
+
+            lblFilterCount.Content = String.Format("{0} scripts filtered", filterCount);
         }
 
         private void OnTxtFilterTextChanged(object sender, TextChangedEventArgs e)
