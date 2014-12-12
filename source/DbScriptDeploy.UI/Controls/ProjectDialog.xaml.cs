@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DbScriptDeploy.UI.Resources;
+using DbScriptDeploy.UI.Services;
 
 namespace DbScriptDeploy.UI.Views
 {
@@ -127,11 +128,12 @@ namespace DbScriptDeploy.UI.Views
 
         private void OnBrowseButtonClick(object sender, RoutedEventArgs e)
         {
+            dlgFolder.SelectedPath = this.txtScriptFolder.Text;
             var result = dlgFolder.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                this.Project.ScriptFolder = dlgFolder.SelectedPath;
-                this.txtScriptFolder.Text = this.Project.ScriptFolder;
+                this.txtScriptFolder.Text = dlgFolder.SelectedPath;
+                this.HandleInputChanges();
             }
         }
 
