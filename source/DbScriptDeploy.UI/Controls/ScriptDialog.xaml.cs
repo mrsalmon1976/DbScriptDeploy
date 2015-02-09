@@ -58,6 +58,7 @@ namespace DbScriptDeploy.UI.Controls
             txtName.Text = this.Script.Name;
             _scintilla.Text = this.Script.ScriptText;
             _scintilla.IsReadOnly = this.IsReadOnly;
+            txtName.Focus();
         }
 
         void OnScintillaTextChanged(object sender, EventArgs e)

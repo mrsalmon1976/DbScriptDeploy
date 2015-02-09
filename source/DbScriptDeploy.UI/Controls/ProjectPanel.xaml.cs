@@ -602,7 +602,11 @@ namespace DbScriptDeploy.UI.Controls
                 if (scb != null)
                 {
                     Visibility vis = UpdateScriptVisibility(scb);
-                    if (vis != Visibility.Visible) filterCount++;
+                    if (vis != Visibility.Visible)
+                    {
+                        scb.IsChecked = false;      // make sure you remove the checked status
+                        filterCount++;
+                    }
                     if (vis == Visibility.Visible && headerTracker.Count > 0)
                     {
                         headerTracker[currentHeader] = headerTracker[currentHeader] + 1;

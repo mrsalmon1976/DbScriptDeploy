@@ -9,9 +9,9 @@
                 <TextBox Name="txtName" LostFocus="txtName_LostFocus" TabIndex="0" />
             </DockPanel>
             <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
-                <Button Name="btnCancel" Content="Cancel" DockPanel.Dock="Right" IsCancel="True" IsDefault="True" Margin="5" Padding="15,0,15,0" TabIndex="2" />
-                <Button Name="btnParse" Content="Parse" DockPanel.Dock="Right" Click="btnParse_Click" Margin="5" Padding="15,0,15,0" TabIndex="3" />
-                <Button Name="btnSave" Content="Save" DockPanel.Dock="Right" Click="btnSave_Click" Margin="5" Padding="15,0,15,0" TabIndex="4" />
+                <Button Name="btnCancel" Content="Cancel" DockPanel.Dock="Right" IsCancel="True" IsDefault="False" Margin="5" Padding="15,0,15,0" TabIndex="2" />
+                <Button Name="btnParse" Content="Parse" DockPanel.Dock="Right" Click="btnParse_Click" Margin="5" Padding="15,0,15,0" TabIndex="3" IsDefault="True" />
+                <Button Name="btnSave" Content="Save" DockPanel.Dock="Right" Click="btnSave_Click" Margin="5" Padding="15,0,15,0" TabIndex="4" IsDefault="False" />
             </DockPanel>
             <WindowsFormsHost Name="scintillaHost"></WindowsFormsHost>
 

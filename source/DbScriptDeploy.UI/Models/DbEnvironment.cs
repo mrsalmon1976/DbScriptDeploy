@@ -18,6 +18,7 @@ namespace DbScriptDeploy.UI.Models
         public DbEnvironment()
         {
             this.AuthType = Models.AuthType.Windows;
+            this.Port = 1433;   // default SQL Server port
         }
 
         public string Name { get; set; }
