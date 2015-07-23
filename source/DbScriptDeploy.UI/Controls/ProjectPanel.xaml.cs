@@ -62,7 +62,7 @@ namespace DbScriptDeploy.UI.Controls
             {
                 _project = value;
                 ReloadDatabaseInstances();
-                lblHeader.Content = "Project: " + value.Name;
+                lblHeader.Content = ControlUtils.EscapeContent("Project: " + value.Name);
             }
         }
 
@@ -74,18 +74,22 @@ namespace DbScriptDeploy.UI.Controls
             }
         }
 
-        private Visibility UpdateScriptVisibility(ScriptCheckBox scb)
+        private Visibility UpdateScriptVisibility(ListViewItem lvi)
         {
+            ScriptCheckBox scb = (ScriptCheckBox)lvi.Content;
             string filter = txtFilter.Text;
             if (filter.Length == 0)
             {
-                scb.Visibility = Visibility.Visible;
+                lvi.Visibility = Visibility.Visible;
+                //scb.Height = 25;
             }
             else
             {
-                scb.Visibility = (scb.ScriptLog.Name.Contains(filter) ? Visibility.Visible : Visibility.Collapsed);
+                lvi.Visibility = (scb.ScriptLog.Name.Contains(filter) ? Visibility.Visible : Visibility.Collapsed);
+                //scb.Margin = new Thickness(0);
+                //scb.Height = 0;
             }
-            return scb.Visibility;
+            return lvi.Visibility;
         }
 
         private void AddScript(Script script)
@@ -101,8 +105,12 @@ namespace DbScriptDeploy.UI.Controls
             scb.Tag = script.Tag ?? Untagged;
 			btnSelectAll.IsEnabled = true;
 
-            UpdateScriptVisibility(scb);
-            lstScripts.Items.Add(scb);
+
+            ListViewItem lvi = new ListViewItem();
+            lvi.Content = scb;
+            UpdateScriptVisibility(lvi);
+
+            lstScripts.Items.Add(lvi);
 
         }
 
@@ -598,10 +606,12 @@ namespace DbScriptDeploy.UI.Controls
                     continue;
                 }
 
-                ScriptCheckBox scb = item as ScriptCheckBox;
-                if (scb != null)
+
+                ListViewItem lvi = item as ListViewItem;
+                if (lvi != null)
                 {
-                    Visibility vis = UpdateScriptVisibility(scb);
+                    ScriptCheckBox scb = (ScriptCheckBox)lvi.Content ;
+                    Visibility vis = UpdateScriptVisibility(lvi);
                     if (vis != Visibility.Visible)
                     {
                         scb.IsChecked = false;      // make sure you remove the checked status

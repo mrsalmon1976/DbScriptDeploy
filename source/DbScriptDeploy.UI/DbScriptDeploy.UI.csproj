@@ -168,6 +168,7 @@
     <Compile Include="Controls\ProjectDialog.xaml.cs">
       <DependentUpon>ProjectDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ControlUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\ImageUtils.cs" />
     <Compile Include="Utils\ScintillaUtils.cs" />

@@ -1,6 +1,7 @@
 ﻿using DbScriptDeploy.UI.Events;
 using DbScriptDeploy.UI.Models;
 using DbScriptDeploy.UI.Services;
+using DbScriptDeploy.UI.Utils;
 using StructureMap;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace DbScriptDeploy.UI.Controls
             TabItem ti = FindProjectPanel(e.Project);
             if (ti != null) 
             {
-                ti.Header = e.Project.Name;
+                ti.Header = ControlUtils.EscapeContent(e.Project.Name);
             }
         }
 

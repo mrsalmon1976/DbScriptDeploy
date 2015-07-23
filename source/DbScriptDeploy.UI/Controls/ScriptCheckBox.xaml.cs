@@ -1,5 +1,6 @@
 ﻿using DbScriptDeploy.UI.Events;
 using DbScriptDeploy.UI.Models;
+using DbScriptDeploy.UI.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -72,7 +73,7 @@ namespace DbScriptDeploy.UI.Controls
             set
             {
                 _scriptLog = value;
-                lblScript.Content = value.Name;
+                lblScript.Content = ControlUtils.EscapeContent(value.Name);
             }
         }
 
