@@ -142,7 +142,7 @@ namespace DbScriptDeploy.UI.Controls
             {
                 ListViewItem lvi = lstScripts.Items[i] as ListViewItem;
                 if (lvi == null) continue;
-                ScriptCheckBox scb = (ScriptCheckBox)lvi.Content;
+                ScriptCheckBox scb = lvi.Content as ScriptCheckBox;
 
                 if (scb == null) continue;
 
