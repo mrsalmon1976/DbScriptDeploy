@@ -128,7 +128,9 @@ namespace DbScriptDeploy.UI.Controls
                 lblTag.Margin = new Thickness(0, 5, 0, 0);
             }
 
-            lstScripts.Items.Add(lblTag);
+            ListViewItem lvi = new ListViewItem();
+            lvi.Content = lblTag;
+            lstScripts.Items.Add(lvi);
         }
 
         void scb_CheckedChanged(object sender, Events.CheckedEventArgs e)
@@ -138,18 +140,20 @@ namespace DbScriptDeploy.UI.Controls
 
             for (int i=0; i<lstScripts.Items.Count; i++)
             {
+                ListViewItem lvi = lstScripts.Items[i] as ListViewItem;
+                if (lvi == null) continue;
+                ScriptCheckBox scb = (ScriptCheckBox)lvi.Content;
 
-                ScriptCheckBox sbc = lstScripts.Items[i] as ScriptCheckBox;
-                if (sbc == null) continue;
+                if (scb == null) continue;
 
-				if (sbc.IsChecked)
+                if (scb.IsChecked)
 				{
-					lstScripts.SelectedItems.Add(sbc);
+                    lstScripts.SelectedItems.Add(lvi);
 					isExecuteEnabled = true;
 				}
 				else
 				{
-					lstScripts.SelectedItems.Remove(sbc);
+                    lstScripts.SelectedItems.Remove(lvi);
 				}
             }
 			btnExecuteScripts.IsEnabled = isExecuteEnabled;
@@ -391,7 +395,10 @@ namespace DbScriptDeploy.UI.Controls
 
 			foreach (Control c in lstScripts.Items)
             {
-                ScriptCheckBox scb = c as ScriptCheckBox;
+                ListViewItem lvi = c as ListViewItem;
+                if (lvi == null) continue;
+
+                ScriptCheckBox scb = lvi.Content as ScriptCheckBox;
                 if (scb != null && scb.IsChecked) workerInfo.Scripts.Add(scb.ScriptLog);
             }
 
@@ -460,7 +467,10 @@ namespace DbScriptDeploy.UI.Controls
 
 			foreach (Control c in lstScripts.Items)
             {
-                ScriptCheckBox scb = c as ScriptCheckBox;
+                ListViewItem lvi = c as ListViewItem;
+                if (lvi == null) continue;
+
+                ScriptCheckBox scb = lvi.Content as ScriptCheckBox;
                 if (scb != null)
                 {
                     scb.IsChecked = true;
@@ -592,24 +602,24 @@ namespace DbScriptDeploy.UI.Controls
         {
             string filter = txtFilter.Text;
 
-            Dictionary<Label, int> headerTracker = new Dictionary<Label, int>();
-            Label currentHeader = null;
+            Dictionary<ListViewItem, int> headerTracker = new Dictionary<ListViewItem, int>();
+            ListViewItem currentHeader = null;
             int filterCount = 0;
 
             foreach (object item in lstScripts.Items)
             {
-                Label header = item as Label;
-                if (header != null)
-                {
-                    headerTracker.Add(header, 0);
-                    currentHeader = header;
-                    continue;
-                }
-
-
                 ListViewItem lvi = item as ListViewItem;
+
                 if (lvi != null)
                 {
+                    Label header = lvi.Content as Label;
+                    if (header != null)
+                    {
+                        headerTracker.Add(lvi, 0);
+                        currentHeader = lvi;
+                        continue;
+                    }
+
                     ScriptCheckBox scb = (ScriptCheckBox)lvi.Content ;
                     Visibility vis = UpdateScriptVisibility(lvi);
                     if (vis != Visibility.Visible)
@@ -626,7 +636,7 @@ namespace DbScriptDeploy.UI.Controls
             }
 
             // now show/hide the tag headers
-            foreach (KeyValuePair<Label, int> kvp in headerTracker)
+            foreach (KeyValuePair<ListViewItem, int> kvp in headerTracker)
             {
                 kvp.Key.Visibility = (kvp.Value > 0 ? Visibility.Visible : Visibility.Collapsed);
             }
