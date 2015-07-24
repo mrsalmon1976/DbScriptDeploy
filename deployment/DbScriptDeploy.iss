@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DbScriptDeploy"
-#define MyAppVersion "1.2.5"
+#define MyAppVersion "1.2.6"
 #define MyAppPublisher "Matt Salmon"
 #define MyAppURL "https://github.com/mrsalmon1976/DbScriptDeploy"
 #define MyAppExeName "DbScriptDeploy.UI.exe"
