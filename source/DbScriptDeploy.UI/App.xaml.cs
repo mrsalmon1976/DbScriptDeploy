@@ -45,6 +45,7 @@ namespace DbScriptDeploy.UI
                         {
                             Console.WriteLine(ex.Message);
                             Console.WriteLine(ex.StackTrace);
+                            logger.ErrorException(ex.Message, ex);
                             throw;
                         }
                     }
