@@ -175,3 +175,7 @@ FakesAssemblies/
 
 # Deployment files
 Output/
+
+# Custom
+docs/AdminBSBMaterialDesign-1.0.7
+.vs/
