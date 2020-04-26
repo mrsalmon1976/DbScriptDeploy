@@ -9,17 +9,11 @@ namespace DbScriptDeploy.Modules
     public class DashboardModule : BaseSecureModule
     {
 
-        public static class Artefacts
-        {
-            public static class Routes
-            {
-                public const string Default = "/dashboard";
-            }
-        }
+        public const string Route_Default_Get = "/dashboard";
 
         public DashboardModule()
         {
-            Get(Artefacts.Routes.Default, x =>
+            Get(Route_Default_Get, x =>
             {
                 return this.View["Index.html"];
             });

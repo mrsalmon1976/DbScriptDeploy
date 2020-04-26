@@ -18,7 +18,7 @@ var loginApp = new Vue({
     data: {
         isProcessing: false,
         password: '',
-        email: ''
+        userName: ''
     },
     methods: {
         submitLogin: function () {
@@ -36,10 +36,10 @@ var loginApp = new Vue({
             //    password: $(that.selectorPassword).val(),
             //};
             var request = $.ajax({
-                url: '/api/login',
+                url: '/api/account/login',
                 method: "POST",
                 data: {
-                    email: this.email,
+                    userName: this.userName,
                     password: this.password
                 }
             });

@@ -14,6 +14,11 @@ namespace DbScriptDeploy.BLL.Data
     {
 
         /// <summary>
+        /// Identifies this DBContext.
+        /// </summary>
+        Guid Id { get; set; }
+
+        /// <summary>
         /// Gets the transaction created with BeginTransaction.
         /// </summary>
         IDbTransaction Transaction { get; }
@@ -73,10 +78,20 @@ namespace DbScriptDeploy.BLL.Data
     public abstract class DbContext : IDbContext
     {
 
+        public DbContext()
+        {
+            this.Id = Guid.NewGuid();
+        }
+
+        /// <summary>
+        /// Identifies this DBContext.
+        /// </summary>
+        public virtual Guid Id { get; set; }
+
         /// <summary>
         /// Gets the transaction created with BeginTransaction.
         /// </summary>
-        public IDbTransaction Transaction { get; protected set; }
+        public virtual IDbTransaction Transaction { get; protected set; }
 
         /// <summary>
         /// Begins a new transaction (if supported by the DbContext)
@@ -128,7 +143,7 @@ namespace DbScriptDeploy.BLL.Data
         /// <returns></returns>
         public abstract IEnumerable<T> Query<T>(string sql, object param = null);
 
-        protected string ReadResource(string qualifiedName)
+        protected virtual string ReadResource(string qualifiedName)
         {
             var assembly = Assembly.GetExecutingAssembly();
             string result = null;

@@ -1,4 +1,9 @@
-﻿using DbScriptDeploy.BLL.Data;
+﻿using DbScriptDeploy.BLL.Commands;
+using DbScriptDeploy.BLL.Data;
+using DbScriptDeploy.BLL.Repositories;
+using DbScriptDeploy.BLL.Security;
+using DbScriptDeploy.BLL.Services;
+using DbScriptDeploy.BLL.Validators;
 using Microsoft.AspNetCore.Hosting;
 using Nancy;
 using Nancy.Authentication.Forms;
@@ -31,24 +36,22 @@ namespace DbScriptDeploy
 
             // Initialise the database only on application start
             string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "DbScriptDeploy.db");
+
+            // make sure we initialise the database and an admin user if one does not exist
             IDbContextFactory dbContextFactory = new DbContextFactory(dbPath);
             container.Register<IDbContextFactory>(dbContextFactory);
-            using (IDbContext dbc = dbContextFactory.GetDbContext())
-            {
-                dbc.Initialise();
+            container.Register<IDbContext>(container.Resolve<IDbContextFactory>().GetDbContext());
 
-                // make sure an administrator exists
-                //IUserRepository userRepo = new UserRepository(dbc);
-                //IUserValidator userValidator = new UserValidator(userRepo);
-                //IUserService userService = new UserService(userRepo, new CreateUserCommand(dbc, userValidator, new PasswordProvider()));
-                //userService.InitialiseAdminUser();
-            }
-
+            this.InitialiseDatabase(dbContextFactory);
         }
 
         protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
         {
             base.RequestStartup(container, pipelines, context);
+
+            // register database context per request
+            IDbContextFactory dbContextFactory = container.Resolve<IDbContextFactory>();
+            container.Register<IDbContext>(dbContextFactory.GetDbContext());
 
             var formsAuthConfiguration = new FormsAuthenticationConfiguration()
             {
@@ -59,5 +62,25 @@ namespace DbScriptDeploy
             FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
 
         }
+
+        private void InitialiseDatabase(IDbContextFactory dbContextFactory)
+        {
+            using (IDbContext dbc = dbContextFactory.GetDbContext())
+            {
+                dbc.Initialise();
+
+                IUserRepository userRepo = new UserRepository(dbc);
+                IUserClaimRepository userClaimRepo = new UserClaimRepository(dbc);
+                ICreateUserCommand createUserCmd = new CreateUserCommand(dbc, new UserValidator(userRepo), new PasswordProvider());
+                ICreateUserClaimCommand createUserClaimCmd = new CreateUserClaimCommand(dbc, new UserClaimValidator(userClaimRepo));
+
+                // make sure an administrator exists
+                IUserService userService = new UserService(dbc, userRepo, createUserCmd, createUserClaimCmd);
+                userService.InitialiseAdminUser();
+            }
+
+        }
+
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using Nancy;
+﻿using DbScriptDeploy.BLL.Models;
+using DbScriptDeploy.BLL.Repositories;
+using Nancy;
 using Nancy.Authentication.Forms;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,14 @@ namespace DbScriptDeploy.Security
 {
     public class UserMapper : IUserMapper
     {
+
+        private readonly IUserRepository _userRepo;
+
+        public UserMapper(IUserRepository userRepo)
+        {
+            _userRepo = userRepo;
+        }
+
         /// <summary>
         /// Get the real username from an identifier
         /// </summary>
@@ -19,7 +29,8 @@ namespace DbScriptDeploy.Security
         /// <returns>Matching populated IUserIdentity object, or empty</returns>
         public ClaimsPrincipal GetUserFromIdentifier(Guid identifier, NancyContext context)
         {
-            return new ClaimsPrincipal(new GenericIdentity("test"));
+            UserModel user = _userRepo.GetById(identifier);
+            return new ClaimsPrincipal(new GenericIdentity(user.UserName));
         }
 
     }

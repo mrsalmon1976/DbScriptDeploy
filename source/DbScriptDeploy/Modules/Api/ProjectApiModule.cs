@@ -8,11 +8,11 @@ namespace DbScriptDeploy.Modules.Api
 {
     public class ProjectApiModule : BaseSecureApiModule
     {
-        public const string Route_Item = "/api/projects";
+        public const string Route_Post = "/api/projects";
 
         public ProjectApiModule()
         {
-            Post(Route_Item, x =>
+            Post(Route_Post, x =>
             {
                 var result = new { Result = "Ok" };
                 return this.Response.AsJson(result);
