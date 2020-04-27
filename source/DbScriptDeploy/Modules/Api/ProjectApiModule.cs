@@ -14,6 +14,8 @@ namespace DbScriptDeploy.Modules.Api
         {
             Post(Route_Post, x =>
             {
+                var projectName = Request.Form.ProjectName;//["Name"];
+                //this.bin
                 var result = new { Result = "Ok" };
                 return this.Response.AsJson(result);
             });

@@ -6,23 +6,16 @@ using System.Threading.Tasks;
 
 namespace DbScriptDeploy.BLL.Models
 {
-    public class UserModel
+    public class ProjectModel
     {
-        public UserModel()
+        public ProjectModel()
         {
             this.Id = Guid.NewGuid();
-            this.Claims = new List<UserClaimModel>();
         }
 
         public Guid Id { get; set; }
 
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-
-        public bool PasswordExpired { get; set; }
-
-        public List<UserClaimModel> Claims { get; }
+        public string Name { get; set; }
 
         public DateTime CreateDate { get; set; }
     }

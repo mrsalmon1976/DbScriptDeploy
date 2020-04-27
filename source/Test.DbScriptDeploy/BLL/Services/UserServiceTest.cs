@@ -22,16 +22,16 @@ namespace Test.DbScriptDeploy.BLL.Services
 
         private IDbContext _dbContext;
         private IUserRepository _userRepo;
-        private ICreateUserCommand _createUserCommand;
-        private ICreateUserClaimCommand _createUserClaimCommand;
+        private IUserCreateCommand _createUserCommand;
+        private IUserClaimCreateCommand _createUserClaimCommand;
 
         [SetUp]
         public void UserServiceTest_SetUp()
         {
             _dbContext = Substitute.For<IDbContext>();
             _userRepo = Substitute.For<IUserRepository>();
-            _createUserCommand = Substitute.For<ICreateUserCommand>();
-            _createUserClaimCommand = Substitute.For<ICreateUserClaimCommand>();
+            _createUserCommand = Substitute.For<IUserCreateCommand>();
+            _createUserClaimCommand = Substitute.For<IUserClaimCreateCommand>();
             _userService = new UserService(_dbContext, _userRepo, _createUserCommand, _createUserClaimCommand);
         }
 

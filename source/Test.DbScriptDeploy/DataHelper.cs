@@ -25,6 +25,14 @@ namespace Test.DbScriptDeploy
             return Path.GetTempFileName();
         }
 
+        public static ProjectModel CreateProjectModel()
+        {
+            ProjectModel model = new ProjectModel();
+            model.Name = "TestProject";
+            model.CreateDate = DateTime.UtcNow;
+            return model;
+        }
+
         public static UserClaimModel CreateUserClaimModel(Guid? userId = null, string name = null, Guid? projectId = null)
         {
             UserClaimModel model = new UserClaimModel();
@@ -39,6 +47,7 @@ namespace Test.DbScriptDeploy
             UserModel model = new UserModel();
             model.UserName = "TestUser";
             model.Password = "password";
+            model.CreateDate = DateTime.UtcNow;
             return model;
         }
 

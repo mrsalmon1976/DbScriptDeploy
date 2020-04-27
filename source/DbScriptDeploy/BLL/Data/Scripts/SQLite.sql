@@ -2,12 +2,14 @@
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
 	UserName text NOT NULL,
 	Password text NOT NULL,
-	PasswordExpired bit NOT NULL
+	PasswordExpired bit NOT NULL,
+	CreateDate text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Project (
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
-	Name text NOT NULL
+	Name text NOT NULL,
+	CreateDate text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS UserClaim (

@@ -71,8 +71,8 @@ namespace DbScriptDeploy
 
                 IUserRepository userRepo = new UserRepository(dbc);
                 IUserClaimRepository userClaimRepo = new UserClaimRepository(dbc);
-                ICreateUserCommand createUserCmd = new CreateUserCommand(dbc, new UserValidator(userRepo), new PasswordProvider());
-                ICreateUserClaimCommand createUserClaimCmd = new CreateUserClaimCommand(dbc, new UserClaimValidator(userClaimRepo));
+                IUserCreateCommand createUserCmd = new UserCreateCommand(dbc, new UserValidator(userRepo), new PasswordProvider());
+                IUserClaimCreateCommand createUserClaimCmd = new UserClaimCreateCommand(dbc, new UserClaimValidator(userClaimRepo));
 
                 // make sure an administrator exists
                 IUserService userService = new UserService(dbc, userRepo, createUserCmd, createUserClaimCmd);

@@ -18,26 +18,26 @@ using DbScriptDeploy.BLL.Repositories;
 namespace Test.DbScriptDeploy.BLL.Commands
 {
     [TestFixture]
-    public class CreateUserCommandTest
+    public class UserCreateCommandTest
     {
-        private ICreateUserCommand _createUserCommand;
+        private IUserCreateCommand _createUserCommand;
 
         private IDbContext _dbContext;
         private IUserValidator _userValidator;
         private IPasswordProvider _passwordProvider;
 
         [SetUp]
-        public void CreateUserCommandTest_SetUp()
+        public void UserCreateCommandTest_SetUp()
         {
             _dbContext = Substitute.For<IDbContext>();
             _userValidator = Substitute.For<IUserValidator>();
             _passwordProvider = Substitute.For<IPasswordProvider>();
 
-            _createUserCommand = new CreateUserCommand(_dbContext, _userValidator, _passwordProvider);
+            _createUserCommand = new UserCreateCommand(_dbContext, _userValidator, _passwordProvider);
         }
 
         [TearDown]
-        public void CreateUserCommandTest_TearDown()
+        public void UserCreateCommandTest_TearDown()
         {
             // delete all .db files (in case previous tests have failed)
             TestHelper.DeleteTestFiles(AppContext.BaseDirectory, "*.dbtest");
@@ -103,6 +103,7 @@ namespace Test.DbScriptDeploy.BLL.Commands
         [Test]
         public void Execute_IntegrationTest_SQLite()
         {
+            DateTime startTime = DateTime.UtcNow.AddSeconds(-1);
             string filePath = Path.Combine(AppContext.BaseDirectory, Path.GetRandomFileName() + ".dbtest");
             using (SQLiteDbContext dbContext = new SQLiteDbContext(filePath))
             {
@@ -116,7 +117,7 @@ namespace Test.DbScriptDeploy.BLL.Commands
                 IUserValidator userValidator = new UserValidator(userRepo);
                 IPasswordProvider passwordProvider = new PasswordProvider();
 
-                ICreateUserCommand createUserCommand = new CreateUserCommand(dbContext, userValidator, passwordProvider);
+                IUserCreateCommand createUserCommand = new UserCreateCommand(dbContext, userValidator, passwordProvider);
                 createUserCommand.Execute(user.UserName, user.Password);
 
                 UserModel savedUser = userRepo.GetByUserName(user.UserName);
@@ -125,6 +126,8 @@ namespace Test.DbScriptDeploy.BLL.Commands
                 Assert.AreEqual(user.UserName, savedUser.UserName);
                 Assert.IsTrue(passwordProvider.CheckPassword(user.Password, savedUser.Password));
                 Assert.IsTrue(savedUser.PasswordExpired);
+                Assert.LessOrEqual(startTime, savedUser.CreateDate);
+                Assert.GreaterOrEqual(DateTime.UtcNow, savedUser.CreateDate);
 
             }
 

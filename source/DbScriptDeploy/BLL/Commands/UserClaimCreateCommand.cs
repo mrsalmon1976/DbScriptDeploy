@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace DbScriptDeploy.BLL.Commands
 {
-    public interface ICreateUserClaimCommand
+    public interface IUserClaimCreateCommand
     {
         UserClaimModel Execute(Guid userId, string name, Guid? projectId);
 
     }
 
-    public class CreateUserClaimCommand : ICreateUserClaimCommand
+    public class UserClaimCreateCommand : IUserClaimCreateCommand
     {
         private readonly IDbContext _dbContext;
         private readonly IUserClaimValidator _userClaimValidator;
 
-        public CreateUserClaimCommand(IDbContext dbContext, IUserClaimValidator userClaimValidator)
+        public UserClaimCreateCommand(IDbContext dbContext, IUserClaimValidator userClaimValidator)
         {
             _dbContext = dbContext;
             _userClaimValidator = userClaimValidator;

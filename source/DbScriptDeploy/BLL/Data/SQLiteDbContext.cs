@@ -17,6 +17,8 @@ namespace DbScriptDeploy.BLL.Data
         private readonly string _connString;
         private SQLiteConnection _conn;
 
+        public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+
         public SQLiteDbContext(string filePath) : base()
         {
             _dbPath = filePath;

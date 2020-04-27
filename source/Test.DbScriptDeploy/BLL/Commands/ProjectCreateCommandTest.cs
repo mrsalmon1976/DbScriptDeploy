@@ -18,24 +18,24 @@ using DbScriptDeploy.BLL.Repositories;
 namespace Test.DbScriptDeploy.BLL.Commands
 {
     [TestFixture]
-    public class CreateUserClaimCommandTest
+    public class ProjectCreateCommandTest
     {
-        private ICreateUserClaimCommand _createUserClaimCommand;
+        private IProjectCreateCommand _createProjectCommand;
 
         private IDbContext _dbContext;
-        private IUserClaimValidator _userClaimValidator;
+        private IProjectValidator _projectValidator;
 
         [SetUp]
-        public void CreateUserClaimCommandTest_SetUp()
+        public void ProjectCreateCommandTest_SetUp()
         {
             _dbContext = Substitute.For<IDbContext>();
-            _userClaimValidator = Substitute.For<IUserClaimValidator>();
+            _projectValidator = Substitute.For<IProjectValidator>();
 
-            _createUserClaimCommand = new CreateUserClaimCommand(_dbContext, _userClaimValidator);
+            _createProjectCommand = new ProjectCreateCommand(_dbContext, _projectValidator);
         }
 
         [TearDown]
-        public void CreateUserClaimCommandTest_TearDown()
+        public void ProjectCreateCommandTest_TearDown()
         {
             // delete all .db files (in case previous tests have failed)
             TestHelper.DeleteTestFiles(AppContext.BaseDirectory, "*.dbtest");
@@ -45,12 +45,12 @@ namespace Test.DbScriptDeploy.BLL.Commands
         [Test]
         public void Execute_ValidationFails_ThrowsException()
         {
-            UserClaimModel model = DataHelper.CreateUserClaimModel();
+            ProjectModel model = DataHelper.CreateProjectModel();
 
-            _userClaimValidator.Validate(Arg.Any<UserClaimModel>()).Returns(new ValidationResult("error"));
+            _projectValidator.Validate(Arg.Any<ProjectModel>()).Returns(new ValidationResult("error"));
 
             // execute
-            TestDelegate del = () => _createUserClaimCommand.Execute(model.UserId, model.Name, model.ProjectId);
+            TestDelegate del = () => _createProjectCommand.Execute(model.Name);
             
             // assert
             Assert.Throws<ValidationException>(del);
@@ -62,12 +62,12 @@ namespace Test.DbScriptDeploy.BLL.Commands
         [Test]
         public void Execute_ValidationSucceeds_RecordInserted()
         {
-            UserClaimModel model = DataHelper.CreateUserClaimModel();
+            ProjectModel model = DataHelper.CreateProjectModel();
 
-            _userClaimValidator.Validate(Arg.Any<UserClaimModel>()).Returns(new ValidationResult());
+            _projectValidator.Validate(Arg.Any<ProjectModel>()).Returns(new ValidationResult());
 
             // execute
-            _createUserClaimCommand.Execute(model.UserId, model.Name, model.ProjectId);
+            _createProjectCommand.Execute(model.Name);
 
             // assert
             _dbContext.Received(1).ExecuteNonQuery(Arg.Any<string>(), Arg.Any<object>());
@@ -80,27 +80,29 @@ namespace Test.DbScriptDeploy.BLL.Commands
         [Test]
         public void Execute_IntegrationTest_SQLite()
         {
+            DateTime startTime = DateTime.UtcNow.AddSeconds(-1);
             string filePath = Path.Combine(AppContext.BaseDirectory, Path.GetRandomFileName() + ".dbtest");
+            string projectName = DataHelper.RandomString();
+
             using (SQLiteDbContext dbContext = new SQLiteDbContext(filePath))
             {
                 dbContext.Initialise();
                 dbContext.BeginTransaction();
 
                 // create the user
-                UserClaimModel claim = DataHelper.CreateUserClaimModel(Guid.NewGuid(), DataHelper.RandomString(), Guid.NewGuid());
+                IProjectRepository projectRepo = new ProjectRepository(dbContext);
+                IProjectValidator projectValidator = new ProjectValidator();
 
-                IUserClaimRepository userClaimRepo = new UserClaimRepository(dbContext);
-                IUserClaimValidator userClaimValidator = new UserClaimValidator(userClaimRepo);
+                IProjectCreateCommand createProjectCommand = new ProjectCreateCommand(dbContext, projectValidator);
+                ProjectModel project = createProjectCommand.Execute(projectName);
 
-                ICreateUserClaimCommand createUserClaimCommand = new CreateUserClaimCommand(dbContext, userClaimValidator);
-                createUserClaimCommand.Execute(claim.UserId, claim.Name, claim.ProjectId);
+                ProjectModel savedProject = projectRepo.GetById(project.Id);
 
-                UserClaimModel savedClaim = userClaimRepo.GetByUserId(claim.UserId).FirstOrDefault(x => x.ProjectId == claim.ProjectId);
+                Assert.IsNotNull(savedProject);
+                Assert.AreEqual(project.Name, savedProject.Name);
+                Assert.LessOrEqual(startTime, savedProject.CreateDate);
+                Assert.GreaterOrEqual(DateTime.UtcNow, savedProject.CreateDate);
 
-                Assert.IsNotNull(savedClaim);
-                Assert.AreEqual(claim.UserId, savedClaim.UserId);
-                Assert.AreEqual(claim.Name, savedClaim.Name);
-                Assert.AreEqual(claim.ProjectId, savedClaim.ProjectId);
             }
 
         }

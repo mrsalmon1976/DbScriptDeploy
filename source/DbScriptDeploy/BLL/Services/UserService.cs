@@ -21,13 +21,13 @@ namespace DbScriptDeploy.BLL.Services
     {
         private readonly IDbContext _dbContext;
         private readonly IUserRepository _userRepo;
-        private readonly ICreateUserCommand _createUserCommand;
-        private readonly ICreateUserClaimCommand _createUserClaimCommand;
+        private readonly IUserCreateCommand _createUserCommand;
+        private readonly IUserClaimCreateCommand _createUserClaimCommand;
 
         public const string AdminUserName = "admin";
         public const string AdminDefaultPassword = "password";
 
-        public UserService(IDbContext dbContext, IUserRepository userRepo, ICreateUserCommand createUserCommand, ICreateUserClaimCommand createUserClaimCommand)
+        public UserService(IDbContext dbContext, IUserRepository userRepo, IUserCreateCommand createUserCommand, IUserClaimCreateCommand createUserClaimCommand)
         {
             _dbContext = dbContext;
             _userRepo = userRepo;

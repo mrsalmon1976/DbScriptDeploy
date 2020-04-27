@@ -52,7 +52,7 @@ var loginApp = new Vue({
                 //window.location.assign($('#returnUrl').val());
             });
             request.fail(function (xhr, textStatus) {
-                alert('TODO: error logging in')
+                alert('TODO: error logging in');
                 //    try {
                 //        Utils.showError(that.selectorErrorMessage, xhr.responseJSON.message);
                 //    }

@@ -14,21 +14,23 @@
                 showLoaderOnConfirm: true,
                 animation: "slide-from-top",
                 inputPlaceholder: "Project name"
-            }, function (inputValue) {
-                if (inputValue === false) return false;
-                if (inputValue === "") {
-                    swal.showInputError("You need enter a project name"); return false;
-                }
-                    var data = { name: inputValue };
-                axios.post('/api/projects', data)
-                    .then(function (response) {
+                }, function (inputValue) {
+                    if (inputValue === false) return false;
+                    if (inputValue === "") {
+                        swal.showInputError("You need enter a project name"); return false;
+                    }
+                    var request = $.ajax({
+                        url: '/api/projects',
+                        method: "POST",
+                        data: {
+                            projectName: inputValue
+                        }
+                    });
+                    request.done(function (response) {
                         swal("Success", "Your new project has been created.", "success");
-                    })
-                    .catch(function (error) {
+                    });
+                    request.fail(function (xhr, textStatus) {
                         swal("Error", error, "error");
-                    })
-                    .then(function () {
-                        // always executed
                     });
             });
         }

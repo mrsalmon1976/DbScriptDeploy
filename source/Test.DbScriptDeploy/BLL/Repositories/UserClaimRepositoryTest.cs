@@ -52,8 +52,8 @@ namespace Test.DbScriptDeploy.BLL.Repositories
                 IUserRepository userRepo = new UserRepository(dbContext);
                 IUserClaimRepository userClaimRepo = new UserClaimRepository(dbContext);
 
-                ICreateUserCommand createUserCommand = new CreateUserCommand(dbContext, new UserValidator(userRepo), new PasswordProvider());
-                ICreateUserClaimCommand createUserClaimCommand = new CreateUserClaimCommand(dbContext, new UserClaimValidator(userClaimRepo));
+                IUserCreateCommand createUserCommand = new UserCreateCommand(dbContext, new UserValidator(userRepo), new PasswordProvider());
+                IUserClaimCreateCommand createUserClaimCommand = new UserClaimCreateCommand(dbContext, new UserClaimValidator(userClaimRepo));
 
                 // create the user
                 UserModel user = DataHelper.CreateUserModel();

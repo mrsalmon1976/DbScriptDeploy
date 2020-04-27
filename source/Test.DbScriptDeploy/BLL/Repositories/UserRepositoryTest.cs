@@ -50,7 +50,7 @@ namespace Test.DbScriptDeploy.BLL.Repositories
 
                 IUserRepository userRepo = new UserRepository(dbContext);
 
-                ICreateUserCommand createUserCommand = new CreateUserCommand(dbContext, new UserValidator(userRepo), new PasswordProvider());
+                IUserCreateCommand createUserCommand = new UserCreateCommand(dbContext, new UserValidator(userRepo), new PasswordProvider());
 
                 // create the users
                 UserModel userB = DataHelper.CreateUserModel();
@@ -90,7 +90,7 @@ namespace Test.DbScriptDeploy.BLL.Repositories
 
                 IUserRepository userRepo = new UserRepository(dbContext);
 
-                ICreateUserCommand createUserCommand = new CreateUserCommand(dbContext, new UserValidator(userRepo), new PasswordProvider());
+                IUserCreateCommand createUserCommand = new UserCreateCommand(dbContext, new UserValidator(userRepo), new PasswordProvider());
 
                 // create the user
                 UserModel user = DataHelper.CreateUserModel();
