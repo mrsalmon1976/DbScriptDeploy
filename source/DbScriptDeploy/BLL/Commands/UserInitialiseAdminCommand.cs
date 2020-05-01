@@ -1,5 +1,6 @@
 ﻿using DbScriptDeploy.BLL.Commands;
 using DbScriptDeploy.BLL.Data;
+using DbScriptDeploy.BLL.Exceptions;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.BLL.Security;
@@ -9,15 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DbScriptDeploy.BLL.Services
+namespace DbScriptDeploy.BLL.Commands
 {
 
-    public interface IUserService
+    public interface IUserInitialiseAdminCommand
     {
-        UserModel InitialiseAdminUser();
+        UserModel Execute();
     }
 
-    public class UserService : IUserService
+    public class UserInitialiseAdminCommand : IUserInitialiseAdminCommand
     {
         private readonly IDbContext _dbContext;
         private readonly IUserRepository _userRepo;
@@ -27,7 +28,7 @@ namespace DbScriptDeploy.BLL.Services
         public const string AdminUserName = "admin";
         public const string AdminDefaultPassword = "password";
 
-        public UserService(IDbContext dbContext, IUserRepository userRepo, IUserCreateCommand createUserCommand, IUserClaimCreateCommand createUserClaimCommand)
+        public UserInitialiseAdminCommand(IDbContext dbContext, IUserRepository userRepo, IUserCreateCommand createUserCommand, IUserClaimCreateCommand createUserClaimCommand)
         {
             _dbContext = dbContext;
             _userRepo = userRepo;
@@ -35,15 +36,17 @@ namespace DbScriptDeploy.BLL.Services
             _createUserClaimCommand = createUserClaimCommand;
         }
 
-        public UserModel InitialiseAdminUser()
+        public UserModel Execute()
         {
+            if (_dbContext.Transaction == null)
+            {
+                throw new TransactionMissingException();
+            }
             UserModel user = _userRepo.GetByUserName(AdminUserName);
             if (user == null)
             {
-                _dbContext.BeginTransaction();
                 user = _createUserCommand.Execute(AdminUserName, AdminDefaultPassword);
                 user.Claims.Add(_createUserClaimCommand.Execute(user.Id, ClaimNames.Administrator, null));
-                _dbContext.Commit();
             }
             return user;
         }

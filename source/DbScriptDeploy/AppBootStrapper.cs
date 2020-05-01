@@ -2,7 +2,6 @@
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.BLL.Security;
-using DbScriptDeploy.BLL.Services;
 using DbScriptDeploy.BLL.Validators;
 using Microsoft.AspNetCore.Hosting;
 using Nancy;
@@ -32,6 +31,7 @@ namespace DbScriptDeploy
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
+            // do not call base, we don't want auto registration to happen
             base.ApplicationStartup(container, pipelines);
 
             // Initialise the database only on application start
@@ -40,7 +40,7 @@ namespace DbScriptDeploy
             // make sure we initialise the database and an admin user if one does not exist
             IDbContextFactory dbContextFactory = new DbContextFactory(dbPath);
             container.Register<IDbContextFactory>(dbContextFactory);
-            container.Register<IDbContext>(container.Resolve<IDbContextFactory>().GetDbContext());
+            container.Register<IDbContext>(dbContextFactory.GetDbContext());
 
             this.InitialiseDatabase(dbContextFactory);
         }
@@ -51,7 +51,23 @@ namespace DbScriptDeploy
 
             // register database context per request
             IDbContextFactory dbContextFactory = container.Resolve<IDbContextFactory>();
-            container.Register<IDbContext>(dbContextFactory.GetDbContext());
+            IDbContext dbContext = dbContextFactory.GetDbContext();
+            container.Register<IDbContext>(dbContext);
+
+            // validators
+            container.Register<IProjectValidator, ProjectValidator>();
+            container.Register<IUserClaimValidator, UserClaimValidator>();
+            container.Register<IUserValidator, UserValidator>();
+
+            // repositories
+            container.Register<IProjectRepository, ProjectRepository>();
+            container.Register<IUserClaimRepository, UserClaimRepository>();
+            container.Register<IUserRepository, UserRepository>();
+
+            // commands
+            container.Register<IProjectCreateCommand, ProjectCreateCommand>();
+            container.Register<IUserClaimCreateCommand, UserClaimCreateCommand>();
+            container.Register<IUserCreateCommand, UserCreateCommand>();
 
             var formsAuthConfiguration = new FormsAuthenticationConfiguration()
             {
@@ -75,8 +91,11 @@ namespace DbScriptDeploy
                 IUserClaimCreateCommand createUserClaimCmd = new UserClaimCreateCommand(dbc, new UserClaimValidator(userClaimRepo));
 
                 // make sure an administrator exists
-                IUserService userService = new UserService(dbc, userRepo, createUserCmd, createUserClaimCmd);
-                userService.InitialiseAdminUser();
+
+                IUserInitialiseAdminCommand cmd = new UserInitialiseAdminCommand(dbc, userRepo, createUserCmd, createUserClaimCmd);
+                dbc.BeginTransaction();
+                cmd.Execute();
+                dbc.Commit();
             }
 
         }
