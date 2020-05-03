@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Nancy;
 using Nancy.Authentication.Forms;
 using Nancy.Bootstrapper;
+using Nancy.Cryptography;
 using Nancy.Extensions;
 using Nancy.TinyIoc;
 using System;
@@ -22,17 +23,25 @@ namespace DbScriptDeploy
         protected override IRootPathProvider RootPathProvider { get; }
 
         private readonly IAppSettings _appSettings;
+        private static CryptographyConfiguration _cryptographyConfiguration;
+
 
         public AppBootStrapper(IWebHostEnvironment environment, IAppSettings appSettings)
         {
             RootPathProvider = new AppRootPathProvider(environment);
             _appSettings = appSettings;
+
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             // do not call base, we don't want auto registration to happen
             base.ApplicationStartup(container, pipelines);
+
+            // set up the crypto config
+            _cryptographyConfiguration = new CryptographyConfiguration(
+                new AesEncryptionProvider(new PassphraseKeyGenerator($"AES_{_appSettings.SecureKey}", new byte[] { 101, 2, 103, 4, 105, 6, 107, 8 })),
+                new DefaultHmacProvider(new PassphraseKeyGenerator($"HMAC_{_appSettings.SecureKey}", new byte[] { 101, 2, 103, 4, 105, 6, 107, 8 })));
 
             // Initialise the database only on application start
             string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "DbScriptDeploy.db");
@@ -71,6 +80,7 @@ namespace DbScriptDeploy
 
             var formsAuthConfiguration = new FormsAuthenticationConfiguration()
             {
+                CryptographyConfiguration = _cryptographyConfiguration,
                 RedirectUrl = "/account/login",
                 UserMapper = container.Resolve<IUserMapper>(),
                 DisableRedirect = context.Request.IsAjaxRequest()

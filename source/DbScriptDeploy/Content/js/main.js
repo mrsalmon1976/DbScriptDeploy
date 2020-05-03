@@ -2,9 +2,15 @@
     el: '#master_menu',
     data: {
         isProcessing: false,
+        isLoadingProjects: true,
+        projects: []
+    },
+    mounted: function () {
+        this.loadProjects();
     },
     methods: {
         addProject: function () {
+            var that = this;
             swal({
                 title: "Add Project",
                 text: "Enter the name of your project",
@@ -27,12 +33,30 @@
                         }
                     });
                     request.done(function (response) {
+                        that.loadProjects();
                         swal("Success", "Your new project has been created.", "success");
                     });
                     request.fail(function (xhr, textStatus) {
                         swal("Error", error, "error");
                     });
             });
-        }
+        },
+        loadProjects: function () {
+            var that = this;
+            that.isLoadingProjects = true;
+            var request = $.ajax({
+                url: '/api/projects/user',
+                method: "GET"
+            });
+            request.done(function (response) {
+                that.projects = response;
+            });
+            request.fail(function (xhr, textStatus) {
+                swal("Error", error, "error");
+            });
+            request.always(function (xhr, textStatus, errorThrown) {
+                that.isLoadingProjects = false;
+            });
+        },
     }
 });

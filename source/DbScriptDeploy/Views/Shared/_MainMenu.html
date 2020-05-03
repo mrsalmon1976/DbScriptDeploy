@@ -13,14 +13,12 @@
                 <span>Projects</span>
             </a>
             <ul class="ml-menu">
-                <li>
-                    <a href="../../pages/ui/thumbnails.html">Project A</a>
+                <li v-if="isLoadingProjects"><a href="#"><img src="/Content/img/loading_16x11.gif" alt="Loading..." /></a></li>
+                <li v-for="p in projects">
+                    <a v-bind:href="'/project/'+ p.id">{{ p.name }}</a>
                 </li>
-                <li class="active">
-                    <a href="../../pages/ui/tabs.html">Project X</a>
-                </li>
-                <li>
-                    <a href="#"  v-on:click="addProject"><i>Add new project</i></a>
+                <li v-if="!isLoadingProjects">
+                    <a href="#" v-on:click="addProject"><i>Add new project</i></a>
                 </li>
             </ul>
         </li>

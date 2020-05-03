@@ -42,7 +42,7 @@ namespace DbScriptDeploy.BLL.Repositories
             if (isAdmin)
             {
                 // administrators get access to all projects
-                sql = @"SELECT * FROM Project p";
+                sql = @"SELECT * FROM Project p ORDER BY p.Name";
             }
             else
             {
@@ -50,7 +50,8 @@ namespace DbScriptDeploy.BLL.Repositories
                         FROM Project p 
                         INNER JOIN UserClaim uc ON p.Id = uc.ProjectId 
                         WHERE uc.UserId = @UserId
-                        AND uc.ProjectId IS NOT NULL";
+                        AND uc.ProjectId IS NOT NULL
+                        ORDER BY p.Name";
             }
             return _dbContext.Query<ProjectModel>(sql, new { UserId = userId });
         }
