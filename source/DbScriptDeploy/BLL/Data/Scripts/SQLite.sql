@@ -20,3 +20,16 @@ CREATE TABLE IF NOT EXISTS UserClaim (
 	FOREIGN KEY (UserId) REFERENCES User (Id),
 	FOREIGN KEY (ProjectId) REFERENCES Project (Id)
 );
+
+CREATE TABLE IF NOT EXISTS ProjectEnvironment (
+	Id UNIQUEIDENTIFIER PRIMARY KEY,
+	ProjectId UNIQUEIDENTIFIER NULL,
+	Name text NOT NULL,
+	DbType text NOT NULL,
+	HostName text NOT NULL,
+	Port numeric NOT NULL,
+	UserName text NOT NULL,
+	Password text NOT NULL,
+	DisplayOrder numeric NOT NULL,
+	FOREIGN KEY (ProjectId) REFERENCES Project (Id)
+);

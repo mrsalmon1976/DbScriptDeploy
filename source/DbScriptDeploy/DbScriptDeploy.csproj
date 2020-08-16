@@ -53,6 +53,9 @@
     <None Update="Content\js\main.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\js\pages\project.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\js\pages\account_login.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

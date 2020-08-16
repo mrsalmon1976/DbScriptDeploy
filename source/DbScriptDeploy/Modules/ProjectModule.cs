@@ -13,7 +13,8 @@ namespace DbScriptDeploy.Modules
         {
             Get(Route_Default_Get, x =>
             {
-                return this.View["Index.html"];
+                var model = new { ProjectId = x.id };
+                return this.View["Index.html", model];
             });
         }
     }
