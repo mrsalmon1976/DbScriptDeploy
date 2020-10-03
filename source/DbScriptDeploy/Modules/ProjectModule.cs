@@ -11,6 +11,12 @@ namespace DbScriptDeploy.Modules
 
         public ProjectModule()
         {
+            Before.AddItemToEndOfPipeline(ctx =>
+            {
+                this.AddScript("/Content/js/pages/project.js");
+                return null;
+            });
+
             Get(Route_Default_Get, x =>
             {
                 var model = new { ProjectId = x.id };

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DbScriptDeploy.BLL.Data;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,11 +18,11 @@ namespace DbScriptDeploy.BLL.Models
 
         public Guid ProjectId { get; set; }
 
-        public string Name { get; set; }
-
-        public string DbType { get; set; }
-
         public string HostName { get; set; }
+
+        public DatabaseType DbType { get; set; }
+
+        public string DbName { get; set; }
 
         public int Port { get; set; }
 
@@ -29,6 +31,8 @@ namespace DbScriptDeploy.BLL.Models
         public string Password { get; set; }
 
         public int DisplayOrder { get; set; }
+
+        public DateTime CreateDate { get; set; }
 
     }
 }

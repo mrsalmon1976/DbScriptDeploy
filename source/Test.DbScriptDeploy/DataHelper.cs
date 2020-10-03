@@ -1,4 +1,5 @@
-﻿using DbScriptDeploy.BLL.Models;
+﻿using DbScriptDeploy.BLL.Data;
+using DbScriptDeploy.BLL.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,6 +24,21 @@ namespace Test.DbScriptDeploy
         public static string RandomString()
         {
             return Path.GetTempFileName();
+        }
+
+        public static EnvironmentModel CreateEnvironmentModel()
+        {
+            EnvironmentModel model = new EnvironmentModel();
+            model.DbName = "MyFakeDb";
+            model.DbType = DatabaseType.SqlServer;
+            model.DisplayOrder = 1;
+            model.HostName = "MyFakeServer";
+            model.Password = "password";
+            model.Port = 9876;
+            model.ProjectId = Guid.NewGuid();
+            model.UserName = "Eric";
+            model.CreateDate = DateTime.UtcNow;
+            return model;
         }
 
         public static ProjectModel CreateProjectModel()

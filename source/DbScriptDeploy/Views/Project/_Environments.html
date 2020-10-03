@@ -1,0 +1,75 @@
+﻿<div id="content_environment">
+    <div>
+        <button type="button" class="btn btn-info waves-effect" data-toggle="modal" data-target="#modal-environment">
+            <i class="material-icons">playlist_add</i>
+            <span>New...</span>
+        </button>
+    </div>
+    <form>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Scripts</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>1</td>
+                    <td>DEV-01</td>
+                    <td>Dev</td>
+                    <td>13</td>
+                    <td>
+                        <i class="material-icons">arrow_drop_down</i>
+                        <i class="material-icons">arrow_drop_up</i>
+                        <i class="material-icons">delete</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>2</td>
+                    <td>DEV-01</td>
+                    <td>Dev</td>
+                    <td>15</td>
+                    <td>
+                        <i class="material-icons">arrow_drop_down</i>
+                        <i class="material-icons">arrow_drop_up</i>
+                        <i class="material-icons">delete</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>3</td>
+                    <td>UAT-01</td>
+                    <td>UAT</td>
+                    <td>22</td>
+                    <td>
+                        <i class="material-icons">arrow_drop_down</i>
+                        <i class="material-icons">arrow_drop_up</i>
+                        <i class="material-icons">delete</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>4</td>
+                    <td>PROD-01</td>
+                    <td>Prod</td>
+                    <td>30</td>
+                    <td>
+                        <i class="material-icons">arrow_drop_down</i>
+                        <i class="material-icons">arrow_drop_up</i>
+                        <i class="material-icons">delete</i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <li v-for="e in environments">
+        <a v-bind:href="'/project/'+ e.id">{{ e.name }}</a>
+    </li>
+</div>

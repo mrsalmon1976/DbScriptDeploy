@@ -1,5 +1,4 @@
 ﻿@Master['_Master.html']
-
 @Section['Content']
 <div id="project-page" class="row clearfix">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -44,17 +43,17 @@
                             <i class="material-icons">settings</i> SETTINGS
                         </a>
                     </li>
+                    <li role="presentation" style="float:right;">
+                        <button type="button" class="btn bg-deep-orange btn-circle waves-effect waves-circle waves-light waves-float pull-right">
+                            <i class="material-icons">playlist_add</i>
+                        </button>                    
+                    </li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="tab_scripts">
-                        <p>
-                            Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                            Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                            pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                            sadipscing mel.
-                        </p>
+                        @Partial['_Scripts.html', Model];
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tab_history">
                         <b>History Content</b>
@@ -75,21 +74,7 @@
                         </p>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tab_environment">
-                        <div id="content_environment">
-                            <div class="preloader">
-                                <div class="spinner-layer pl-red-grey">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="circle-clipper right">
-                                        <div class="circle"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <li v-for="e in environments">
-                                <a v-bind:href="'/project/'+ e.id">{{ e.name }}</a>
-                            </li>
-                        </div>
+                        @Partial['_Environments.html', Model];
                     </div>
                 </div>
             </div>
@@ -97,4 +82,98 @@
     </div>
 </div>
 <input type="hidden" id="hid-project-id" value="@Model.ProjectId" />
+
+<!-- Environment modal-->
+<div class="modal fade" id="modal-environment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Add Environment</h4>
+            </div>
+            <div class="modal-body">
+                <form name="frmEnvironment" class="form-horizontal form-modal">
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="env_server">Host name</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="env_server" class="form-control" placeholder="The name of the server" autocomplete="off" style="cursor: auto;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="env_database">Database</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="env_database" class="form-control" placeholder="Database name" autocomplete="off" style="cursor: auto;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="env_port">Port</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="number" id="env_port" value="1433" class="form-control" placeholder="" autocomplete="off" style="cursor: auto;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="env_user">User name</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="env_user" class="form-control" placeholder="" autocomplete="off" style="cursor: auto;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="env_password">Password</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="env_password" class="form-control" autocomplete="off" style="cursor: auto;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="env_displayorder">Display order</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <select id="env_displayorder" class="form-control show-tick">
+                                        <option value="1">1</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect">SAVE</button>
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>
 @EndSection

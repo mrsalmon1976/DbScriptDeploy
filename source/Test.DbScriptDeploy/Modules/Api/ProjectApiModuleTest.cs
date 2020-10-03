@@ -55,7 +55,7 @@ namespace Test.DbScriptDeploy.Modules.Api
             _projectCreateCommand.Execute(project.Name).Returns(project);
 
             // execute
-            var response = browser.Post(ProjectApiModule.Route_Post, (with) =>
+            var response = browser.Post(ProjectApiModule.Route_Post_AddProject, (with) =>
             {
                 with.HttpRequest();
                 with.FormValue("projectName", project.Name);

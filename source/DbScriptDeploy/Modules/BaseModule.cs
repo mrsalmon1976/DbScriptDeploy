@@ -1,4 +1,5 @@
 ﻿using DbScriptDeploy.Security;
+using DbScriptDeploy.ViewModels;
 using Nancy;
 using Nancy.Authentication.Forms;
 using System;
@@ -18,17 +19,14 @@ namespace DbScriptDeploy.Modules
             {
                 
                 ctx.ViewBag.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                ctx.ViewBag.Data = new ViewBagData();
                 return null;
             });
         }
 
         protected void AddScript(string script)
         {
-            if (Context.ViewBag.Scripts == null)
-            {
-                Context.ViewBag.Scripts = new List<string>();
-            }
-            ((List<string>)Context.ViewBag.Scripts).Add(script);
+            ((ViewBagData)Context.ViewBag.Data).Scripts.Add(script);
         }
     }
 }

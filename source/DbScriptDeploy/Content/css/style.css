@@ -8218,3 +8218,8 @@ html.ie11 .bs-searchbox .form-control {
     margin-right: auto;
     display: block;
 }
+
+/* CUSTOM OVERRIDES */
+.form-modal > .row {
+    margin-bottom: 20px;
+}

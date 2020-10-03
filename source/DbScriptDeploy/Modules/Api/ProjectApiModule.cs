@@ -68,7 +68,7 @@ namespace DbScriptDeploy.Modules.Api
             List<EnvironmentModel> environments = new List<EnvironmentModel>();
             for (int i=0; i< 10; i++)
             {
-                environments.Add(new EnvironmentModel() { Name = $"Env {i}", HostName = $"Host {i}" });
+                environments.Add(new EnvironmentModel() { HostName = $"Host {i}" });
             }
             return this.Response.AsJson(environments);
         }

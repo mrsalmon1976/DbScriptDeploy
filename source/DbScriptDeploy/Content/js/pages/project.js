@@ -8,7 +8,7 @@ var projectEnvironmentApp = new Vue({
     el: '#project-page',
     data: globalData,
     mounted: function () {
-        alert(this.projectId);
+        //alert(this.projectId);
         this.loadEnvironments();
     },
     methods: {
