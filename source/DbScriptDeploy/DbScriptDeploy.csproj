@@ -107,6 +107,12 @@
     <None Update="Views\Project\Editor\Index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Views\Project\_History.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Views\Project\_Settings.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Views\Project\_Scripts.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
