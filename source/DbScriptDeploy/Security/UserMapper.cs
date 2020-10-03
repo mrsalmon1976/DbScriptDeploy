@@ -30,6 +30,10 @@ namespace DbScriptDeploy.Security
         public ClaimsPrincipal GetUserFromIdentifier(Guid identifier, NancyContext context)
         {
             UserModel user = _userRepo.GetById(identifier);
+            if (user == null)
+            {
+                return null;
+            }
             return new UserPrincipal(identifier, new GenericIdentity(user.UserName));
         }
 

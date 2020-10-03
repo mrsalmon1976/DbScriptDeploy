@@ -18,7 +18,7 @@ namespace DbScriptDeploy.BLL.Models
 
         public string Name { get; set; }
 
-        public Guid? ProjectId { get; set; }
+        public int? ProjectId { get; set; }
 
     }
 }

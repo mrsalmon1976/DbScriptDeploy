@@ -49,7 +49,7 @@ namespace Test.DbScriptDeploy
             return model;
         }
 
-        public static UserClaimModel CreateUserClaimModel(Guid? userId = null, string name = null, Guid? projectId = null)
+        public static UserClaimModel CreateUserClaimModel(Guid? userId = null, string name = null, int? projectId = null)
         {
             UserClaimModel model = new UserClaimModel();
             model.UserId = userId ?? Guid.NewGuid();

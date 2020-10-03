@@ -2,7 +2,9 @@
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
+using DbScriptDeploy.BLL.Utilities;
 using DbScriptDeploy.Security;
+using DbScriptDeploy.ViewModels.Api;
 using Nancy;
 using Nancy.Routing;
 using System;
@@ -52,18 +54,26 @@ namespace DbScriptDeploy.Modules.Api
             _dbContext.BeginTransaction();
             ProjectModel result = _projectCreateCommand.Execute(projectName);
             _dbContext.Commit();
-            return this.Response.AsJson(result);
+
+            // only return what we need in the response
+            var response = new ProjectViewModel()
+            {
+                Id = UrlUtility.EncodeNumber(result.Id),
+                Name = result.Name
+            };
+            return this.Response.AsJson(response);
         }
 
         public dynamic LoadUserProjects()
         {
             UserPrincipal userPrincipal = this.Context.CurrentUser as UserPrincipal;
             List<ProjectModel> projects = _projectRepo.GetAllByUserId(userPrincipal.UserId).ToList();
-            return this.Response.AsJson(projects);
+            IEnumerable<ProjectViewModel> result = projects.Select(x => ProjectViewModel.FromProjectModel(x));
+            return this.Response.AsJson(result);
 
         }
 
-        public dynamic LoadEnvironments(Guid projectId)
+        public dynamic LoadEnvironments(string projectId)
         {
             List<EnvironmentModel> environments = new List<EnvironmentModel>();
             for (int i=0; i< 10; i++)

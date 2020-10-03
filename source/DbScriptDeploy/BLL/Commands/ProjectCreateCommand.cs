@@ -41,8 +41,8 @@ namespace DbScriptDeploy.BLL.Commands
 
             // insert new record
             string createDate = project.CreateDate.ToString(SQLiteDbContext.DateTimeFormat);
-            string sql = $"INSERT INTO Project (Id, Name, CreateDate) VALUES (@Id, @Name, '{createDate}')";
-            _dbContext.ExecuteNonQuery(sql, project);
+            string sql = $"INSERT INTO Project (Name, CreateDate) VALUES (@Name, '{createDate}');SELECT last_insert_rowid()";
+            project.Id = _dbContext.ExecuteScalar<int>(sql, project);
 
             return project;
         }

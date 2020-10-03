@@ -3,8 +3,10 @@ using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.BLL.Security;
+using DbScriptDeploy.BLL.Utilities;
 using DbScriptDeploy.Modules.Api;
 using DbScriptDeploy.Security;
+using DbScriptDeploy.ViewModels.Api;
 using Nancy;
 using Nancy.Authentication.Forms;
 using Nancy.Bootstrapper;
@@ -66,8 +68,9 @@ namespace Test.DbScriptDeploy.Modules.Api
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             _projectCreateCommand.Received(1).Execute(project.Name);
 
-            ProjectModel result = JsonConvert.DeserializeObject<ProjectModel>(response.Body.AsString());
-            Assert.AreEqual(project.Id, result.Id);
+            ProjectViewModel result = JsonConvert.DeserializeObject<ProjectViewModel>(response.Body.AsString());
+            string safeProjectId = UrlUtility.EncodeNumber(project.Id);
+            Assert.AreEqual(safeProjectId, result.Id);
 
             _dbContext.Received(1).BeginTransaction();
             _dbContext.Received(1).Commit();
@@ -76,7 +79,7 @@ namespace Test.DbScriptDeploy.Modules.Api
 
         #endregion
 
-        #region AddProject Tests
+        #region LoadUserProjects Tests
 
         [Test]
         public void LoadUserProjects_LoadsDataForCurrentUser()
@@ -87,7 +90,8 @@ namespace Test.DbScriptDeploy.Modules.Api
             var browser = CreateBrowser(currentUser);
 
             List<ProjectModel> userProjects = new List<ProjectModel>();
-            userProjects.Add(DataHelper.CreateProjectModel());
+            ProjectModel project1 = DataHelper.CreateProjectModel();
+            userProjects.Add(project1);
             userProjects.Add(DataHelper.CreateProjectModel());
             userProjects.Add(DataHelper.CreateProjectModel());
             _projectRepo.GetAllByUserId(userId).Returns(userProjects);
@@ -103,8 +107,12 @@ namespace Test.DbScriptDeploy.Modules.Api
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             _projectRepo.Received(1).GetAllByUserId(userId);
 
-            List<ProjectModel> result = JsonConvert.DeserializeObject<List<ProjectModel>>(response.Body.AsString());
+            List<ProjectViewModel> result = JsonConvert.DeserializeObject<List<ProjectViewModel>>(response.Body.AsString());
             Assert.AreEqual(userProjects.Count, result.Count);
+
+            ProjectViewModel pvm = result.First();
+            Assert.AreEqual(project1.Id, UrlUtility.DecodeNumber(pvm.Id));
+            Assert.AreEqual(project1.Name, pvm.Name);
         }
 
 

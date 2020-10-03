@@ -11,7 +11,7 @@ namespace DbScriptDeploy.BLL.Commands
 {
     public interface IUserClaimCreateCommand
     {
-        UserClaimModel Execute(Guid userId, string name, Guid? projectId);
+        UserClaimModel Execute(Guid userId, string name, int? projectId);
 
     }
 
@@ -26,7 +26,7 @@ namespace DbScriptDeploy.BLL.Commands
             _userClaimValidator = userClaimValidator;
         }
 
-        public UserClaimModel Execute(Guid userId, string name, Guid? projectId)
+        public UserClaimModel Execute(Guid userId, string name, int? projectId)
         {
             UserClaimModel userClaim = new UserClaimModel();
             userClaim.UserId = userId;

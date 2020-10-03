@@ -57,7 +57,8 @@ namespace Test.DbScriptDeploy.BLL.Validators
         [Test]
         public void Validate_UserClaimAlreadyExists_ReturnsFailure()
         {
-            UserClaimModel model = DataHelper.CreateUserClaimModel(projectId: Guid.NewGuid());
+            int projectId = new Random().Next(1, 100);
+            UserClaimModel model = DataHelper.CreateUserClaimModel(projectId: projectId);
 
             List<UserClaimModel> existingClaims = new List<UserClaimModel>();
             existingClaims.Add(new UserClaimModel() { Name = model.Name, ProjectId = model.ProjectId });

@@ -11,7 +11,7 @@ namespace DbScriptDeploy.BLL.Repositories
 {
     public interface IProjectRepository
     {
-        ProjectModel GetById(Guid id);
+        ProjectModel GetById(int id);
 
         IEnumerable<ProjectModel> GetAllByUserId(Guid userId);
 
@@ -27,7 +27,7 @@ namespace DbScriptDeploy.BLL.Repositories
             _dbContext = dbContext;
         }
 
-        public ProjectModel GetById(Guid id)
+        public ProjectModel GetById(int id)
         {
             const string sql = "SELECT * FROM Project WHERE Id = @Id";
             return _dbContext.Query<ProjectModel>(sql, new { Id = id }).SingleOrDefault();

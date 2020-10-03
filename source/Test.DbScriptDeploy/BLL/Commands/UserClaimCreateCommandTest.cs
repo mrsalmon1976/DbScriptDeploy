@@ -87,7 +87,8 @@ namespace Test.DbScriptDeploy.BLL.Commands
                 dbContext.BeginTransaction();
 
                 // create the user
-                UserClaimModel claim = DataHelper.CreateUserClaimModel(Guid.NewGuid(), DataHelper.RandomString(), Guid.NewGuid());
+                int projectId = new Random().Next(1, 100);
+                UserClaimModel claim = DataHelper.CreateUserClaimModel(Guid.NewGuid(), DataHelper.RandomString(), projectId);
 
                 IUserClaimRepository userClaimRepo = new UserClaimRepository(dbContext);
                 IUserClaimValidator userClaimValidator = new UserClaimValidator(userClaimRepo);
