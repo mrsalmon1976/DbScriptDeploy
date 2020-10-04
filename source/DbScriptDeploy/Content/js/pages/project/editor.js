@@ -10,12 +10,14 @@ var projectEditorApp = new Vue({
         // set this to /ace/mode/sql if not SqlServer database
         editorUp.session.setMode("ace/mode/sqlserver");
         editorUp.setReadOnly(false); 
+        document.getElementById('editor_up').style.fontSize = '14px';
 
         var editorDown = ace.edit("editor_down");
         editorDown.setTheme("ace/theme/sqlserver");
         // set this to /ace/mode/sql if not SqlServer database
         editorDown.session.setMode("ace/mode/sqlserver");
         editorDown.setReadOnly(false); 
+        document.getElementById('editor_down').style.fontSize = '14px';
     },
     methods: {
     }

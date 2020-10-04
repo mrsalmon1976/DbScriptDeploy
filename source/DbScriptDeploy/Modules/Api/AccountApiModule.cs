@@ -16,8 +16,8 @@ namespace DbScriptDeploy.Modules.Api
     {
         public const string Route_Login_Post = "/api/account/login";
 
-        private IUserRepository _userRepo;
-        private IPasswordProvider _passwordProvider;
+        private readonly IUserRepository _userRepo;
+        private readonly IPasswordProvider _passwordProvider;
 
         public AccountApiModule(IUserRepository userRepo, IPasswordProvider passwordProvider)
         {

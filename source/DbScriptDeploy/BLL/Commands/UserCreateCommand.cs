@@ -17,9 +17,9 @@ namespace DbScriptDeploy.BLL.Commands
     }
     public class UserCreateCommand : IUserCreateCommand
     {
-        private IDbContext _dbContext;
-        private IUserValidator _userValidator;
-        private IPasswordProvider _passwordProvider;
+        private readonly IDbContext _dbContext;
+        private readonly IUserValidator _userValidator;
+        private readonly IPasswordProvider _passwordProvider;
 
         public UserCreateCommand(IDbContext dbContext, IUserValidator userValidator, IPasswordProvider passwordProvider)
         {

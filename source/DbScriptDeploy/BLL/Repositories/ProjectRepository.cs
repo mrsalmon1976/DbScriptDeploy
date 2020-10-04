@@ -20,7 +20,7 @@ namespace DbScriptDeploy.BLL.Repositories
     public class ProjectRepository : IProjectRepository
     {
 
-        private IDbContext _dbContext;
+        private readonly IDbContext _dbContext;
 
         public ProjectRepository(IDbContext dbContext)
         {

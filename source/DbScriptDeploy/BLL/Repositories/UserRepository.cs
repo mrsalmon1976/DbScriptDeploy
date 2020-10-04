@@ -21,7 +21,7 @@ namespace DbScriptDeploy.BLL.Repositories
     public class UserRepository : IUserRepository
     {
 
-        private IDbContext _dbContext;
+        private readonly IDbContext _dbContext;
 
         public UserRepository(IDbContext dbContext)
         {

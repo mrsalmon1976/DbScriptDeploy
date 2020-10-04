@@ -15,7 +15,7 @@ namespace DbScriptDeploy.BLL.Validators
 
     public class UserClaimValidator : IUserClaimValidator
     {
-        private IUserClaimRepository _userClaimRepo;
+        private readonly IUserClaimRepository _userClaimRepo;
 
         public UserClaimValidator(IUserClaimRepository userClaimRepo)
         {

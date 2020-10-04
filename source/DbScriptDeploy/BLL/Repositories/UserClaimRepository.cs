@@ -17,7 +17,7 @@ namespace DbScriptDeploy.BLL.Repositories
     public class UserClaimRepository : IUserClaimRepository
     {
 
-        private IDbContext _dbContext;
+        private readonly IDbContext _dbContext;
 
         public UserClaimRepository(IDbContext dbContext)
         {

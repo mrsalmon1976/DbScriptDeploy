@@ -17,8 +17,8 @@ namespace DbScriptDeploy.BLL.Commands
     }
     public class ProjectCreateCommand : IProjectCreateCommand
     {
-        private IDbContext _dbContext;
-        private IProjectValidator _projectValidator;
+        private readonly IDbContext _dbContext;
+        private readonly IProjectValidator _projectValidator;
 
         public ProjectCreateCommand(IDbContext dbContext, IProjectValidator projectValidator)
         {
