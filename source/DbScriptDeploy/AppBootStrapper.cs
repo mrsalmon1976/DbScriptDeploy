@@ -93,18 +93,32 @@ namespace DbScriptDeploy
         {
             using (IDbContext dbc = dbContextFactory.GetDbContext())
             {
+                // initialise the database
                 dbc.Initialise();
 
+                ILookupRepository lookupRepo = new LookupRepository(dbc);
                 IUserRepository userRepo = new UserRepository(dbc);
+
                 IUserClaimRepository userClaimRepo = new UserClaimRepository(dbc);
+                
                 IUserCreateCommand createUserCmd = new UserCreateCommand(dbc, new UserValidator(userRepo), new PasswordProvider());
                 IUserClaimCreateCommand createUserClaimCmd = new UserClaimCreateCommand(dbc, new UserClaimValidator(userClaimRepo));
+                IDesignationCreateCommand createDesignationCmd = new DesignationCreateCommand(dbc, new DesignationValidator());
+
+                dbc.BeginTransaction();
 
                 // make sure an administrator exists
-
                 IUserInitialiseAdminCommand cmd = new UserInitialiseAdminCommand(dbc, userRepo, createUserCmd, createUserClaimCmd);
-                dbc.BeginTransaction();
                 cmd.Execute();
+
+                // initialise designation info
+                if (lookupRepo.GetAllDesignations().Count() == 0)
+                {
+                    createDesignationCmd.Execute("Development");
+                    createDesignationCmd.Execute("Staging");
+                    createDesignationCmd.Execute("Production");
+                }
+
                 dbc.Commit();
             }
 

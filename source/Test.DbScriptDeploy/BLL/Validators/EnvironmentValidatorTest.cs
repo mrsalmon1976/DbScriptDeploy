@@ -42,7 +42,7 @@ namespace Test.DbScriptDeploy.BLL.Validators
         public void Validate_InvalidDbType_ReturnsFailure()
         {
             EnvironmentModel model = DataHelper.CreateEnvironmentModel();
-            model.DbType = DatabaseType.None;
+            model.DbType = Lookups.DatabaseType.None;
 
             ValidationResult result = _environmentValidator.Validate(model);
 

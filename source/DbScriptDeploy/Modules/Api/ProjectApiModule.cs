@@ -16,11 +16,11 @@ namespace DbScriptDeploy.Modules.Api
 {
     public class ProjectApiModule : BaseSecureApiModule
     {
-        public const string Route_Post_AddProject = "/api/projects";
+        public const string Route_Post_AddProject = "/api/project";
 
-        public const string Route_Get_Api_Projects_User = "/api/projects/user";
+        public const string Route_Get_Api_Projects_User = "/api/project/user";
 
-        public const string Route_Get_ProjectEnvironments = "/api/projects/environments/{id}";
+        public const string Route_Get_ProjectEnvironments = "/api/project/{id}/environments";
 
         private readonly IDbContext _dbContext;
         private readonly IProjectRepository _projectRepo;

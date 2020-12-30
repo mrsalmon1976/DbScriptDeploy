@@ -20,7 +20,7 @@ namespace DbScriptDeploy.BLL.Models
 
         public string HostName { get; set; }
 
-        public DatabaseType DbType { get; set; }
+        public Lookups.DatabaseType DbType { get; set; }
 
         public string DbName { get; set; }
 

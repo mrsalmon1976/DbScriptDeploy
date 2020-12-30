@@ -16,7 +16,9 @@
     <link href="/Content/lib/node-waves/waves.min.css?v=@ViewBag.Version" rel="stylesheet" />
     <link href="/Content/lib/animate-css/animate.min.css?v=@ViewBag.Version" rel="stylesheet" />
     <link href="/Content/lib/sweetalert/sweetalert.css?v=@ViewBag.Version" rel="stylesheet" />
+    <!--
     <link href="/Content/lib/bootstrap-select/css/bootstrap-select.min.css?v=@ViewBag.Version" rel="stylesheet" />
+        -->
     <!-- Custom Css -->
     <link href="/Content/css/style.css?v=@ViewBag.Version" rel="stylesheet">
 
@@ -432,7 +434,9 @@
 
     <script src="/Content/lib/jquery/jquery.min.js?v=@ViewBag.Version"></script>
     <script src="/Content/lib/bootstrap/js/bootstrap.min.js?v=@ViewBag.Version"></script>
+    <!--
     <script src="/Content/lib/bootstrap-select/js/bootstrap-select.min.js?v=@ViewBag.Version"></script>
+        -->
     <script src="/Content/lib/jquery-slimscroll/jquery.slimscroll.js?v=@ViewBag.Version"></script>
     <script src="/Content/lib/sweetalert/sweetalert.min.js?v=@ViewBag.Version"></script>
 
@@ -442,7 +446,7 @@
     <script src="/Content/js/main.js?v=@ViewBag.Version"></script>
 
     @Each.Context.ViewBag.Data.Scripts
-        <script src="@Current?v=@ViewBag.Version"></script>"
+    <script src="@Current?v=@ViewBag.Version"></script>"
     @EndEach
 
 </body>

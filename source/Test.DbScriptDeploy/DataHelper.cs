@@ -26,11 +26,20 @@ namespace Test.DbScriptDeploy
             return Path.GetTempFileName();
         }
 
+        public static DesignationModel CreateDesignationModel()
+        {
+            DesignationModel model = new DesignationModel();
+            model.Id = Guid.NewGuid();
+            model.Name = "TestDesignation";
+            model.CreateDate = DateTime.UtcNow;
+            return model;
+        }
+
         public static EnvironmentModel CreateEnvironmentModel()
         {
             EnvironmentModel model = new EnvironmentModel();
             model.DbName = "MyFakeDb";
-            model.DbType = DatabaseType.SqlServer;
+            model.DbType = Lookups.DatabaseType.SqlServer;
             model.DisplayOrder = 1;
             model.HostName = "MyFakeServer";
             model.Password = "password";

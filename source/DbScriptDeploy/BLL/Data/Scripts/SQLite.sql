@@ -1,4 +1,10 @@
-﻿CREATE TABLE IF NOT EXISTS User (
+﻿CREATE TABLE IF NOT EXISTS Designation (
+	Id UNIQUEIDENTIFIER PRIMARY KEY,
+	Name text NOT NULL,
+	CreateDate text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS User (
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
 	UserName text NOT NULL,
 	Password text NOT NULL,
@@ -31,5 +37,7 @@ CREATE TABLE IF NOT EXISTS Environment (
 	UserName text NOT NULL,
 	Password text NOT NULL,
 	DisplayOrder numeric NOT NULL,
-	FOREIGN KEY (ProjectId) REFERENCES Project (Id)
+	DesignationId uniqueidentifier NOT NULL,
+	FOREIGN KEY (ProjectId) REFERENCES Project (Id),
+	FOREIGN KEY (DesignationId) REFERENCES Designation (Id)
 );

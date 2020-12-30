@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace DbScriptDeploy.BLL.Data
 {
-    public enum DatabaseType
+    public class Lookups
     {
-        None = 0,
-        SqlServer = 1
+        public enum DatabaseType
+        {
+            None = 0,
+            SqlServer = 1
+        }
     }
 }

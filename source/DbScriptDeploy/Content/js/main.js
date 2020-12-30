@@ -26,7 +26,7 @@
                         swal.showInputError("You need enter a project name"); return false;
                     }
                     var request = $.ajax({
-                        url: '/api/projects',
+                        url: '/api/project',
                         method: "POST",
                         data: {
                             projectName: inputValue
@@ -45,7 +45,7 @@
             var that = this;
             that.isLoadingProjects = true;
             var request = $.ajax({
-                url: '/api/projects/user',
+                url: '/api/project/user',
                 method: "GET"
             });
             request.done(function (response) {

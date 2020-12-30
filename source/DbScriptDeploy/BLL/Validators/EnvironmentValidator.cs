@@ -29,7 +29,7 @@ namespace DbScriptDeploy.BLL.Validators
             {
                 result.Messages.Add("Host name cannot be empty");
             }
-            if (model.DbType == DatabaseType.None)
+            if (model.DbType == Lookups.DatabaseType.None)
             {
                 result.Messages.Add("Database type cannot be \"None\"");
             }

@@ -51,14 +51,8 @@ var loginApp = new Vue({
                 window.location.assign('/dashboard');
                 //window.location.assign($('#returnUrl').val());
             });
-            request.fail(function (xhr, textStatus) {
-                alert('TODO: error logging in');
-                //    try {
-                //        Utils.showError(that.selectorErrorMessage, xhr.responseJSON.message);
-                //    }
-                //    catch (err) {
-                //        Utils.showError(that.selectorErrorMessage, 'A fatal error occurred');
-                //    }
+            request.fail(function (xhr, textStatus, errorThrown) {
+                swal("Error", "An error occurred with the authorisation process: " + errorThrown, "error");
             });
 
         }
