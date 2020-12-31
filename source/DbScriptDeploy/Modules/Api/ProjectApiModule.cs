@@ -2,7 +2,7 @@
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
-using DbScriptDeploy.BLL.Utilities;
+using DbScriptDeploy.Core.Encoding;
 using DbScriptDeploy.Security;
 using DbScriptDeploy.ViewModels.Api;
 using Nancy;
@@ -78,7 +78,7 @@ namespace DbScriptDeploy.Modules.Api
             List<EnvironmentModel> environments = new List<EnvironmentModel>();
             for (int i=0; i< 10; i++)
             {
-                environments.Add(new EnvironmentModel() { HostName = $"Host {i}" });
+                environments.Add(new EnvironmentModel() { Name = $"Name {i}", DatabaseName = $"Database {i}", HostName = $"Host {i}", Port = 100, DbType = Lookups.DatabaseType.SqlServer, Id = Guid.NewGuid(), CreateDate = DateTime.Now, DisplayOrder = i, ProjectId = UrlUtility.DecodeNumber(projectId) });
             }
             return this.Response.AsJson(environments);
         }

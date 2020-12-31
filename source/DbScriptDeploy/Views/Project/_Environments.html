@@ -1,10 +1,4 @@
 ﻿<div id="content_environment">
-    <div>
-        <button type="button" class="btn btn-info waves-effect" data-toggle="modal" data-target="#modal-environment">
-            <i class="material-icons">playlist_add</i>
-            <span>New...</span>
-        </button>
-    </div>
     <form>
         <table class="table table-condensed">
             <thead>
@@ -18,12 +12,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr v-for="e in environments">
                     <td><input type="checkbox" /></td>
-                    <td>1</td>
-                    <td>DEV-01</td>
-                    <td>Dev</td>
-                    <td>13</td>
+                    <td>{{ e.displayOrder }}</td>
+                    <td><a v-bind:href="'/project/'+ e.id">{{ e.name }}</a></td>
+                    <td>{{ e.designation }}</td>
+                    <td>??</td>
                     <td>
                         <i class="material-icons">arrow_drop_down</i>
                         <i class="material-icons">arrow_drop_up</i>
@@ -69,9 +63,6 @@
             </tbody>
         </table>
     </form>
-    <li v-for="e in environments">
-        <a v-bind:href="'/project/'+ e.id">{{ e.name }}</a>
-    </li>
 </div>
 <div class="modal fade" id="dlgEnvironment" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -84,24 +75,24 @@
 
                     <div class="row clearfix">
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                            <label for="environment_name">Name</label>
+                            <label for="environmentName">Name</label>
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="environment_name" placeholder="e.g. Production_Server" class="form-control" autocomplete="off" required />
+                                    <input type="text" id="environmentName" name="environmentName" v-model="environmentName" placeholder="e.g. Production_Server" class="form-control" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row clearfix">
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                            <label for="environment_dbtype">Database Type</label>
+                            <label for="environmentDbType">Database Type</label>
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <select id="environment_dbtype" class="form-control" v-model="selectedDatabaseType">
+                                    <select id="environmentDbType" name="environmentDbType" class="form-control" v-model="environmentDbType" required>
                                         <option v-for="dbType in databaseTypes" v-bind:value="dbType.id">
                                             {{ dbType.name }}
                                         </option>
@@ -112,60 +103,72 @@
                     </div>
                     <div class="row clearfix">
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                            <label for="environment_host">Host Name</label>
+                            <label for="environmentHost">Host Name</label>
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="environment_host" placeholder="e.g. Production_Server" class="form-control" autocomplete="off" required />
+                                    <input type="text" id="environmentHost" name="environmentHost" v-model="environmentHost" placeholder="e.g. Production_Server" class="form-control" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row clearfix">
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                            <label for="environment_port">Port</label>
+                            <label for="environmentPort">Port</label>
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="number" id="environment_port" class="form-control" autocomplete="off" required />
+                                    <input type="number" id="environmentPort" name="environmentPort" v-model="environmentPort" class="form-control" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row clearfix">
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                            <label for="environment_username">User Name</label>
+                            <label for="environmentDatabase">Database Name</label>
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="environment_username" class="form-control" autocomplete="off" required />
+                                    <input type="text" id="environmentDatabase" name="environmentDatabase" v-model="environmentDatabase" class="form-control" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row clearfix">
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                            <label for="environment_password">Password</label>
+                            <label for="environmentUserName">User Name</label>
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="password" id="environment_password" class="form-control" autocomplete="off" required />
+                                    <input type="text" id="environmentUserName" name="environmentUserName" v-model="environmentUserName" class="form-control" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row clearfix">
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                            <label for="environment_designation">Designation</label>
+                            <label for="environmentPassword">Password</label>
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <select id="environment_designation" class="form-control" v-model="selectedDesignation">
+                                    <input type="password" id="environmentPassword" name="environmentPassword" v-model="environmentPassword" class="form-control" autocomplete="off" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="environmentDesignation">Designation</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <select id="environmentDesignation" name="environmentDesignation" class="form-control" v-model="environmentDesignation">
                                         <option v-for="designation in designations" v-bind:value="designation.id">
                                             {{ designation.name }}
                                         </option>
@@ -177,7 +180,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect">SAVE</button>
+                <button type="button" class="btn btn-link waves-effect"  v-on:click="saveEnvironment" v-bind:disabled="isSavingEnvironment">SAVE</button>
                 <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
         </div>

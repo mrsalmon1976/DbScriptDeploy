@@ -2,11 +2,11 @@
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
-using DbScriptDeploy.BLL.Utilities;
 using DbScriptDeploy.Security;
 using DbScriptDeploy.ViewModels.Api;
 using Nancy;
 using Nancy.Routing;
+using Nancy.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +28,10 @@ namespace DbScriptDeploy.Modules.Api
             _projectRepo = projectRepo;
             _projectCreateCommand = projectCreateCommand;
 
-            //Post(Route_Post_AddProject, x =>
-            //{
-            //    return AddProject();
-            //});
+            Post(Route_Post_AddEnvironment, x =>
+            {
+                return AddEnvironment();
+            });
             //Get(Route_Get_Api_Projects_User, x =>
             //{
             //    return LoadUserProjects();
@@ -46,10 +46,17 @@ namespace DbScriptDeploy.Modules.Api
 
         public dynamic AddEnvironment()
         {
+            EnvironmentModel environmentModel = this.Bind<EnvironmentModel>();
             //var projectName = Request.Form.ProjectName;
             //_dbContext.BeginTransaction();
             //ProjectModel result = _projectCreateCommand.Execute(projectName);
             //_dbContext.Commit();
+            return new Response
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                ReasonPhrase = "Hello World"
+            };
+            //return this.Response.AsJson(result);
 
             //// only return what we need in the response
             //var response = new ProjectViewModel()
@@ -58,7 +65,6 @@ namespace DbScriptDeploy.Modules.Api
             //    Name = result.Name
             //};
             //return this.Response.AsJson(response);
-            throw new NotImplementedException();
         }
 
     }

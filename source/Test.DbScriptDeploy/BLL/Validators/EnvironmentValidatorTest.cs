@@ -57,7 +57,7 @@ namespace Test.DbScriptDeploy.BLL.Validators
         public void Validate_InvalidDbName_ReturnsFailure(string dbName)
         {
             EnvironmentModel model = DataHelper.CreateEnvironmentModel();
-            model.DbName = dbName;
+            model.DatabaseName = dbName;
 
             ValidationResult result = _environmentValidator.Validate(model);
 
@@ -115,7 +115,7 @@ namespace Test.DbScriptDeploy.BLL.Validators
         public void Validate_InvalidProjectId_ReturnsFailure()
         {
             EnvironmentModel model = DataHelper.CreateEnvironmentModel();
-            model.ProjectId = Guid.Empty;
+            model.ProjectId = 0;
 
             ValidationResult result = _environmentValidator.Validate(model);
 

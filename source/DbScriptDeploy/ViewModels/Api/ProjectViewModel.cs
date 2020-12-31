@@ -1,5 +1,5 @@
 ﻿using DbScriptDeploy.BLL.Models;
-using DbScriptDeploy.BLL.Utilities;
+using DbScriptDeploy.Core.Encoding;
 using System;
 using System.Collections.Generic;
 using System.Linq;

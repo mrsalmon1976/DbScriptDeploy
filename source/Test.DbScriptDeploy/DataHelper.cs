@@ -37,14 +37,15 @@ namespace Test.DbScriptDeploy
 
         public static EnvironmentModel CreateEnvironmentModel()
         {
+            Random r = new Random();
             EnvironmentModel model = new EnvironmentModel();
-            model.DbName = "MyFakeDb";
+            model.DatabaseName = "MyFakeDb";
             model.DbType = Lookups.DatabaseType.SqlServer;
             model.DisplayOrder = 1;
             model.HostName = "MyFakeServer";
             model.Password = "password";
             model.Port = 9876;
-            model.ProjectId = Guid.NewGuid();
+            model.ProjectId = r.Next(1, 1000);
             model.UserName = "Eric";
             model.CreateDate = DateTime.UtcNow;
             return model;

@@ -1,5 +1,6 @@
-$(function () {
+$(document).ready(function () {
     $('#sign_in').validate({
+        onkeyup: function (element) { $(element).valid() },
         highlight: function (input) {
             console.log(input);
             $(input).parents('.form-line').addClass('error');

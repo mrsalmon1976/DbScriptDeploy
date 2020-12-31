@@ -16,16 +16,18 @@ namespace DbScriptDeploy.BLL.Models
 
         public Guid Id { get; set; }
 
-        public Guid ProjectId { get; set; }
+        public string Name { get; set; }
+
+        public int ProjectId { get; set; }
 
         public string HostName { get; set; }
 
         public Lookups.DatabaseType DbType { get; set; }
 
-        public string DbName { get; set; }
+        public string DatabaseName { get; set; }
 
         public int Port { get; set; }
-
+            
         public string UserName { get; set; }
 
         public string Password { get; set; }

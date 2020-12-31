@@ -1,13 +1,53 @@
+$(document).ready(function () {
+    $('#form_environment').validate({
+        rules: {
+            environmentName: {
+                required: true,
+            },
+            environmentDbType: {
+                required: true,
+                number: true,
+                min: 1
+            }
+        }, 
+        messages: {
+            environmentDbType: {
+                min: "This field is required"
+            },
+        },
+        onkeyup: function (element) { $(element).valid() },
+        highlight: function (input) {
+            //console.log(input);
+            $(input).parents('.form-line').addClass('error');
+        },
+        unhighlight: function (input) {
+            $(input).parents('.form-line').removeClass('error');
+        },
+        errorPlacement: function (error, element) {
+            $(element).parents('.form-group').append(error);
+        }
+    });
+});
+
 var projectEnvironmentApp = new Vue({
     el: '#project-page',
     data: {
         projectId: null,
-        databaseTypes: [{ id: 0, name: 'None' }],
-        designations: [{ id: 0, name: 'None' }],
+        databaseTypes: [{ id: '0', name: 'None' }],
+        designations: [{ id: '0', name: 'None' }],
         environments: [],
         isAddButtonVisible: true,
-        selectedDatabaseType: '0',
-        selectedDesignation: '0',
+
+        // environment details
+        isSavingEnvironment: false,
+        environmentName: '',
+        environmentDbType: '0',
+        environmentHost: '',
+        environmentPort: '',
+        environmentDatabaseName: '',
+        environmentUserName: '',
+        environmentPassword: '',
+        environmentDesignation: '0',
     },
     mounted: function () {
 
@@ -67,20 +107,20 @@ var projectEnvironmentApp = new Vue({
         },
         loadEnvironments: function () {
             var that = this;
-            //that.isLoadingProjects = true;
-            //var request = $.ajax({
-            //    url: '/api/project/' + this.projectId + '/environments',
-            //    method: "GET"
-            //});
-            //request.done(function (response) {
-            //    that.environments = response;
-            //});
-            //request.fail(function (xhr, textStatus, errorThrown) {
-            //    swal("Error", errorThrown, "error");
-            //});
-            //request.always(function (xhr, textStatus, errorThrown) {
-            //    //that.isLoadingProjects = false;
-            //});
+            $('.page-loader-wrapper').fadeIn();
+            var request = $.ajax({
+                url: '/api/project/' + this.projectId + '/environments',
+                method: "GET"
+            });
+            request.done(function (response) {
+                that.environments = response;
+            });
+            request.fail(function (xhr, textStatus, errorThrown) {
+                swal("Error", "An error occurred fetching environments: " + errorThrown, "error");
+            });
+            request.always(function (xhr, textStatus, errorThrown) {
+                $('.page-loader-wrapper').fadeOut();
+            });
         },
         onAddButtonClick: function () {
             if ($('#tab-scripts').hasClass('active')) {
@@ -104,6 +144,38 @@ var projectEnvironmentApp = new Vue({
             else {
                 this.isAddButtonVisible = false;
             }
-        }
+        },
+        saveEnvironment: function () {
+            var that = this;
+            if ($("#form_environment").validate().valid()) {
+                that.isSavingEnvironment = true;
+                var request = $.ajax({
+                    url: '/api/environment',
+                    method: "POST",
+                    data: {
+                        name: this.environmentName,
+                        dbType: this.environmentDbType,
+                        host: this.environmentHost,
+                        port: this.environmentPort,
+                        databaseName: this.environmentDatabaseName,
+                        userName: this.environmentUserName,
+                        password: this.environmentPassword,
+                        designation: this.environmentDesignation,
+
+                    }
+                });
+                request.done(function (response) {
+                    //alert('saved');
+                    //that.environments = response;
+                    that.loadEnvironments();
+                });
+                request.fail(function (xhr, textStatus, errorThrown) {
+                    swal("Error", 'An error occurred saving the environment: ' + xhr.statusText, "error");
+                });
+                request.always(function (xhr, textStatus, errorThrown) {
+                    that.isSavingEnvironment = false;
+                });
+            }
+        },
     }
 });

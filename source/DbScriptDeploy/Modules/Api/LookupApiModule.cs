@@ -2,7 +2,6 @@
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
-using DbScriptDeploy.BLL.Utilities;
 using DbScriptDeploy.Security;
 using DbScriptDeploy.ViewModels.Api;
 using Nancy;

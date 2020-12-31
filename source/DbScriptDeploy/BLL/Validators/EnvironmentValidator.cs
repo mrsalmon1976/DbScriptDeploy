@@ -33,7 +33,7 @@ namespace DbScriptDeploy.BLL.Validators
             {
                 result.Messages.Add("Database type cannot be \"None\"");
             }
-            if (String.IsNullOrWhiteSpace(model.DbName))
+            if (String.IsNullOrWhiteSpace(model.DatabaseName))
             {
                 result.Messages.Add("Database name cannot be empty");
             }
@@ -49,7 +49,7 @@ namespace DbScriptDeploy.BLL.Validators
             {
                 result.Messages.Add("Display order must be greater than 0");
             }
-            if (model.ProjectId == Guid.Empty)
+            if (model.ProjectId <= 0)
             {
                 result.Messages.Add("Project must be set");
             }
