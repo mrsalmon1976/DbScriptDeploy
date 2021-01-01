@@ -12,6 +12,7 @@ using DbScriptDeploy.BLL.Commands;
 using DbScriptDeploy.BLL.Validators;
 using DbScriptDeploy.BLL.Security;
 using DbScriptDeploy.BLL.Models;
+using DbScriptDeploy.Core.Security;
 
 namespace Test.DbScriptDeploy.BLL.Repositories
 {

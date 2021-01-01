@@ -78,7 +78,7 @@ namespace DbScriptDeploy.Modules.Api
             List<EnvironmentModel> environments = new List<EnvironmentModel>();
             for (int i=0; i< 10; i++)
             {
-                environments.Add(new EnvironmentModel() { Name = $"Name {i}", DatabaseName = $"Database {i}", HostName = $"Host {i}", Port = 100, DbType = Lookups.DatabaseType.SqlServer, Id = Guid.NewGuid(), CreateDate = DateTime.Now, DisplayOrder = i, ProjectId = UrlUtility.DecodeNumber(projectId) });
+                environments.Add(new EnvironmentModel() { Name = $"Name {i}", Database = $"Database {i}", Host = $"Host {i}", Port = 100, DbType = Lookups.DatabaseType.SqlServer, Id = i, CreateDate = DateTime.Now, DisplayOrder = i, ProjectId = UrlUtility.DecodeNumber(projectId) });
             }
             return this.Response.AsJson(environments);
         }

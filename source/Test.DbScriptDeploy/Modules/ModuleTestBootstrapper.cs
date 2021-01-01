@@ -19,6 +19,7 @@ using DbScriptDeploy.Security;
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.BLL.Validators;
+using DbScriptDeploy.BLL.Commands;
 
 namespace Test.DbScriptDeploy.Modules
 {
@@ -86,7 +87,11 @@ namespace Test.DbScriptDeploy.Modules
 
             // register database context per request
             container.Register<IDbContext>(Substitute.For<IDbContext>());
+            container.Register<IEnvironmentRepository>(Substitute.For<IEnvironmentRepository>());
+            container.Register<IProjectRepository>(Substitute.For<IProjectRepository>());
             container.Register<IUserRepository>(Substitute.For<IUserRepository>());
+
+            container.Register<IEnvironmentCreateCommand>(Substitute.For<EnvironmentCreateCommand>());
 
             if (this.ConfigureRequestContainerCallback != null)
             {

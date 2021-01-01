@@ -29,7 +29,6 @@ namespace DbScriptDeploy.BLL.Commands
         public DesignationModel Execute(string name)
         {
             DesignationModel designation = new DesignationModel();
-            designation.Id = Guid.NewGuid();
             designation.Name = name;
             designation.CreateDate = DateTime.UtcNow;
 
@@ -42,8 +41,9 @@ namespace DbScriptDeploy.BLL.Commands
 
             // insert new record
             string createDate = designation.CreateDate.ToString(SQLiteDbContext.DateTimeFormat);
-            string sql = $"INSERT INTO Designation (Id, Name, CreateDate) VALUES (@Id, @Name, '{createDate}')";
-            _dbContext.ExecuteNonQuery(sql, designation);
+            string sql = $"INSERT INTO Designation (Name, CreateDate) VALUES (@Name, '{createDate}');SELECT last_insert_rowid()";
+            designation.Id = _dbContext.ExecuteScalar<int>(sql, designation);
+
 
             return designation;
         }

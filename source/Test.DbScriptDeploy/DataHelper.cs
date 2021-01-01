@@ -29,24 +29,25 @@ namespace Test.DbScriptDeploy
         public static DesignationModel CreateDesignationModel()
         {
             DesignationModel model = new DesignationModel();
-            model.Id = Guid.NewGuid();
             model.Name = "TestDesignation";
             model.CreateDate = DateTime.UtcNow;
             return model;
         }
 
-        public static EnvironmentModel CreateEnvironmentModel()
+        public static EnvironmentModel CreateEnvironmentModel(int? projectId = null)
         {
             Random r = new Random();
             EnvironmentModel model = new EnvironmentModel();
-            model.DatabaseName = "MyFakeDb";
+            model.Name = "TestEnvironment";
+            model.Database = "MyFakeDb";
             model.DbType = Lookups.DatabaseType.SqlServer;
             model.DisplayOrder = 1;
-            model.HostName = "MyFakeServer";
-            model.Password = "password";
+            model.Host = "MyFakeServer";
             model.Port = 9876;
-            model.ProjectId = r.Next(1, 1000);
+            model.ProjectId = projectId ?? r.Next(1, 1000);
             model.UserName = "Eric";
+            model.Password = "password";
+            model.DesignationId = r.Next(1, 1000);
             model.CreateDate = DateTime.UtcNow;
             return model;
         }

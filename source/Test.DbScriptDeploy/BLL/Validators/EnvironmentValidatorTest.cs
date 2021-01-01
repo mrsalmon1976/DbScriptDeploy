@@ -26,10 +26,10 @@ namespace Test.DbScriptDeploy.BLL.Validators
         [TestCase("")]
         [TestCase(null)]
         [TestCase("   ")]
-        public void Validate_InvalidHostName_ReturnsFailure(string hostName)
+        public void Validate_InvalidHost_ReturnsFailure(string host)
         {
             EnvironmentModel model = DataHelper.CreateEnvironmentModel();
-            model.HostName = hostName;
+            model.Host = host;
 
             ValidationResult result = _environmentValidator.Validate(model);
 
@@ -57,7 +57,7 @@ namespace Test.DbScriptDeploy.BLL.Validators
         public void Validate_InvalidDbName_ReturnsFailure(string dbName)
         {
             EnvironmentModel model = DataHelper.CreateEnvironmentModel();
-            model.DatabaseName = dbName;
+            model.Database = dbName;
 
             ValidationResult result = _environmentValidator.Validate(model);
 

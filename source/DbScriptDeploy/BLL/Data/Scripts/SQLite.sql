@@ -1,9 +1,16 @@
-﻿CREATE TABLE IF NOT EXISTS Designation (
-	Id UNIQUEIDENTIFIER PRIMARY KEY,
+﻿-- Designation table stores the possible types of environment, e.g. Development, Staging, Production
+-- Primary key is an integer which we seed at a random number
+CREATE TABLE IF NOT EXISTS Designation (
+	Id INTEGER PRIMARY KEY AUTOINCREMENT,
 	Name text NOT NULL,
 	CreateDate text NOT NULL
 );
+INSERT INTO sqlite_sequence (name, seq) 
+	SELECT 'Designation', 1000 
+	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'Designation');
 
+-- User table stores users - primary key has to be text to store Guid values (makes it easier working 
+-- with Nancy)
 CREATE TABLE IF NOT EXISTS User (
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
 	UserName text NOT NULL,
@@ -12,11 +19,15 @@ CREATE TABLE IF NOT EXISTS User (
 	CreateDate text NOT NULL
 );
 
+-- The Project table stores projects, not suprisingly
 CREATE TABLE IF NOT EXISTS Project (
 	Id INTEGER PRIMARY KEY AUTOINCREMENT,
 	Name text NOT NULL,
 	CreateDate text NOT NULL
 );
+INSERT INTO sqlite_sequence (name, seq) 
+	SELECT 'Project', 10000 
+	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'Project');
 
 CREATE TABLE IF NOT EXISTS UserClaim (
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
@@ -32,12 +43,17 @@ CREATE TABLE IF NOT EXISTS Environment (
 	ProjectId INTEGER NULL,
 	Name text NOT NULL,
 	DbType text NOT NULL,
-	HostName text NOT NULL,
+	Host text NOT NULL,
 	Port numeric NOT NULL,
+	Database text NOT NULL,
 	UserName text NOT NULL,
 	Password text NOT NULL,
 	DisplayOrder numeric NOT NULL,
-	DesignationId uniqueidentifier NOT NULL,
+	DesignationId INTEGER NOT NULL,
+	CreateDate text NOT NULL,
 	FOREIGN KEY (ProjectId) REFERENCES Project (Id),
 	FOREIGN KEY (DesignationId) REFERENCES Designation (Id)
 );
+INSERT INTO sqlite_sequence (name, seq) 
+	SELECT 'Environment', 1000
+	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'Environment');

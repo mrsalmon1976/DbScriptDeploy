@@ -44,7 +44,7 @@ var projectEnvironmentApp = new Vue({
         environmentDbType: '0',
         environmentHost: '',
         environmentPort: '',
-        environmentDatabaseName: '',
+        environmentDatabase: '',
         environmentUserName: '',
         environmentPassword: '',
         environmentDesignation: '0',
@@ -154,14 +154,14 @@ var projectEnvironmentApp = new Vue({
                     method: "POST",
                     data: {
                         name: this.environmentName,
+                        projectId: this.projectId,
                         dbType: this.environmentDbType,
                         host: this.environmentHost,
                         port: this.environmentPort,
-                        databaseName: this.environmentDatabaseName,
+                        database: this.environmentDatabase,
                         userName: this.environmentUserName,
                         password: this.environmentPassword,
-                        designation: this.environmentDesignation,
-
+                        designationId: this.environmentDesignation
                     }
                 });
                 request.done(function (response) {

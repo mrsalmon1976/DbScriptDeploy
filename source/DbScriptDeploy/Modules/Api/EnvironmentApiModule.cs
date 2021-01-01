@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DbScriptDeploy.BLL.Exceptions;
 
 namespace DbScriptDeploy.Modules.Api
 {
@@ -19,14 +20,14 @@ namespace DbScriptDeploy.Modules.Api
         public const string Route_Post_AddEnvironment = "/api/environment";
 
         private readonly IDbContext _dbContext;
-        private readonly IProjectRepository _projectRepo;
-        private readonly IProjectCreateCommand _projectCreateCommand;
+        private readonly IEnvironmentRepository _environmentRepo;
+        private readonly IEnvironmentCreateCommand _environmentCreateCommand;
 
-        public EnvironmentApiModule(IDbContext dbContext, IProjectRepository projectRepo, IProjectCreateCommand projectCreateCommand)
+        public EnvironmentApiModule(IDbContext dbContext, IEnvironmentRepository projectRepo, IEnvironmentCreateCommand projectCreateCommand)
         {
             _dbContext = dbContext;
-            _projectRepo = projectRepo;
-            _projectCreateCommand = projectCreateCommand;
+            _environmentRepo = projectRepo;
+            _environmentCreateCommand = projectCreateCommand;
 
             Post(Route_Post_AddEnvironment, x =>
             {
@@ -46,25 +47,24 @@ namespace DbScriptDeploy.Modules.Api
 
         public dynamic AddEnvironment()
         {
-            EnvironmentModel environmentModel = this.Bind<EnvironmentModel>();
-            //var projectName = Request.Form.ProjectName;
-            //_dbContext.BeginTransaction();
-            //ProjectModel result = _projectCreateCommand.Execute(projectName);
-            //_dbContext.Commit();
-            return new Response
-            {
-                StatusCode = HttpStatusCode.BadRequest,
-                ReasonPhrase = "Hello World"
-            };
-            //return this.Response.AsJson(result);
+            EnvironmentViewModel environmentModel = this.Bind<EnvironmentViewModel>();
 
-            //// only return what we need in the response
-            //var response = new ProjectViewModel()
-            //{
-            //    Id = UrlUtility.EncodeNumber(result.Id),
-            //    Name = result.Name
-            //};
-            //return this.Response.AsJson(response);
+            try
+            {
+                _dbContext.BeginTransaction();
+                EnvironmentModel model = _environmentCreateCommand.Execute(environmentModel.ToEnvironmentModel());
+                EnvironmentViewModel result = EnvironmentViewModel.FromEnvironmentModel(model);
+                _dbContext.Commit();
+                return Response.AsJson(result);
+            }
+            catch (ValidationException ve)
+            {
+                return new Response
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ReasonPhrase = ve.Message
+                };
+            }
         }
 
     }

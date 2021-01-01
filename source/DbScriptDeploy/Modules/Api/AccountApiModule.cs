@@ -1,6 +1,6 @@
 ﻿using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
-using DbScriptDeploy.BLL.Security;
+using DbScriptDeploy.Core.Security;
 using DbScriptDeploy.ViewModels.Api;
 using Nancy;
 using Nancy.Authentication.Forms;

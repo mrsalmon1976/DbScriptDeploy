@@ -25,7 +25,7 @@ namespace DbScriptDeploy.BLL.Validators
         {
             ValidationResult result = new ValidationResult();
 
-            if (String.IsNullOrWhiteSpace(model.HostName))
+            if (String.IsNullOrWhiteSpace(model.Host))
             {
                 result.Messages.Add("Host name cannot be empty");
             }
@@ -33,7 +33,7 @@ namespace DbScriptDeploy.BLL.Validators
             {
                 result.Messages.Add("Database type cannot be \"None\"");
             }
-            if (String.IsNullOrWhiteSpace(model.DatabaseName))
+            if (String.IsNullOrWhiteSpace(model.Database))
             {
                 result.Messages.Add("Database name cannot be empty");
             }

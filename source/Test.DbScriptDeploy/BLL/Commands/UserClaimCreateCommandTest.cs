@@ -86,7 +86,7 @@ namespace Test.DbScriptDeploy.BLL.Commands
                 dbContext.Initialise();
                 dbContext.BeginTransaction();
 
-                // create the user
+                // create the project
                 int projectId = new Random().Next(1, 100);
                 UserClaimModel claim = DataHelper.CreateUserClaimModel(Guid.NewGuid(), DataHelper.RandomString(), projectId);
 

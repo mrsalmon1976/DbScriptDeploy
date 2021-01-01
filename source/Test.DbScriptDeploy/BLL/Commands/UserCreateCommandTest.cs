@@ -14,6 +14,7 @@ using DbScriptDeploy.BLL.Security;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Exceptions;
 using DbScriptDeploy.BLL.Repositories;
+using DbScriptDeploy.Core.Security;
 
 namespace Test.DbScriptDeploy.BLL.Commands
 {

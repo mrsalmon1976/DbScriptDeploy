@@ -15,7 +15,9 @@ namespace DbScriptDeploy
     public class AppSettings : IAppSettings
     {
         public int Port { get; set; }
+
         public string SecureKey { get; set; }
+
 
     }
 }

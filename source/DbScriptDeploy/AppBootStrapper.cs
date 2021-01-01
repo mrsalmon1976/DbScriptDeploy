@@ -1,8 +1,8 @@
 ﻿using DbScriptDeploy.BLL.Commands;
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Repositories;
-using DbScriptDeploy.BLL.Security;
 using DbScriptDeploy.BLL.Validators;
+using DbScriptDeploy.Core.Security;
 using Microsoft.AspNetCore.Hosting;
 using Nancy;
 using Nancy.Authentication.Forms;
@@ -64,16 +64,19 @@ namespace DbScriptDeploy
             container.Register<IDbContext>(dbContext);
 
             // validators
+            container.Register<IEnvironmentValidator, EnvironmentValidator>();
             container.Register<IProjectValidator, ProjectValidator>();
             container.Register<IUserClaimValidator, UserClaimValidator>();
             container.Register<IUserValidator, UserValidator>();
 
             // repositories
+            container.Register<IEnvironmentRepository, EnvironmentRepository>();
             container.Register<IProjectRepository, ProjectRepository>();
             container.Register<IUserClaimRepository, UserClaimRepository>();
             container.Register<IUserRepository, UserRepository>();
 
             // commands
+            container.Register<IEnvironmentCreateCommand, EnvironmentCreateCommand>();
             container.Register<IProjectCreateCommand, ProjectCreateCommand>();
             container.Register<IUserClaimCreateCommand, UserClaimCreateCommand>();
             container.Register<IUserCreateCommand, UserCreateCommand>();

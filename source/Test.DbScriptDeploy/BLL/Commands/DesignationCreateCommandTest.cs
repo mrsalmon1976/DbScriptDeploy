@@ -70,7 +70,7 @@ namespace Test.DbScriptDeploy.BLL.Commands
             _createDesignationCommand.Execute(model.Name);
 
             // assert
-            _dbContext.Received(1).ExecuteNonQuery(Arg.Any<string>(), Arg.Any<object>());
+            _dbContext.Received(1).ExecuteScalar<int>(Arg.Any<string>(), Arg.Any<object>());
         }
 
 
