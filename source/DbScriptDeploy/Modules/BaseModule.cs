@@ -18,6 +18,7 @@ namespace DbScriptDeploy.Modules
             Before.AddItemToStartOfPipeline(ctx =>
             {
                 ctx.ViewBag.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                ctx.ViewBag.Year = DateTime.Now.Year;
                 ctx.ViewBag.Data = new ViewBagData();
                 return null;
             });

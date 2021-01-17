@@ -14,6 +14,8 @@ namespace DbScriptDeploy.BLL.Repositories
 
 
         IEnumerable<DesignationModel> GetAllDesignations();
+
+        DesignationModel GetDesignationById(int designationId);
     }
 
     public class LookupRepository : ILookupRepository
@@ -38,6 +40,12 @@ namespace DbScriptDeploy.BLL.Repositories
         {
             const string sql = "SELECT * FROM Designation ORDER BY Name";
             return _dbContext.Query<DesignationModel>(sql);
+        }
+
+        public DesignationModel GetDesignationById(int designationId)
+        {
+            const string sql = "SELECT * FROM Designation WHERE Id = @Id";
+            return _dbContext.Query<DesignationModel>(sql, new { Id = designationId }).SingleOrDefault();
         }
     }
 }

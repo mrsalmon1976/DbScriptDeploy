@@ -2,7 +2,7 @@
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
-using DbScriptDeploy.Core.Encoding;
+using DbScriptDeploy.BLL.Encoding;
 using DbScriptDeploy.Security;
 using DbScriptDeploy.ViewModels.Api;
 using Nancy;
@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DbScriptDeploy.Services;
+using DbScriptDeploy.BLL.Exceptions;
 
 namespace DbScriptDeploy.Modules.Api
 {
@@ -22,14 +24,18 @@ namespace DbScriptDeploy.Modules.Api
 
         public const string Route_Get_ProjectEnvironments = "/api/project/{id}/environments";
 
+        public const string Route_Post_Project_Script = "/api/project/{projectId}/script";
+
         private readonly IDbContext _dbContext;
         private readonly IProjectRepository _projectRepo;
+        private readonly IProjectViewService _projectViewService;
         private readonly IProjectCreateCommand _projectCreateCommand;
 
-        public ProjectApiModule(IDbContext dbContext, IProjectRepository projectRepo, IProjectCreateCommand projectCreateCommand)
+        public ProjectApiModule(IDbContext dbContext, IProjectRepository projectRepo, IProjectViewService projectViewService, IProjectCreateCommand projectCreateCommand)
         {
             _dbContext = dbContext;
             _projectRepo = projectRepo;
+            _projectViewService = projectViewService;
             _projectCreateCommand = projectCreateCommand;
 
             Post(Route_Post_AddProject, x =>
@@ -43,7 +49,11 @@ namespace DbScriptDeploy.Modules.Api
             Get(Route_Get_ProjectEnvironments, x =>
             {
                 var id = x.id;
-                return LoadEnvironments(id);
+                return LoadProjectEnvironments(id);
+            });
+            Post(Route_Post_Project_Script, x =>
+            {
+                return AddScript(x.projectId);
             });
 
         }
@@ -64,6 +74,29 @@ namespace DbScriptDeploy.Modules.Api
             return this.Response.AsJson(response);
         }
 
+        public dynamic AddScript(string projectId)
+        {
+            //EnvironmentViewModel environmentModel = this.Bind<EnvironmentViewModel>();
+
+            try
+            {
+                _dbContext.BeginTransaction();
+                //EnvironmentModel model = _environmentCreateCommand.Execute(environmentModel.ToEnvironmentModel());
+                //EnvironmentViewModel result = EnvironmentViewModel.FromEnvironmentModel(model);
+                string result = "ok";
+                _dbContext.Commit();
+                return Response.AsJson(result);
+            }
+            catch (ValidationException ve)
+            {
+                return new Response
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ReasonPhrase = ve.Message
+                };
+            }
+        }
+
         public dynamic LoadUserProjects()
         {
             UserPrincipal userPrincipal = this.Context.CurrentUser as UserPrincipal;
@@ -73,13 +106,9 @@ namespace DbScriptDeploy.Modules.Api
 
         }
 
-        public dynamic LoadEnvironments(string projectId)
+        public dynamic LoadProjectEnvironments(string projectId)
         {
-            List<EnvironmentModel> environments = new List<EnvironmentModel>();
-            for (int i=0; i< 10; i++)
-            {
-                environments.Add(new EnvironmentModel() { Name = $"Name {i}", Database = $"Database {i}", Host = $"Host {i}", Port = 100, DbType = Lookups.DatabaseType.SqlServer, Id = i, CreateDate = DateTime.Now, DisplayOrder = i, ProjectId = UrlUtility.DecodeNumber(projectId) });
-            }
+            var environments = _projectViewService.LoadEnvironments(projectId);
             return this.Response.AsJson(environments);
         }
     }

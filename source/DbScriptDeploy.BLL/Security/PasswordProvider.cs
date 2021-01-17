@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DbScriptDeploy.Core.Security
+namespace DbScriptDeploy.BLL.Security
 {
     public interface IPasswordProvider
     {

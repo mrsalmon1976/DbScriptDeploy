@@ -26,9 +26,10 @@ namespace Test.DbScriptDeploy
             return Path.GetTempFileName();
         }
 
-        public static DesignationModel CreateDesignationModel()
+        public static DesignationModel CreateDesignationModel(int id = 0)
         {
             DesignationModel model = new DesignationModel();
+            model.Id = id;
             model.Name = "TestDesignation";
             model.CreateDate = DateTime.UtcNow;
             return model;

@@ -8,7 +8,6 @@ using DbScriptDeploy.BLL.Exceptions;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Security;
 using DbScriptDeploy.BLL.Validators;
-using DbScriptDeploy.Core.Security;
 
 namespace DbScriptDeploy.BLL.Commands
 {

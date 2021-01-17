@@ -1,6 +1,6 @@
 ﻿using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
-using DbScriptDeploy.Core.Encoding;
+using DbScriptDeploy.BLL.Encoding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +31,9 @@ namespace DbScriptDeploy.ViewModels.Api
         public int DisplayOrder { get; set; }
 
         public int DesignationId { get; set; }
+
+        public string DesignationName { get; set; }
+
 
         public DateTime CreateDate { get; set; }
 

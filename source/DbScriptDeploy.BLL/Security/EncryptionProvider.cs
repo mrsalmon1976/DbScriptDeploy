@@ -15,7 +15,7 @@ using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 
-namespace DbScriptDeploy.Core.Security
+namespace DbScriptDeploy.BLL.Security
 {
     public interface IEncryptionProvider
     {

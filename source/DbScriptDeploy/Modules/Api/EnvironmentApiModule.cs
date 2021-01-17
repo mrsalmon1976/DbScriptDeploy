@@ -33,16 +33,6 @@ namespace DbScriptDeploy.Modules.Api
             {
                 return AddEnvironment();
             });
-            //Get(Route_Get_Api_Projects_User, x =>
-            //{
-            //    return LoadUserProjects();
-            //});
-            //Get(Route_Get_ProjectEnvironments, x =>
-            //{
-            //    var id = x.id;
-            //    return LoadEnvironments(id);
-            //});
-
         }
 
         public dynamic AddEnvironment()

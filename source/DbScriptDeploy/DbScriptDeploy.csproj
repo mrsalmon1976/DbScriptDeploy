@@ -9,25 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="BLL\Data\Scripts\SQLite.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
-    <PackageReference Include="BouncyCastle" Version="1.8.6.1" />
-    <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.8" />
     <PackageReference Include="Nancy" Version="2.0.0" />
     <PackageReference Include="Nancy.Authentication.Forms" Version="2.0.0" />
     <PackageReference Include="NLog" Version="4.7.6" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.7" />
     <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.113" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="BLL\Data\Scripts\SQLite.sql" />
+    <ProjectReference Include="..\DbScriptDeploy.BLL\DbScriptDeploy.BLL.csproj" />
   </ItemGroup>
 
   <ItemGroup>

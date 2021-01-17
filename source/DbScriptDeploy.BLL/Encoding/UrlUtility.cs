@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DbScriptDeploy.Core.Encoding
+namespace DbScriptDeploy.BLL.Encoding
 {
     public class UrlUtility
     {

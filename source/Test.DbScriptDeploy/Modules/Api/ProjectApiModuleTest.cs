@@ -3,7 +3,7 @@ using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.BLL.Security;
-using DbScriptDeploy.Core.Encoding;
+using DbScriptDeploy.BLL.Encoding;
 using DbScriptDeploy.Modules.Api;
 using DbScriptDeploy.Security;
 using DbScriptDeploy.ViewModels.Api;
@@ -123,7 +123,7 @@ namespace Test.DbScriptDeploy.Modules.Api
         {
 
             var browser = new Browser((bootstrapper) =>
-                            bootstrapper.Module(new ProjectApiModule(_dbContext, _projectRepo, _projectCreateCommand))
+                            bootstrapper.Module(new ProjectApiModule(_dbContext, _projectRepo, null, _projectCreateCommand))
                                 .RootPathProvider(new TestRootPathProvider())
                                 .RequestStartup((container, pipelines, context) => {
                                     context.CurrentUser = currentUser;

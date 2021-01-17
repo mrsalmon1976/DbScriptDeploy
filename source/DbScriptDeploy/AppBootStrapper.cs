@@ -2,7 +2,7 @@
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.BLL.Validators;
-using DbScriptDeploy.Core.Security;
+using DbScriptDeploy.BLL.Security;
 using Microsoft.AspNetCore.Hosting;
 using Nancy;
 using Nancy.Authentication.Forms;
@@ -51,6 +51,17 @@ namespace DbScriptDeploy
             container.Register<IDbContextFactory>(dbContextFactory);
             container.Register<IDbContext>(dbContextFactory.GetDbContext());
 
+            // validators
+            container.Register<IEnvironmentValidator, EnvironmentValidator>();
+            container.Register<IProjectValidator, ProjectValidator>();
+            container.Register<IUserClaimValidator, UserClaimValidator>();
+            container.Register<IUserValidator, UserValidator>();
+
+            container.Register<IPasswordProvider, PasswordProvider>();
+            container.Register<DbScriptDeploy.BLL.Security.IEncryptionProvider, AESGCM>();
+
+            this.RegisterDbDependencies(container);
+
             this.InitialiseDatabase(dbContextFactory);
         }
 
@@ -62,24 +73,7 @@ namespace DbScriptDeploy
             IDbContextFactory dbContextFactory = container.Resolve<IDbContextFactory>();
             IDbContext dbContext = dbContextFactory.GetDbContext();
             container.Register<IDbContext>(dbContext);
-
-            // validators
-            container.Register<IEnvironmentValidator, EnvironmentValidator>();
-            container.Register<IProjectValidator, ProjectValidator>();
-            container.Register<IUserClaimValidator, UserClaimValidator>();
-            container.Register<IUserValidator, UserValidator>();
-
-            // repositories
-            container.Register<IEnvironmentRepository, EnvironmentRepository>();
-            container.Register<IProjectRepository, ProjectRepository>();
-            container.Register<IUserClaimRepository, UserClaimRepository>();
-            container.Register<IUserRepository, UserRepository>();
-
-            // commands
-            container.Register<IEnvironmentCreateCommand, EnvironmentCreateCommand>();
-            container.Register<IProjectCreateCommand, ProjectCreateCommand>();
-            container.Register<IUserClaimCreateCommand, UserClaimCreateCommand>();
-            container.Register<IUserCreateCommand, UserCreateCommand>();
+            this.RegisterDbDependencies(container);
 
             var formsAuthConfiguration = new FormsAuthenticationConfiguration()
             {
@@ -124,6 +118,23 @@ namespace DbScriptDeploy
 
                 dbc.Commit();
             }
+
+        }
+
+        private void RegisterDbDependencies(TinyIoCContainer container)
+        {
+            // repositories
+            container.Register<IEnvironmentRepository, EnvironmentRepository>();
+            container.Register<ILookupRepository, LookupRepository>();
+            container.Register<IProjectRepository, ProjectRepository>();
+            container.Register<IUserClaimRepository, UserClaimRepository>();
+            container.Register<IUserRepository, UserRepository>();
+
+            // commands
+            container.Register<IEnvironmentCreateCommand, EnvironmentCreateCommand>();
+            container.Register<IProjectCreateCommand, ProjectCreateCommand>();
+            container.Register<IUserClaimCreateCommand, UserClaimCreateCommand>();
+            container.Register<IUserCreateCommand, UserCreateCommand>();
 
         }
 

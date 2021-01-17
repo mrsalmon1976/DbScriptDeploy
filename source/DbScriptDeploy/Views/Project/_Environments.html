@@ -16,44 +16,8 @@
                     <td><input type="checkbox" /></td>
                     <td>{{ e.displayOrder }}</td>
                     <td><a v-bind:href="'/project/'+ e.id">{{ e.name }}</a></td>
-                    <td>{{ e.designation }}</td>
+                    <td>{{ e.designationName }}</td>
                     <td>??</td>
-                    <td>
-                        <i class="material-icons">arrow_drop_down</i>
-                        <i class="material-icons">arrow_drop_up</i>
-                        <i class="material-icons">delete</i>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>2</td>
-                    <td>DEV-01</td>
-                    <td>Dev</td>
-                    <td>15</td>
-                    <td>
-                        <i class="material-icons">arrow_drop_down</i>
-                        <i class="material-icons">arrow_drop_up</i>
-                        <i class="material-icons">delete</i>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>3</td>
-                    <td>UAT-01</td>
-                    <td>UAT</td>
-                    <td>22</td>
-                    <td>
-                        <i class="material-icons">arrow_drop_down</i>
-                        <i class="material-icons">arrow_drop_up</i>
-                        <i class="material-icons">delete</i>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>4</td>
-                    <td>PROD-01</td>
-                    <td>Prod</td>
-                    <td>30</td>
                     <td>
                         <i class="material-icons">arrow_drop_down</i>
                         <i class="material-icons">arrow_drop_up</i>
@@ -180,8 +144,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect"  v-on:click="saveEnvironment" v-bind:disabled="isSavingEnvironment">SAVE</button>
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn waves-effect btn-primary"  v-on:click="saveEnvironment" v-bind:disabled="isSavingEnvironment">SAVE</button>
+                <button type="button" class="btn waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
     </div>

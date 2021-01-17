@@ -22,28 +22,29 @@
             </div>
             <div class="body">
 
-                <form _lpchecked="1">
+                <form id="form_script" _lpchecked="1">
                     <label for="script_name">Name</label>
                     <div class="form-group">
                         <div class="form-line">
-                            <input type="text" id="script_name" class="form-control" placeholder="Enter a name that identifies your script" autocomplete="off" />
+                            <input type="text" id="scriptName" name="scriptName" v-model="scriptName" class="form-control" placeholder="Enter a name that identifies your script" autocomplete="off" required/>
                         </div>
                     </div>
                     <label for="script_tags">Tags</label>
                     <div class="form-group">
                         <div class="form-line">
-                            <input type="text" id="script_tags" class="form-control" placeholder="Enter one or many tags (separated by spaces)" autocomplete="off" />
+                            <input type="text" id="scriptTags" name="scriptTags" v-model="scriptTags" class="form-control" placeholder="Enter one or many tags (separated by spaces)" autocomplete="off" />
                         </div>
                     </div>
                     <label>Up Script</label>
                     <div class="form-group">
-                        <div id="editor_up" style="width: 100%; height: 300px;"></div>
+                        <div id="editorUp" style="width: 100%; height: 300px;"></div>
                     </div>
                     <label>Down Script</label>
                     <div class="form-group">
-                        <div id="editor_down" style="width: 100%; height: 300px;"></div>
+                        <div id="editorDown" style="width: 100%; height: 300px;"></div>
                     </div>
-                    <button type="button" class="btn btn-primary m-t-15 waves-effect">SAVE SCRIPT</button>
+                    <button type="button" class="btn btn-primary m-t-15 waves-effect" v-on:click="saveScript" v-bind:disabled="isSavingScript">Save Script</button>
+                    <button type="button" class="btn btn-danger m-t-15 waves-effect" v-on:click="cancel">Cancel</button>
                 </form>
 
 
@@ -53,7 +54,5 @@
 </div>
 <input type="hidden" id="hid-project-id" value="@Model.ProjectId" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-</script>
 
 @EndSection

@@ -1,10 +1,10 @@
-﻿using DbScriptDeploy.Core.Encoding;
+﻿using DbScriptDeploy.BLL.Encoding;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Test.DbScriptDeploy.Core.Encoding
+namespace Test.DbScriptDeploy.BLL.Encoding
 {
     [TestFixture]
     public class UrlUtilityTest

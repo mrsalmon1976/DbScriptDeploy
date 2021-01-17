@@ -3,7 +3,7 @@ using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.BLL.Security;
-using DbScriptDeploy.Core.Encoding;
+using DbScriptDeploy.BLL.Encoding;
 using DbScriptDeploy.Modules.Api;
 using DbScriptDeploy.Security;
 using DbScriptDeploy.ViewModels.Api;

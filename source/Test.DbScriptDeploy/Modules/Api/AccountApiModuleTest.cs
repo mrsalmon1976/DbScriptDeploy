@@ -1,7 +1,6 @@
 ﻿using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.BLL.Security;
-using DbScriptDeploy.Core.Security;
 using DbScriptDeploy.Modules.Api;
 using DbScriptDeploy.Security;
 using Nancy;

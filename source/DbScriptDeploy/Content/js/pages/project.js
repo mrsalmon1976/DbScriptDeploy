@@ -124,9 +124,7 @@ var projectEnvironmentApp = new Vue({
         },
         onAddButtonClick: function () {
             if ($('#tab-scripts').hasClass('active')) {
-                alert('scripts active');
                 var url = '/project/' + this.projectId + '/editor';
-                alert(url);
                 window.location.href = url;
             }
             else if ($('#tab-environments').hasClass('active')) {
