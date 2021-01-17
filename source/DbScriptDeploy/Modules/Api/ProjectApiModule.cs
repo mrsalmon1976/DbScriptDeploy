@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DbScriptDeploy.Services;
 using DbScriptDeploy.BLL.Exceptions;
+using Nancy.ModelBinding;
 
 namespace DbScriptDeploy.Modules.Api
 {
@@ -76,7 +77,7 @@ namespace DbScriptDeploy.Modules.Api
 
         public dynamic AddScript(string projectId)
         {
-            //EnvironmentViewModel environmentModel = this.Bind<EnvironmentViewModel>();
+            ScriptViewModel scriptModel = this.Bind<ScriptViewModel>();
 
             try
             {

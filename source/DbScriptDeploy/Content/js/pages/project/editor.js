@@ -63,21 +63,14 @@ var projectEditorApp = new Vue({
                     url: '/api/project/' + this.projectId + '/script',
                     method: "POST",
                     data: {
-                        //name: this.environmentName,
-                        //projectId: this.projectId,
-                        //dbType: this.environmentDbType,
-                        //host: this.environmentHost,
-                        //port: this.environmentPort,
-                        //database: this.environmentDatabase,
-                        //userName: this.environmentUserName,
-                        //password: this.environmentPassword,
-                        //designationId: this.environmentDesignation
+                        name: that.scriptName,
+                        tags: that.scriptTags,
+                        scriptUp: that.editorUp.getValue(),
+                        scriptDown: that.editorDown.getValue()
                     }
                 });
                 request.done(function (response) {
-                    //alert('saved');
-                    //that.environments = response;
-                    //that.loadEnvironments();
+                    window.location.href = '/project/' + that.projectId;
                 });
                 request.fail(function (xhr, textStatus, errorThrown) {
                     swal("Error", 'An error occurred saving the script: ' + xhr.statusText, "error");
