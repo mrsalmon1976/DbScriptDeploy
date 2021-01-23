@@ -8,7 +8,6 @@ using DbScriptDeploy.BLL.Exceptions;
 using DbScriptDeploy.BLL.Models;
 using DbScriptDeploy.BLL.Security;
 using DbScriptDeploy.BLL.Validators;
-using DbScriptDeploy.BLL.Security;
 
 namespace DbScriptDeploy.BLL.Commands
 {
@@ -21,7 +20,6 @@ namespace DbScriptDeploy.BLL.Commands
         private readonly IDbContext _dbContext;
         private readonly IEnvironmentValidator _environmentValidator;
         private readonly IEncryptionProvider _encryptionProvider;
-        private const int SALT_LENGTH = 10;
 
         public EnvironmentCreateCommand(IDbContext dbContext, IEnvironmentValidator environmentValidator, IEncryptionProvider encryptionProvider)
         {

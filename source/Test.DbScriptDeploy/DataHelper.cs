@@ -61,6 +61,19 @@ namespace Test.DbScriptDeploy
             return model;
         }
 
+        public static ScriptModel CreateScriptModel(int? projectId = null)
+        {
+            Random r = new Random();
+            ScriptModel model = new ScriptModel();
+            model.Name = "TestScript";
+            model.ProjectId = projectId ?? r.Next(1, 1000);
+            model.Tags = new string[] { "Tag1" };
+            model.ScriptUp = "This is the up script";
+            model.ScriptDown = "This is the down script";
+            model.CreateDate = DateTime.UtcNow;
+            return model;
+        }
+
         public static UserClaimModel CreateUserClaimModel(Guid? userId = null, string name = null, int? projectId = null)
         {
             UserClaimModel model = new UserClaimModel();

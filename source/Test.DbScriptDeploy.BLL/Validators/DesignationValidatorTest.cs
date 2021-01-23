@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Test.DbScriptDeploy.BLL.Validators
 {
     [TestFixture]
-    public class DesignationValidatorTest
+    public class TSqlExecutionServiceTest
     {
         private IDesignationValidator _designationValidator;
 

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Designation (
 	CreateDate text NOT NULL
 );
 INSERT INTO sqlite_sequence (name, seq) 
-	SELECT 'Designation', 1000 
+	SELECT 'Designation', 10000 
 	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'Designation');
 
 -- User table stores users - primary key has to be text to store Guid values (makes it easier working 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Project (
 	CreateDate text NOT NULL
 );
 INSERT INTO sqlite_sequence (name, seq) 
-	SELECT 'Project', 10000 
+	SELECT 'Project', 20000 
 	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'Project');
 
 CREATE TABLE IF NOT EXISTS UserClaim (
@@ -55,5 +55,29 @@ CREATE TABLE IF NOT EXISTS Environment (
 	FOREIGN KEY (DesignationId) REFERENCES Designation (Id)
 );
 INSERT INTO sqlite_sequence (name, seq) 
-	SELECT 'Environment', 1000
+	SELECT 'Environment', 30000
 	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'Environment');
+
+CREATE TABLE IF NOT EXISTS Script (
+	Id INTEGER PRIMARY KEY AUTOINCREMENT,
+	ProjectId INTEGER NULL,
+	Name text NOT NULL,
+	ScriptUp text NOT NULL,
+	ScriptDown text NULL,
+	CreateDate text NOT NULL,
+	FOREIGN KEY (ProjectId) REFERENCES Project (Id)
+);
+INSERT INTO sqlite_sequence (name, seq) 
+	SELECT 'Script', 40000
+	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'Script');
+
+CREATE TABLE IF NOT EXISTS ScriptTag (
+	Id INTEGER PRIMARY KEY AUTOINCREMENT,
+	ScriptId INTEGER NULL,
+	Tag text NOT NULL,
+	CreateDate text NOT NULL,
+	FOREIGN KEY (ScriptId) REFERENCES Script (Id)
+);
+INSERT INTO sqlite_sequence (name, seq) 
+	SELECT 'ScriptTag', 50000
+	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'ScriptTag');

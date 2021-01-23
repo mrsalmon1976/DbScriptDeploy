@@ -58,7 +58,7 @@ namespace Test.DbScriptDeploy.BLL.Commands
             Assert.Throws<ValidationException>(del);
 
             // we shouldn't have even tried to do the insert
-            _dbContext.DidNotReceive().ExecuteNonQuery(Arg.Any<string>(), Arg.Any<object>());
+            _dbContext.DidNotReceive().ExecuteScalar<int>(Arg.Any<string>(), Arg.Any<object>());
             _encryptionProvider.DidNotReceive().SimpleEncrypt(Arg.Any<string>(), Arg.Any<byte[]>(), Arg.Any<byte[]>());
         }
 
