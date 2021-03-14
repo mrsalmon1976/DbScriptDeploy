@@ -32,6 +32,7 @@ namespace Test.DbScriptDeploy.Modules.Api
         private IDbContext _dbContext;
         private IProjectRepository _projectRepo;
         private IProjectCreateCommand _projectCreateCommand;
+        private IScriptCreateCommand _scriptCreateCommand;
 
         [SetUp]
         public void ProjectApiModuleTest_SetUp()
@@ -39,6 +40,7 @@ namespace Test.DbScriptDeploy.Modules.Api
             _dbContext = Substitute.For<IDbContext>();
             _projectRepo = Substitute.For<IProjectRepository>();
             _projectCreateCommand = Substitute.For<IProjectCreateCommand>();
+            _scriptCreateCommand = Substitute.For<IScriptCreateCommand>();
         }
 
         #region AddProject Tests
@@ -70,6 +72,45 @@ namespace Test.DbScriptDeploy.Modules.Api
             ProjectViewModel result = JsonConvert.DeserializeObject<ProjectViewModel>(response.Body.AsString());
             string safeProjectId = UrlUtility.EncodeNumber(project.Id);
             Assert.AreEqual(safeProjectId, result.Id);
+
+            _dbContext.Received(1).BeginTransaction();
+            _dbContext.Received(1).Commit();
+        }
+
+
+        #endregion
+
+        #region AddScript Tests
+
+        [Test]
+        public void AddScript_ValidData_ReturnsProjectData()
+        {
+            // setup
+            var currentUser = new ClaimsPrincipal(new GenericPrincipal(new GenericIdentity("Joe Soap"), new string[] { }));
+            var browser = CreateBrowser(currentUser);
+            var user = DataHelper.CreateUserModel();
+
+
+            ScriptModel scriptModel = DataHelper.CreateScriptModel();
+            _scriptCreateCommand.Execute(Arg.Any<ScriptModel>()).Returns(scriptModel);
+
+            ScriptViewModel scriptViewModel = ScriptViewModel.FromScriptModel(scriptModel);
+
+            // execute
+            var response = browser.Post(ProjectApiModule.Route_Post_Project_Script.Replace("{projectId}", scriptViewModel.ProjectId) , (with) =>
+            {
+                with.HttpRequest();
+                with.JsonBody<ScriptViewModel>(scriptViewModel);
+                with.Header("Content-Type", "application/json; charset=utf-8");
+                with.FormsAuth(user.Id, new FormsAuthenticationConfiguration());
+            }).Result;
+
+            // assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            _scriptCreateCommand.Received(1).Execute(Arg.Any<ScriptModel>());
+
+            ScriptViewModel result = JsonConvert.DeserializeObject<ScriptViewModel>(response.Body.AsString());
+            Assert.AreEqual(scriptViewModel.ProjectId, result.ProjectId);
 
             _dbContext.Received(1).BeginTransaction();
             _dbContext.Received(1).Commit();
@@ -123,7 +164,7 @@ namespace Test.DbScriptDeploy.Modules.Api
         {
 
             var browser = new Browser((bootstrapper) =>
-                            bootstrapper.Module(new ProjectApiModule(_dbContext, _projectRepo, null, _projectCreateCommand))
+                            bootstrapper.Module(new ProjectApiModule(_dbContext, _projectRepo, null, _projectCreateCommand, _scriptCreateCommand))
                                 .RootPathProvider(new TestRootPathProvider())
                                 .RequestStartup((container, pipelines, context) => {
                                     context.CurrentUser = currentUser;

@@ -59,15 +59,18 @@ var projectEditorApp = new Vue({
             var frm = $("#form_script");
             if (frm.valid() && frm.validate().valid()) {
                 that.isSavingScript = true;
+                var data = {
+                    name: that.scriptName,
+                    tags: that.scriptTags.split(' '),
+                    scriptUp: that.editorUp.getValue(),
+                    scriptDown: that.editorDown.getValue()
+                };
                 var request = $.ajax({
                     url: '/api/project/' + this.projectId + '/script',
                     method: "POST",
-                    data: {
-                        name: that.scriptName,
-                        tags: that.scriptTags,
-                        scriptUp: that.editorUp.getValue(),
-                        scriptDown: that.editorDown.getValue()
-                    }
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data) 
                 });
                 request.done(function (response) {
                     window.location.href = '/project/' + that.projectId;

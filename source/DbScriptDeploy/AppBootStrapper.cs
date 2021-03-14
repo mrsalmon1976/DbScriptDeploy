@@ -54,6 +54,7 @@ namespace DbScriptDeploy
             // validators
             container.Register<IEnvironmentValidator, EnvironmentValidator>();
             container.Register<IProjectValidator, ProjectValidator>();
+            container.Register<IScriptValidator, ScriptValidator>();
             container.Register<IUserClaimValidator, UserClaimValidator>();
             container.Register<IUserValidator, UserValidator>();
 
@@ -133,6 +134,7 @@ namespace DbScriptDeploy
             // commands
             container.Register<IEnvironmentCreateCommand, EnvironmentCreateCommand>();
             container.Register<IProjectCreateCommand, ProjectCreateCommand>();
+            container.Register<IScriptCreateCommand, ScriptCreateCommand>();
             container.Register<IUserClaimCreateCommand, UserClaimCreateCommand>();
             container.Register<IUserCreateCommand, UserCreateCommand>();
 

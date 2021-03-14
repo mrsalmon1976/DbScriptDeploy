@@ -83,6 +83,7 @@ namespace Test.DbScriptDeploy.Modules
         {
             base.ConfigureRequestContainer(container, context);
             container.Register<IUserMapper, UserMapper>();
+            container.Register<IScriptValidator>(Substitute.For<IScriptValidator>());
             container.Register<IUserValidator>(Substitute.For<IUserValidator>());
 
             // register database context per request
@@ -92,6 +93,7 @@ namespace Test.DbScriptDeploy.Modules
             container.Register<IUserRepository>(Substitute.For<IUserRepository>());
 
             container.Register<IEnvironmentCreateCommand>(Substitute.For<EnvironmentCreateCommand>());
+            container.Register<IScriptCreateCommand>(Substitute.For<ScriptCreateCommand>());
 
             if (this.ConfigureRequestContainerCallback != null)
             {

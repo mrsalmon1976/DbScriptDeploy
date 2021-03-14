@@ -31,13 +31,15 @@ namespace DbScriptDeploy.Modules.Api
         private readonly IProjectRepository _projectRepo;
         private readonly IProjectViewService _projectViewService;
         private readonly IProjectCreateCommand _projectCreateCommand;
+        private readonly IScriptCreateCommand _scriptCreateCommand;
 
-        public ProjectApiModule(IDbContext dbContext, IProjectRepository projectRepo, IProjectViewService projectViewService, IProjectCreateCommand projectCreateCommand)
+        public ProjectApiModule(IDbContext dbContext, IProjectRepository projectRepo, IProjectViewService projectViewService, IProjectCreateCommand projectCreateCommand, IScriptCreateCommand scriptCreateCommand)
         {
             _dbContext = dbContext;
             _projectRepo = projectRepo;
             _projectViewService = projectViewService;
             _projectCreateCommand = projectCreateCommand;
+            _scriptCreateCommand = scriptCreateCommand;
 
             Post(Route_Post_AddProject, x =>
             {
@@ -77,14 +79,13 @@ namespace DbScriptDeploy.Modules.Api
 
         public dynamic AddScript(string projectId)
         {
-            ScriptViewModel scriptModel = this.Bind<ScriptViewModel>();
+            ScriptViewModel scriptViewModel = this.Bind<ScriptViewModel>();
 
             try
             {
                 _dbContext.BeginTransaction();
-                //EnvironmentModel model = _environmentCreateCommand.Execute(environmentModel.ToEnvironmentModel());
-                //EnvironmentViewModel result = EnvironmentViewModel.FromEnvironmentModel(model);
-                string result = "ok";
+                ScriptModel scriptModel = _scriptCreateCommand.Execute(scriptViewModel.ToScriptModel());
+                ScriptViewModel result = ScriptViewModel.FromScriptModel(scriptModel);
                 _dbContext.Commit();
                 return Response.AsJson(result);
             }

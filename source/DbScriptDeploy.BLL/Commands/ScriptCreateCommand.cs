@@ -47,6 +47,10 @@ namespace DbScriptDeploy.BLL.Commands
 
             foreach (string tag in script.Tags)
             {
+                if (String.IsNullOrWhiteSpace(tag))
+                {
+                    continue;
+                }
                 sql = $"INSERT INTO ScriptTag (ScriptId, Tag, CreateDate) VALUES (@ScriptId, @Tag, '{createDate}')";
                 _dbContext.ExecuteNonQuery(sql, new { ScriptId = script.Id, Tag = tag });
             }
