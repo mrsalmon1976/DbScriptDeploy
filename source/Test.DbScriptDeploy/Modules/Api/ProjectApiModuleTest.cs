@@ -23,6 +23,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using DbScriptDeploy.Services;
 
 namespace Test.DbScriptDeploy.Modules.Api
 {
@@ -33,6 +34,7 @@ namespace Test.DbScriptDeploy.Modules.Api
         private IProjectRepository _projectRepo;
         private IProjectCreateCommand _projectCreateCommand;
         private IScriptCreateCommand _scriptCreateCommand;
+        private IProjectViewService _projectViewService;
 
         [SetUp]
         public void ProjectApiModuleTest_SetUp()
@@ -41,6 +43,7 @@ namespace Test.DbScriptDeploy.Modules.Api
             _projectRepo = Substitute.For<IProjectRepository>();
             _projectCreateCommand = Substitute.For<IProjectCreateCommand>();
             _scriptCreateCommand = Substitute.For<IScriptCreateCommand>();
+            _projectViewService = Substitute.For<IProjectViewService>();
         }
 
         #region AddProject Tests
@@ -158,13 +161,52 @@ namespace Test.DbScriptDeploy.Modules.Api
 
         #endregion
 
+        #region LoadProjectScripts Tests
+
+        [Test]
+        public void LoadProjectScripts_LoadsData()
+        {
+            // setup
+            Guid userId = Guid.NewGuid();
+            int projectId = new Random().Next(10, 1000);
+            string sProjectId = UrlUtility.EncodeNumber(projectId);
+            var currentUser = new UserPrincipal(userId, new GenericIdentity("Joe Soap"));
+            var browser = CreateBrowser(currentUser);
+
+            List<ScriptViewModel> scripts = new List<ScriptViewModel>();
+            scripts.Add(ScriptViewModel.FromScriptModel(DataHelper.CreateScriptModel(id: 111, projectId)));
+            scripts.Add(ScriptViewModel.FromScriptModel(DataHelper.CreateScriptModel(id: 222, projectId)));
+            scripts.Add(ScriptViewModel.FromScriptModel(DataHelper.CreateScriptModel(id: 333, projectId)));
+            _projectViewService.LoadScripts(sProjectId).Returns(scripts);
+
+            // execute
+            var response = browser.Get(ProjectApiModule.Route_Get_ProjectScripts.Replace("{id}", sProjectId), (with) =>
+            {
+                with.HttpRequest();
+                with.FormsAuth(userId, new FormsAuthenticationConfiguration());
+            }).Result;
+
+            // assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            _projectViewService.Received(1).LoadScripts(sProjectId);
+
+            List<ScriptViewModel> result = JsonConvert.DeserializeObject<List<ScriptViewModel>>(response.Body.AsString());
+            Assert.AreEqual(scripts.Count, result.Count);
+
+            ScriptViewModel svm = result.First();
+            Assert.AreEqual(scripts[0].Id, svm.Id);
+            Assert.AreEqual(scripts[0].Name, svm.Name);
+        }
+
+        #endregion
+
         #region Private Methods
 
         private Browser CreateBrowser(ClaimsPrincipal currentUser)
         {
 
             var browser = new Browser((bootstrapper) =>
-                            bootstrapper.Module(new ProjectApiModule(_dbContext, _projectRepo, null, _projectCreateCommand, _scriptCreateCommand))
+                            bootstrapper.Module(new ProjectApiModule(_dbContext, _projectRepo, _projectViewService, _projectCreateCommand, _scriptCreateCommand))
                                 .RootPathProvider(new TestRootPathProvider())
                                 .RequestStartup((container, pipelines, context) => {
                                     context.CurrentUser = currentUser;

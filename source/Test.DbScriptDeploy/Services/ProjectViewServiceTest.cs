@@ -33,15 +33,17 @@ namespace Test.DbScriptDeploy.Services
         private IProjectViewService _projectViewService;
 
         private IEnvironmentRepository _environmentRepo;
+        private IScriptRepository _scriptRepo;
         private ILookupRepository _lookupRepo;
 
         [SetUp]
         public void ProjectViewServiceTest_SetUp()
         {
             _environmentRepo = Substitute.For<IEnvironmentRepository>();
+            _scriptRepo = Substitute.For<IScriptRepository>();
             _lookupRepo = Substitute.For<ILookupRepository>();
 
-            _projectViewService = new ProjectViewService(_environmentRepo, _lookupRepo);
+            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _lookupRepo);
         }
 
         #region LoadEnvironments Tests
@@ -107,6 +109,40 @@ namespace Test.DbScriptDeploy.Services
 
         #endregion
 
+        #region LoadScripts Tests
+
+        [Test]
+        public void LoadScripts_WithString_LoadsData()
+        {
+            int projectId = new Random().Next(10, 1000);
+
+            ScriptModel sm1 = DataHelper.CreateScriptModel(projectId: projectId);
+            ScriptModel sm2 = DataHelper.CreateScriptModel(projectId: projectId);
+            List<ScriptModel> scripts = new List<ScriptModel>(new[] { sm1, sm2 });
+            _scriptRepo.GetAllByProjectId(projectId).Returns(scripts);
+
+            IEnumerable<ScriptViewModel> result = _projectViewService.LoadScripts(projectId);
+
+            _scriptRepo.Received(1).GetAllByProjectId(projectId);
+
+            Assert.AreEqual(2, result.Count());
+            Assert.IsNotNull(result.Select(x => x.Id == UrlUtility.EncodeNumber(sm1.Id)));
+            Assert.IsNotNull(result.Select(x => x.Id == UrlUtility.EncodeNumber(sm2.Id)));
+        }
+
+        [Test]
+        public void LoadScripts_WithInteger_LoadsDataCorrectly()
+        {
+            int projectId = new Random().Next(10, 1000);
+            string sProjectId = UrlUtility.EncodeNumber(projectId);
+
+            _projectViewService.LoadScripts(sProjectId);
+
+            _scriptRepo.Received(1).GetAllByProjectId(projectId);
+
+        }
+
+        #endregion
 
     }
 }

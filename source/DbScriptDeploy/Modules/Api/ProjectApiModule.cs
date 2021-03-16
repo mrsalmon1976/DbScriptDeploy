@@ -27,6 +27,8 @@ namespace DbScriptDeploy.Modules.Api
 
         public const string Route_Post_Project_Script = "/api/project/{projectId}/script";
 
+        public const string Route_Get_ProjectScripts = "/api/project/{id}/scripts";
+
         private readonly IDbContext _dbContext;
         private readonly IProjectRepository _projectRepo;
         private readonly IProjectViewService _projectViewService;
@@ -53,6 +55,11 @@ namespace DbScriptDeploy.Modules.Api
             {
                 var id = x.id;
                 return LoadProjectEnvironments(id);
+            });
+            Get(Route_Get_ProjectScripts, x =>
+            {
+                var id = x.id;
+                return LoadProjectScripts(id);
             });
             Post(Route_Post_Project_Script, x =>
             {
@@ -113,5 +120,12 @@ namespace DbScriptDeploy.Modules.Api
             var environments = _projectViewService.LoadEnvironments(projectId);
             return this.Response.AsJson(environments);
         }
+
+        public dynamic LoadProjectScripts(string projectId)
+        {
+            var scripts = _projectViewService.LoadScripts(projectId);
+            return this.Response.AsJson(scripts);
+        }
+
     }
 }

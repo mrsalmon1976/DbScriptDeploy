@@ -13,6 +13,8 @@ namespace DbScriptDeploy.BLL.Repositories
     {
         ScriptModel GetById(int id);
 
+        IEnumerable<ScriptModel> GetAllByProjectId(int projectId);
+
     }
 
     public class ScriptRepository : IScriptRepository
@@ -29,6 +31,16 @@ namespace DbScriptDeploy.BLL.Repositories
         {
             const string sql = "SELECT * FROM Script WHERE Id = @Id";
             return _dbContext.Query<ScriptModel>(sql, new { Id = id }).SingleOrDefault();
+        }
+
+        public IEnumerable<ScriptModel> GetAllByProjectId(int projectId)
+        {
+
+            string sql = @"SELECT s.* 
+                    FROM Script s 
+                    WHERE s.ProjectId = @ProjectId
+                    ORDER BY s.Name";
+            return _dbContext.Query<ScriptModel>(sql, new { ProjectId = projectId });
         }
 
     }

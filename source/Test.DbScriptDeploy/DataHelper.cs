@@ -61,10 +61,11 @@ namespace Test.DbScriptDeploy
             return model;
         }
 
-        public static ScriptModel CreateScriptModel(int? projectId = null)
+        public static ScriptModel CreateScriptModel(int? id = null, int? projectId = null)
         {
             Random r = new Random();
             ScriptModel model = new ScriptModel();
+            model.Id = id ?? r.Next(1, 1000);
             model.Name = "TestScript";
             model.ProjectId = projectId ?? r.Next(1, 1000);
             model.Tags = new string[] { "Tag1" };

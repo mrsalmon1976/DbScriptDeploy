@@ -36,6 +36,7 @@ var projectEnvironmentApp = new Vue({
         databaseTypes: [{ id: '0', name: 'None' }],
         designations: [{ id: '0', name: 'None' }],
         environments: [],
+        scripts: [],
         isAddButtonVisible: true,
 
         // environment details
@@ -59,6 +60,7 @@ var projectEnvironmentApp = new Vue({
         this.loadEnvironments();
         this.loadDatabaseTypes();
         this.loadDesignations();
+        this.loadScripts();
 
         // track when tabs change
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -114,6 +116,23 @@ var projectEnvironmentApp = new Vue({
             });
             request.done(function (response) {
                 that.environments = response;
+            });
+            request.fail(function (xhr, textStatus, errorThrown) {
+                swal("Error", "An error occurred fetching environments: " + errorThrown, "error");
+            });
+            request.always(function (xhr, textStatus, errorThrown) {
+                $('.page-loader-wrapper').fadeOut();
+            });
+        },
+        loadScripts: function () {
+            var that = this;
+            $('.page-loader-wrapper').fadeIn();
+            var request = $.ajax({
+                url: '/api/project/' + this.projectId + '/scripts',
+                method: "GET"
+            });
+            request.done(function (response) {
+                that.scripts = response;
             });
             request.fail(function (xhr, textStatus, errorThrown) {
                 swal("Error", "An error occurred fetching environments: " + errorThrown, "error");

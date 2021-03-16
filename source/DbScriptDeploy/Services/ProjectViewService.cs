@@ -15,16 +15,22 @@ namespace DbScriptDeploy.Services
 
         IEnumerable<EnvironmentViewModel> LoadEnvironments(string projectId);
 
+        IEnumerable<ScriptViewModel> LoadScripts(int projectId);
+                                              
+        IEnumerable<ScriptViewModel> LoadScripts(string projectId);
+
     }
 
     public class ProjectViewService : IProjectViewService
     {
         private readonly IEnvironmentRepository _environmentRepo;
+        private readonly IScriptRepository _scriptRepo;
         private readonly ILookupRepository _lookupRepo;
 
-        public ProjectViewService(IEnvironmentRepository environmentRepo, ILookupRepository lookupRepo)
+        public ProjectViewService(IEnvironmentRepository environmentRepo, IScriptRepository scriptRepo, ILookupRepository lookupRepo)
         {
             _environmentRepo = environmentRepo;
+            _scriptRepo = scriptRepo;
             _lookupRepo = lookupRepo;
         }
 
@@ -47,6 +53,18 @@ namespace DbScriptDeploy.Services
         {
             int pid = UrlUtility.DecodeNumber(projectId);
             return this.LoadEnvironments(pid);
+        }
+
+        public IEnumerable<ScriptViewModel> LoadScripts(int projectId)
+        {
+            var scripts = _scriptRepo.GetAllByProjectId(projectId).Select(x => ScriptViewModel.FromScriptModel(x)).ToList();
+            return scripts;
+        }
+
+        public IEnumerable<ScriptViewModel> LoadScripts(string projectId)
+        {
+            int pid = UrlUtility.DecodeNumber(projectId);
+            return this.LoadScripts(pid);
         }
     }
 }
