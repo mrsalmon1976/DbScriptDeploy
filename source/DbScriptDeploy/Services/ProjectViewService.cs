@@ -25,13 +25,17 @@ namespace DbScriptDeploy.Services
     {
         private readonly IEnvironmentRepository _environmentRepo;
         private readonly IScriptRepository _scriptRepo;
+        private readonly IScriptTagRepository _scriptTagRepo;
         private readonly ILookupRepository _lookupRepo;
+        private readonly IModelBinderService _modelBinderService;
 
-        public ProjectViewService(IEnvironmentRepository environmentRepo, IScriptRepository scriptRepo, ILookupRepository lookupRepo)
+        public ProjectViewService(IEnvironmentRepository environmentRepo, IScriptRepository scriptRepo, IScriptTagRepository scriptTagRepo, ILookupRepository lookupRepo, IModelBinderService modelBinderService)
         {
             _environmentRepo = environmentRepo;
             _scriptRepo = scriptRepo;
+            _scriptTagRepo = scriptTagRepo;
             _lookupRepo = lookupRepo;
+            _modelBinderService = modelBinderService;
         }
 
         public IEnumerable<EnvironmentViewModel> LoadEnvironments(int projectId)
@@ -57,8 +61,20 @@ namespace DbScriptDeploy.Services
 
         public IEnumerable<ScriptViewModel> LoadScripts(int projectId)
         {
-            var scripts = _scriptRepo.GetAllByProjectId(projectId).Select(x => ScriptViewModel.FromScriptModel(x)).ToList();
-            return scripts;
+            var scripts = _scriptRepo.GetAllByProjectId(projectId);
+            var scriptTags = _scriptTagRepo.GetByProjectId(projectId);
+
+            List<ScriptViewModel> scriptViewModels = new List<ScriptViewModel>();
+
+            // convert the scripts into viewmodel equivalents and decorate
+            foreach (ScriptModel sm in scripts)
+            {
+                ScriptViewModel svm = _modelBinderService.BindScriptViewModel(sm); 
+                svm.Tags.AddRange(scriptTags.Where(x => x.ScriptId == sm.Id).Select(y => ScriptTagViewModel.FromScriptModel(y)));
+                scriptViewModels.Add(svm);
+            }
+
+            return scriptViewModels;
         }
 
         public IEnumerable<ScriptViewModel> LoadScripts(string projectId)

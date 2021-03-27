@@ -1,5 +1,8 @@
-﻿<div v-if="scripts.length == 0">No scripts have been added to this project.</div>
-<div v-if="scripts.length > 0">
+﻿<div v-if="isLoadingScripts">
+    <img src="/Content/img/loading_143x42.gif" width="143" height="42" alt="Loading..." />
+</div>
+<div v-if="scripts.length == 0 && !isLoadingScripts">No scripts have been added to this project.</div>
+<div v-if="scripts.length > 0 && !isLoadingScripts">
     <form>
         <div class="row clearfix">
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
@@ -80,6 +83,38 @@
                     <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
                     <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
                     <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
+                    <td>
+                        <i class="material-icons">delete</i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>Script</th>
+                    <th>&nbsp; <!-- Tags --></th>
+                    <th>Created</th>
+                    <th v-for="e in environments">
+                        {{ e.name }}
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="s in scripts">
+                    <td>
+                        <a href="javascript:void(0);">
+                            {{ s.name }}
+                        </a>
+                    </td>
+                    <td>
+                        <span v-for="t in s.tags" class="label tag-label" v-bind:class="t.cssClass">{{ t.tag }}</span>
+                    </td>
+                    <td>2020-01-01 15:37</td>
+                    <td v-for="e in environments">
+                        {{ e.name }}
+                    </td>
                     <td>
                         <i class="material-icons">delete</i>
                     </td>

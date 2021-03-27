@@ -8226,3 +8226,6 @@ html.ie11 .bs-searchbox .form-control {
 .form-modal > .row {
     margin-bottom: 20px;
 }
+.tag-label {
+    margin-right: 3px;
+}

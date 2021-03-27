@@ -75,6 +75,18 @@ namespace Test.DbScriptDeploy
             return model;
         }
 
+        public static ScriptTagModel CreateScriptTagModel(int? id = null, int? scriptId = null)
+        {
+            Random r = new Random();
+            ScriptTagModel model = new ScriptTagModel();
+            model.Id = id ?? r.Next(1, 1000);
+            model.Tag = "TestTag " + model.Id.ToString();
+            model.ScriptId = scriptId ?? r.Next(1, 1000);
+            model.CreateDate = DateTime.UtcNow;
+            return model;
+        }
+
+
         public static UserClaimModel CreateUserClaimModel(Guid? userId = null, string name = null, int? projectId = null)
         {
             UserClaimModel model = new UserClaimModel();

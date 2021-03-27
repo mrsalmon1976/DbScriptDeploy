@@ -34,16 +34,20 @@ namespace Test.DbScriptDeploy.Services
 
         private IEnvironmentRepository _environmentRepo;
         private IScriptRepository _scriptRepo;
+        private IScriptTagRepository _scriptTagRepo;
         private ILookupRepository _lookupRepo;
+        private IModelBinderService _modelBinderService;
 
         [SetUp]
         public void ProjectViewServiceTest_SetUp()
         {
             _environmentRepo = Substitute.For<IEnvironmentRepository>();
             _scriptRepo = Substitute.For<IScriptRepository>();
+            _scriptTagRepo = Substitute.For<IScriptTagRepository>();
             _lookupRepo = Substitute.For<ILookupRepository>();
+            _modelBinderService = Substitute.For<IModelBinderService>();
 
-            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _lookupRepo);
+            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _lookupRepo, _modelBinderService);
         }
 
         #region LoadEnvironments Tests
@@ -115,6 +119,7 @@ namespace Test.DbScriptDeploy.Services
         public void LoadScripts_WithString_LoadsData()
         {
             int projectId = new Random().Next(10, 1000);
+            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _lookupRepo, new ModelBinderService());
 
             ScriptModel sm1 = DataHelper.CreateScriptModel(projectId: projectId);
             ScriptModel sm2 = DataHelper.CreateScriptModel(projectId: projectId);
@@ -128,6 +133,41 @@ namespace Test.DbScriptDeploy.Services
             Assert.AreEqual(2, result.Count());
             Assert.IsNotNull(result.Select(x => x.Id == UrlUtility.EncodeNumber(sm1.Id)));
             Assert.IsNotNull(result.Select(x => x.Id == UrlUtility.EncodeNumber(sm2.Id)));
+        }
+
+        [Test]
+        public void LoadScripts_TagsExist_LoadsScriptsWithTags()
+        {
+            int projectId = new Random().Next(10, 1000);
+            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _lookupRepo, new ModelBinderService());
+
+            ScriptModel sm1 = DataHelper.CreateScriptModel(projectId: projectId);
+            ScriptModel sm2 = DataHelper.CreateScriptModel(projectId: projectId);
+            List<ScriptModel> scripts = new List<ScriptModel>(new[] { sm1, sm2 });
+            _scriptRepo.GetAllByProjectId(projectId).Returns(scripts);
+
+            ScriptTagModel stm1_1 = DataHelper.CreateScriptTagModel(scriptId: sm1.Id);
+            ScriptTagModel stm1_2 = DataHelper.CreateScriptTagModel(scriptId: sm1.Id);
+            ScriptTagModel stm2_1 = DataHelper.CreateScriptTagModel(scriptId: sm2.Id);
+            ScriptTagModel stm2_2 = DataHelper.CreateScriptTagModel(scriptId: sm2.Id);
+            List<ScriptTagModel> scriptTags = new List<ScriptTagModel>(new[] { stm1_1, stm1_2, stm2_1, stm2_2 });
+            _scriptTagRepo.GetByProjectId(projectId).Returns(scriptTags);
+
+
+            List<ScriptViewModel> result = _projectViewService.LoadScripts(projectId).ToList();
+
+            _scriptRepo.Received(1).GetAllByProjectId(projectId);
+            _scriptTagRepo.Received(1).GetByProjectId(projectId);
+
+            Assert.AreEqual(2, result.Count());
+
+            ScriptViewModel svm1 = result[0];
+            Assert.IsNotNull(svm1.Tags.Select(x => x.Id == UrlUtility.EncodeNumber(stm1_1.Id)));
+            Assert.IsNotNull(svm1.Tags.Select(x => x.Id == UrlUtility.EncodeNumber(stm1_2.Id)));
+
+            ScriptViewModel svm2 = result[0];
+            Assert.IsNotNull(svm2.Tags.Select(x => x.Id == UrlUtility.EncodeNumber(stm2_1.Id)));
+            Assert.IsNotNull(svm2.Tags.Select(x => x.Id == UrlUtility.EncodeNumber(stm2_2.Id)));
         }
 
         [Test]

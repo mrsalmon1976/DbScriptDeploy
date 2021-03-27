@@ -1,4 +1,7 @@
-﻿<div id="content_environment">
+﻿<div v-if="isLoadingEnvironments">
+    <img src="/Content/img/loading_143x42.gif" width="143" height="42" alt="Loading..." />
+</div>
+<div v-if="!isLoadingEnvironments" id="content_environment">
     <form>
         <table class="table table-condensed">
             <thead>
@@ -144,7 +147,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn waves-effect btn-primary"  v-on:click="saveEnvironment" v-bind:disabled="isSavingEnvironment">SAVE</button>
+                <button type="button" class="btn waves-effect btn-primary" v-on:click="saveEnvironment" v-bind:disabled="isSavingEnvironment">SAVE</button>
                 <button type="button" class="btn waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
         </div>

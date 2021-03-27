@@ -32,14 +32,16 @@ namespace DbScriptDeploy.Modules.Api
         private readonly IDbContext _dbContext;
         private readonly IProjectRepository _projectRepo;
         private readonly IProjectViewService _projectViewService;
+        private readonly IModelBinderService _modelBinderService;
         private readonly IProjectCreateCommand _projectCreateCommand;
         private readonly IScriptCreateCommand _scriptCreateCommand;
 
-        public ProjectApiModule(IDbContext dbContext, IProjectRepository projectRepo, IProjectViewService projectViewService, IProjectCreateCommand projectCreateCommand, IScriptCreateCommand scriptCreateCommand)
+        public ProjectApiModule(IDbContext dbContext, IProjectRepository projectRepo, IProjectViewService projectViewService, IModelBinderService modelBinderService, IProjectCreateCommand projectCreateCommand, IScriptCreateCommand scriptCreateCommand)
         {
             _dbContext = dbContext;
             _projectRepo = projectRepo;
             _projectViewService = projectViewService;
+            _modelBinderService = modelBinderService;
             _projectCreateCommand = projectCreateCommand;
             _scriptCreateCommand = scriptCreateCommand;
 
@@ -87,14 +89,15 @@ namespace DbScriptDeploy.Modules.Api
         public dynamic AddScript(string projectId)
         {
             ScriptViewModel scriptViewModel = this.Bind<ScriptViewModel>();
+            ScriptModel scriptModel = _modelBinderService.BindScriptModel(scriptViewModel);
 
             try
             {
                 _dbContext.BeginTransaction();
-                ScriptModel scriptModel = _scriptCreateCommand.Execute(scriptViewModel.ToScriptModel());
-                ScriptViewModel result = ScriptViewModel.FromScriptModel(scriptModel);
+                scriptModel = _scriptCreateCommand.Execute(scriptModel);
+                scriptViewModel = _modelBinderService.BindScriptViewModel(scriptModel);
                 _dbContext.Commit();
-                return Response.AsJson(result);
+                return Response.AsJson(scriptViewModel);
             }
             catch (ValidationException ve)
             {

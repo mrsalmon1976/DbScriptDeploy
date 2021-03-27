@@ -38,6 +38,8 @@ var projectEnvironmentApp = new Vue({
         environments: [],
         scripts: [],
         isAddButtonVisible: true,
+        isLoadingEnvironments: true,
+        isLoadingScripts: true,
 
         // environment details
         isSavingEnvironment: false,
@@ -108,8 +110,8 @@ var projectEnvironmentApp = new Vue({
             });
         },
         loadEnvironments: function () {
-            var that = this;
-            $('.page-loader-wrapper').fadeIn();
+            var that = this
+            that.isLoadingEnvironments = true;
             var request = $.ajax({
                 url: '/api/project/' + this.projectId + '/environments',
                 method: "GET"
@@ -121,12 +123,12 @@ var projectEnvironmentApp = new Vue({
                 swal("Error", "An error occurred fetching environments: " + errorThrown, "error");
             });
             request.always(function (xhr, textStatus, errorThrown) {
-                $('.page-loader-wrapper').fadeOut();
+                that.isLoadingEnvironments = false;
             });
         },
         loadScripts: function () {
             var that = this;
-            $('.page-loader-wrapper').fadeIn();
+            that.isLoadingScripts = true;
             var request = $.ajax({
                 url: '/api/project/' + this.projectId + '/scripts',
                 method: "GET"
@@ -138,7 +140,7 @@ var projectEnvironmentApp = new Vue({
                 swal("Error", "An error occurred fetching environments: " + errorThrown, "error");
             });
             request.always(function (xhr, textStatus, errorThrown) {
-                $('.page-loader-wrapper').fadeOut();
+                that.isLoadingScripts = false;
             });
         },
         onAddButtonClick: function () {

@@ -13,6 +13,12 @@ namespace DbScriptDeploy.BLL.Repositories
     {
         IEnumerable<ScriptTagModel> GetByScriptId(int scriptId);
 
+        /// <summary>
+        /// Gets all tags for scripts for a specific project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        IEnumerable<ScriptTagModel> GetByProjectId(int projectId);
     }
 
     public class ScriptTagRepository : IScriptTagRepository
@@ -30,6 +36,18 @@ namespace DbScriptDeploy.BLL.Repositories
             const string sql = "SELECT * FROM ScriptTag WHERE ScriptId = @ScriptId ORDER BY Tag";
             return _dbContext.Query<ScriptTagModel>(sql, new { ScriptId = scriptId });
         }
+
+        public IEnumerable<ScriptTagModel> GetByProjectId(int projectId)
+        {
+
+            string sql = @"SELECT st.* 
+                    FROM ScriptTag st
+                    INNER JOIN Script s on st.ScriptId = s.Id
+                    WHERE s.ProjectId = @ProjectId
+                    ORDER BY st.Tag";
+            return _dbContext.Query<ScriptTagModel>(sql, new { ProjectId = projectId });
+        }
+
 
     }
 }

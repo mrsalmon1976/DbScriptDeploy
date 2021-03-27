@@ -35,6 +35,7 @@ namespace Test.DbScriptDeploy.Modules.Api
         private IProjectCreateCommand _projectCreateCommand;
         private IScriptCreateCommand _scriptCreateCommand;
         private IProjectViewService _projectViewService;
+        private IModelBinderService _modelBinderService;
 
         [SetUp]
         public void ProjectApiModuleTest_SetUp()
@@ -44,6 +45,7 @@ namespace Test.DbScriptDeploy.Modules.Api
             _projectCreateCommand = Substitute.For<IProjectCreateCommand>();
             _scriptCreateCommand = Substitute.For<IScriptCreateCommand>();
             _projectViewService = Substitute.For<IProjectViewService>();
+            _modelBinderService = Substitute.For<IModelBinderService>();
         }
 
         #region AddProject Tests
@@ -92,12 +94,14 @@ namespace Test.DbScriptDeploy.Modules.Api
             var currentUser = new ClaimsPrincipal(new GenericPrincipal(new GenericIdentity("Joe Soap"), new string[] { }));
             var browser = CreateBrowser(currentUser);
             var user = DataHelper.CreateUserModel();
+            var modelBinder = new ModelBinderService();
 
 
             ScriptModel scriptModel = DataHelper.CreateScriptModel();
             _scriptCreateCommand.Execute(Arg.Any<ScriptModel>()).Returns(scriptModel);
 
-            ScriptViewModel scriptViewModel = ScriptViewModel.FromScriptModel(scriptModel);
+            ScriptViewModel scriptViewModel = modelBinder.BindScriptViewModel(scriptModel);
+            _modelBinderService.BindScriptViewModel(Arg.Any<ScriptModel>()).Returns(scriptViewModel);
 
             // execute
             var response = browser.Post(ProjectApiModule.Route_Post_Project_Script.Replace("{projectId}", scriptViewModel.ProjectId) , (with) =>
@@ -172,11 +176,12 @@ namespace Test.DbScriptDeploy.Modules.Api
             string sProjectId = UrlUtility.EncodeNumber(projectId);
             var currentUser = new UserPrincipal(userId, new GenericIdentity("Joe Soap"));
             var browser = CreateBrowser(currentUser);
+            var modelBinder = new ModelBinderService();
 
             List<ScriptViewModel> scripts = new List<ScriptViewModel>();
-            scripts.Add(ScriptViewModel.FromScriptModel(DataHelper.CreateScriptModel(id: 111, projectId)));
-            scripts.Add(ScriptViewModel.FromScriptModel(DataHelper.CreateScriptModel(id: 222, projectId)));
-            scripts.Add(ScriptViewModel.FromScriptModel(DataHelper.CreateScriptModel(id: 333, projectId)));
+            scripts.Add(modelBinder.BindScriptViewModel(DataHelper.CreateScriptModel(id: 111, projectId)));
+            scripts.Add(modelBinder.BindScriptViewModel(DataHelper.CreateScriptModel(id: 222, projectId)));
+            scripts.Add(modelBinder.BindScriptViewModel(DataHelper.CreateScriptModel(id: 333, projectId)));
             _projectViewService.LoadScripts(sProjectId).Returns(scripts);
 
             // execute
@@ -206,7 +211,7 @@ namespace Test.DbScriptDeploy.Modules.Api
         {
 
             var browser = new Browser((bootstrapper) =>
-                            bootstrapper.Module(new ProjectApiModule(_dbContext, _projectRepo, _projectViewService, _projectCreateCommand, _scriptCreateCommand))
+                            bootstrapper.Module(new ProjectApiModule(_dbContext, _projectRepo, _projectViewService, _modelBinderService, _projectCreateCommand, _scriptCreateCommand))
                                 .RootPathProvider(new TestRootPathProvider())
                                 .RequestStartup((container, pipelines, context) => {
                                     context.CurrentUser = currentUser;
