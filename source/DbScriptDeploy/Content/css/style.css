@@ -8220,6 +8220,9 @@ html.ie11 .bs-searchbox .form-control {
 }
 
 /* CUSTOM OVERRIDES */
+.action-button {
+    margin-right: 5px;
+}
 .form-group {
     margin-bottom: 10px;
 }
@@ -8227,5 +8230,16 @@ html.ie11 .bs-searchbox .form-control {
     margin-bottom: 20px;
 }
 .tag-label {
-    margin-right: 3px;
+    margin-right: 5px;
+}
+.db-checkbox-plain {
+    position: relative !important;
+    opacity: 100 !important;
+    left: 0px !important;
+}
+#db-script-body {
+    padding: 0px;
+    height: 100%;
+    max-height: 300px;
+    overflow: auto;
 }

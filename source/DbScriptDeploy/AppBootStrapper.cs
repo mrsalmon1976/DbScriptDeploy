@@ -129,6 +129,7 @@ namespace DbScriptDeploy
             container.Register<ILookupRepository, LookupRepository>();
             container.Register<IProjectRepository, ProjectRepository>();
             container.Register<IScriptRepository, ScriptRepository>();
+            container.Register<IScriptExecutionRepository, ScriptExecutionRepository>();
             container.Register<IScriptTagRepository, ScriptTagRepository>();
             container.Register<IUserClaimRepository, UserClaimRepository>();
             container.Register<IUserRepository, UserRepository>();

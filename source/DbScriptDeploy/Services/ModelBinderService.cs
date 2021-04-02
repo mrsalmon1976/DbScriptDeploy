@@ -14,6 +14,8 @@ namespace DbScriptDeploy.Services
 
         ScriptViewModel BindScriptViewModel(ScriptModel model);
 
+        ScriptExecutionViewModel BindScriptExecutionViewModel(ScriptExecutionModel model);
+
     }
 
     public class ModelBinderService : IModelBinderService
@@ -28,6 +30,7 @@ namespace DbScriptDeploy.Services
                 ProjectId = (String.IsNullOrWhiteSpace(model.ProjectId) ? 0 : UrlUtility.DecodeNumber(model.ProjectId)),
                 ScriptDown = model.ScriptDown,
                 ScriptUp = model.ScriptUp,
+                CreateDate = model.CreateDate
             };
         }
         public ScriptViewModel BindScriptViewModel(ScriptModel model)
@@ -39,6 +42,19 @@ namespace DbScriptDeploy.Services
                 ProjectId = (model.ProjectId <= 0 ? "" : UrlUtility.EncodeNumber(model.ProjectId)),
                 ScriptDown = model.ScriptDown,
                 ScriptUp = model.ScriptUp,
+                CreateDate = model.CreateDate
+            };
+        }
+
+        public ScriptExecutionViewModel BindScriptExecutionViewModel(ScriptExecutionModel model)
+        {
+            return new ScriptExecutionViewModel()
+            {
+                Id = (model.Id <= 0 ? "" : UrlUtility.EncodeNumber(model.Id)),
+                ScriptId = (model.ScriptId <= 0 ? "" : UrlUtility.EncodeNumber(model.ScriptId)),
+                EnvironmentId = (model.EnvironmentId <= 0 ? "" : UrlUtility.EncodeNumber(model.EnvironmentId)),
+                ExecutionStartDate = model.ExecutionStartDate,
+                ExecutionCompleteDate = model.ExecutionCompleteDate
             };
         }
     }

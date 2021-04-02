@@ -81,3 +81,16 @@ CREATE TABLE IF NOT EXISTS ScriptTag (
 INSERT INTO sqlite_sequence (name, seq) 
 	SELECT 'ScriptTag', 50000
 	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'ScriptTag');
+
+CREATE TABLE IF NOT EXISTS ScriptExecution (
+	Id INTEGER PRIMARY KEY AUTOINCREMENT,
+	ScriptId INTEGER NULL,
+	EnvironmentId INTEGER NULL,
+	ExecutionStartDate text NOT NULL,
+	ExecutionCompleteDate text NOT NULL,
+	FOREIGN KEY (ScriptId) REFERENCES Script (Id),
+	FOREIGN KEY (EnvironmentId) REFERENCES Environment (Id)
+);
+INSERT INTO sqlite_sequence (name, seq) 
+	SELECT 'ScriptExecution', 31000
+	WHERE NOT EXISTS (SELECT 1 FROM sqlite_sequence WHERE name = 'ScriptExecution');

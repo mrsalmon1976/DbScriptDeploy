@@ -1,4 +1,14 @@
-﻿var masterMenuApp = new Vue({
+﻿Vue.mixin({
+    methods: {
+        formatDate: function (dt, format) {
+            var f = format;
+            if (f === undefined) { f = 'YYYY-MM-DD HH:mm:ss' };
+            return dayjs(dt).format(f);
+        },
+    },
+});
+
+var masterMenuApp = new Vue({
     el: '#master_menu',
     data: {
         isProcessing: false,

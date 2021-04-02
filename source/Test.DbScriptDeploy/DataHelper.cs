@@ -75,6 +75,18 @@ namespace Test.DbScriptDeploy
             return model;
         }
 
+        public static ScriptExecutionModel CreateScriptExecutionModel(int? id = null, int? scriptId = null, int? environmentId = null)
+        {
+            Random r = new Random();
+            ScriptExecutionModel model = new ScriptExecutionModel();
+            model.Id = id ?? r.Next(1, 1000);
+            model.ScriptId = scriptId ?? r.Next(1, 1000);
+            model.EnvironmentId = environmentId ?? r.Next(1, 1000);
+            model.ExecutionStartDate = DateTime.UtcNow.AddSeconds(-5);
+            model.ExecutionCompleteDate = DateTime.UtcNow;
+            return model;
+        }
+
         public static ScriptTagModel CreateScriptTagModel(int? id = null, int? scriptId = null)
         {
             Random r = new Random();

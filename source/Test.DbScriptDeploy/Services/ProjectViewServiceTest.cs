@@ -34,6 +34,7 @@ namespace Test.DbScriptDeploy.Services
 
         private IEnvironmentRepository _environmentRepo;
         private IScriptRepository _scriptRepo;
+        private IScriptExecutionRepository _scriptExecutionRepo;
         private IScriptTagRepository _scriptTagRepo;
         private ILookupRepository _lookupRepo;
         private IModelBinderService _modelBinderService;
@@ -44,10 +45,11 @@ namespace Test.DbScriptDeploy.Services
             _environmentRepo = Substitute.For<IEnvironmentRepository>();
             _scriptRepo = Substitute.For<IScriptRepository>();
             _scriptTagRepo = Substitute.For<IScriptTagRepository>();
+            _scriptExecutionRepo = Substitute.For<IScriptExecutionRepository>();
             _lookupRepo = Substitute.For<ILookupRepository>();
             _modelBinderService = Substitute.For<IModelBinderService>();
 
-            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _lookupRepo, _modelBinderService);
+            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _scriptExecutionRepo, _lookupRepo, _modelBinderService);
         }
 
         #region LoadEnvironments Tests
@@ -119,7 +121,7 @@ namespace Test.DbScriptDeploy.Services
         public void LoadScripts_WithString_LoadsData()
         {
             int projectId = new Random().Next(10, 1000);
-            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _lookupRepo, new ModelBinderService());
+            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _scriptExecutionRepo, _lookupRepo, new ModelBinderService());
 
             ScriptModel sm1 = DataHelper.CreateScriptModel(projectId: projectId);
             ScriptModel sm2 = DataHelper.CreateScriptModel(projectId: projectId);
@@ -139,7 +141,7 @@ namespace Test.DbScriptDeploy.Services
         public void LoadScripts_TagsExist_LoadsScriptsWithTags()
         {
             int projectId = new Random().Next(10, 1000);
-            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _lookupRepo, new ModelBinderService());
+            _projectViewService = new ProjectViewService(_environmentRepo, _scriptRepo, _scriptTagRepo, _scriptExecutionRepo, _lookupRepo, new ModelBinderService());
 
             ScriptModel sm1 = DataHelper.CreateScriptModel(projectId: projectId);
             ScriptModel sm2 = DataHelper.CreateScriptModel(projectId: projectId);

@@ -20,10 +20,10 @@ namespace DbScriptDeploy.BLL.Commands
         private readonly IDbContext _dbContext;
         private readonly IScriptValidator _scriptValidator;
 
-        public ScriptCreateCommand(IDbContext dbContext, IScriptValidator ScriptValidator)
+        public ScriptCreateCommand(IDbContext dbContext, IScriptValidator scriptValidator)
         {
             _dbContext = dbContext;
-            _scriptValidator = ScriptValidator;
+            _scriptValidator = scriptValidator;
         }
 
         public ScriptModel Execute(ScriptModel script)

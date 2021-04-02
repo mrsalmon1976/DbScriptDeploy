@@ -37,6 +37,7 @@ var projectEnvironmentApp = new Vue({
         designations: [{ id: '0', name: 'None' }],
         environments: [],
         scripts: [],
+        runnableScripts: [],
         isAddButtonVisible: true,
         isLoadingEnvironments: true,
         isLoadingScripts: true,
@@ -51,6 +52,9 @@ var projectEnvironmentApp = new Vue({
         environmentUserName: '',
         environmentPassword: '',
         environmentDesignation: '0',
+
+        // scripts information
+        selectScriptToggle: false,
     },
     mounted: function () {
 
@@ -70,6 +74,14 @@ var projectEnvironmentApp = new Vue({
         });
     },
     methods: {
+        getEnvironmentExecutionState(environmentId, script) {
+            for (var i = 0; i < script.executions.length; i++) {
+                if (script.executions[i].environmentId == environmentId) {
+                    return true;
+                }
+            }
+            return false;
+        },
         loadDatabaseTypes: function () {
             var that = this;
             //that.isLoadingProjects = true;
@@ -150,6 +162,30 @@ var projectEnvironmentApp = new Vue({
             }
             else if ($('#tab-environments').hasClass('active')) {
                 $('#dlgEnvironment').modal('show');
+            }
+        },
+        onOpenRunDialogButtonClick: function () {
+            this.runnableScripts.splice(0);
+            for (var i = 0; i < this.scripts.length; i++) {
+                if (this.scripts[i].checked) {
+                    this.runnableScripts.push(this.scripts[i]);
+                }
+            }
+            if (this.runnableScripts.length > 0) {
+                $('#dlgRunScripts').modal('show');
+            }
+            else {
+                swal({
+                    title: "No scripts selected",
+                    text: "You need to select at least one script to run",
+                    type: "error",
+                    buttons: { cancel: 'OK' }
+                })
+            }
+        },
+        onSelectedScriptsChange: function (e) {
+            for (var i = 0; i < this.scripts.length; i++) {
+                this.scripts[i].checked = this.selectScriptToggle;
             }
         },
         onTabChange: function (e) {

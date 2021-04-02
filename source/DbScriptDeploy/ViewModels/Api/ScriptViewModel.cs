@@ -12,6 +12,7 @@ namespace DbScriptDeploy.ViewModels.Api
         public ScriptViewModel()
         {
             this.Tags = new List<ScriptTagViewModel>();
+            this.Executions = new List<ScriptExecutionViewModel>();
         }
 
         public string Id { get; set; }
@@ -21,10 +22,14 @@ namespace DbScriptDeploy.ViewModels.Api
         public string Name { get; set; }
 
         public List<ScriptTagViewModel> Tags { get; private set; }
-                        
+
+        public List<ScriptExecutionViewModel> Executions { get; private set; }
+
         public string ScriptUp { get; set; }
 
         public string ScriptDown { get; set; }
+
+        public DateTime CreateDate { get; set; }
 
     }
 }

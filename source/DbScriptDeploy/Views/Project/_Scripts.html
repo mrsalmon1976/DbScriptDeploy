@@ -25,73 +25,11 @@
         <table class="table table-condensed">
             <thead>
                 <tr>
-                    <th>Script</th>
-                    <th>&nbsp; <!-- Tags --></th>
-                    <th>Created</th>
-                    <th>DEV01</th>
-                    <th>DEV02</th>
-                    <th>UAT01</th>
-                    <th>PROD01</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <a href="javascript:void(0);">
-                            Script that does stuff
-                        </a>
+                    <td style="padding: 10px;">
+                        <div>
+                            <input type="checkbox" class="db-checkbox-plain" v-model="selectScriptToggle" v-on:change="onSelectedScriptsChange()" />
+                        </div>
                     </td>
-                    <td><span class="label bg-pink">Sprint1</span></td>
-                    <td>2020-01-01 15:37</td>
-                    <td><i class="material-icons" style="color:#4CAF50 !important">check</i></td>
-                    <td><i class="material-icons" style="color:#4CAF50 !important">check</i></td>
-                    <td><i class="material-icons" style="color:#4CAF50 !important">check</i></td>
-                    <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
-                    <td>
-                        <i class="material-icons">delete</i>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="javascript:void(0);">
-                            Another script
-                        </a>
-                    </td>
-                    <td>
-                        <span class="label bg-purple">#22012</span>
-                        <span class="label bg-deep-purple">Sprint2</span>
-                    </td>
-                    <td>2020-06-30 12:24</td>
-                    <td><i class="material-icons" style="color:#4CAF50 !important">check</i></td>
-                    <td><i class="material-icons" style="color:#4CAF50 !important">check</i></td>
-                    <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
-                    <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
-                    <td>
-                        <i class="material-icons">delete</i>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="javascript:void(0);">
-                            Script not run
-                        </a>
-                    </td>
-                    <td><span class="label bg-lime">Random</span></td>
-                    <td>2020-09-01 08:15</td>
-                    <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
-                    <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
-                    <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
-                    <td><i class="material-icons" style="color:#F44336 !important">close</i></td>
-                    <td>
-                        <i class="material-icons">delete</i>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-condensed">
-            <thead>
-                <tr>
                     <th>Script</th>
                     <th>&nbsp; <!-- Tags --></th>
                     <th>Created</th>
@@ -101,8 +39,13 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody-scripts">
                 <tr v-for="s in scripts">
+                    <td>
+                        <div>
+                            <input type="checkbox" class="script-select-box db-checkbox-plain" v-bind:id="'cb_script_' + s.id" v-model="s.checked" />
+                        </div>                        
+                    </td>
                     <td>
                         <a href="javascript:void(0);">
                             {{ s.name }}
@@ -111,9 +54,10 @@
                     <td>
                         <span v-for="t in s.tags" class="label tag-label" v-bind:class="t.cssClass">{{ t.tag }}</span>
                     </td>
-                    <td>2020-01-01 15:37</td>
+                    <td>{{ formatDate(s.createDate) }}</td>
                     <td v-for="e in environments">
-                        {{ e.name }}
+                        <i v-if="getEnvironmentExecutionState(e.id, s)" class="material-icons" style="color:#4CAF50 !important">check</i>
+                        <i v-else class="material-icons" style="color:#F44336 !important">close</i>
                     </td>
                     <td>
                         <i class="material-icons">delete</i>
@@ -122,4 +66,29 @@
             </tbody>
         </table>
     </form>
+</div>
+<div class="modal fade" id="dlgRunScripts" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Run Scripts</h4>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="body" id="db-script-body">
+                        <ul class="list-group">
+                            <li v-for="rs in runnableScripts" class="list-group-item">
+                                {{ rs.name }}
+                                <span v-for="t in rs.tags" class="label tag-label pull-right" v-bind:class="t.cssClass">{{ t.tag }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn waves-effect btn-danger" v-on:click="saveEnvironment" v-bind:disabled="isSavingEnvironment">RUN SCRIPTS</button>
+                <button type="button" class="btn waves-effect" data-dismiss="modal">CANCEL</button>
+            </div>
+        </div>
+    </div>
 </div>

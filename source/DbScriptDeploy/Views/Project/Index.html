@@ -43,10 +43,15 @@
                             <i class="material-icons">settings</i> SETTINGS
                         </a>
                     </li>
-                    <li role="presentation" style="float:right;" v-show="isAddButtonVisible">
+                    <li role="presentation" class="pull-right action-button" v-show="isAddButtonVisible">
                         <button type="button" v-on:click="onAddButtonClick" class="btn bg-deep-orange btn-circle waves-effect waves-circle waves-light waves-float pull-right">
                             <i class="material-icons">playlist_add</i>
-                        </button>                    
+                        </button>
+                    </li>
+                    <li role="presentation" class="pull-right action-button" v-show="isAddButtonVisible">
+                        <button type="button" v-on:click="onOpenRunDialogButtonClick" class="btn bg-deep-orange btn-circle waves-effect waves-circle waves-light waves-float pull-right">
+                            <i class="material-icons">play_arrow</i>
+                        </button>
                     </li>
                 </ul>
 

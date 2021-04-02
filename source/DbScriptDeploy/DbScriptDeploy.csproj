@@ -71,6 +71,9 @@
     <None Update="Content\lib\bootstrap\js\bootstrap.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\lib\dayjs\dayjs.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\lib\jquery-slimscroll\jquery.slimscroll.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

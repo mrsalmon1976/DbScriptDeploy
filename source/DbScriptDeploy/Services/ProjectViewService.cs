@@ -26,14 +26,16 @@ namespace DbScriptDeploy.Services
         private readonly IEnvironmentRepository _environmentRepo;
         private readonly IScriptRepository _scriptRepo;
         private readonly IScriptTagRepository _scriptTagRepo;
+        private readonly IScriptExecutionRepository _scriptExecutionRepo;
         private readonly ILookupRepository _lookupRepo;
         private readonly IModelBinderService _modelBinderService;
 
-        public ProjectViewService(IEnvironmentRepository environmentRepo, IScriptRepository scriptRepo, IScriptTagRepository scriptTagRepo, ILookupRepository lookupRepo, IModelBinderService modelBinderService)
+        public ProjectViewService(IEnvironmentRepository environmentRepo, IScriptRepository scriptRepo, IScriptTagRepository scriptTagRepo, IScriptExecutionRepository scriptExecutionRepo, ILookupRepository lookupRepo, IModelBinderService modelBinderService)
         {
             _environmentRepo = environmentRepo;
             _scriptRepo = scriptRepo;
             _scriptTagRepo = scriptTagRepo;
+            _scriptExecutionRepo = scriptExecutionRepo;
             _lookupRepo = lookupRepo;
             _modelBinderService = modelBinderService;
         }
@@ -63,6 +65,7 @@ namespace DbScriptDeploy.Services
         {
             var scripts = _scriptRepo.GetAllByProjectId(projectId);
             var scriptTags = _scriptTagRepo.GetByProjectId(projectId);
+            var scriptExecutions = _scriptExecutionRepo.GetByProjectId(projectId);
 
             List<ScriptViewModel> scriptViewModels = new List<ScriptViewModel>();
 
@@ -71,6 +74,7 @@ namespace DbScriptDeploy.Services
             {
                 ScriptViewModel svm = _modelBinderService.BindScriptViewModel(sm); 
                 svm.Tags.AddRange(scriptTags.Where(x => x.ScriptId == sm.Id).Select(y => ScriptTagViewModel.FromScriptModel(y)));
+                svm.Executions.AddRange(scriptExecutions.Where(x => x.ScriptId == sm.Id).Select(y => _modelBinderService.BindScriptExecutionViewModel(y)));
                 scriptViewModels.Add(svm);
             }
 
