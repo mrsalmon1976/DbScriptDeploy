@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DbScriptDeploy.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +27,7 @@ namespace DbScriptDeploy
             IAppSettings settings = new AppSettings();
             config.GetSection("AppSettings").Bind(settings);
 
-            return Host.CreateDefaultBuilder(args)
+            IHostBuilder builder =  Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseContentRoot(AppDomain.CurrentDomain.BaseDirectory)
@@ -34,6 +36,10 @@ namespace DbScriptDeploy
                         .UseUrls($"http://localhost:{settings.Port}/");
                 })
                 .UseWindowsService();
+
+            builder.ConfigureServices(services => services.AddHostedService<BackgroundScriptService>());
+            return builder;
+
         }
     }
 }

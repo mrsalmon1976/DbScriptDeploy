@@ -16,7 +16,7 @@ namespace DbScriptDeploy
 {
     public class Startup
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
 
         public Startup(IConfiguration configuration)
         {

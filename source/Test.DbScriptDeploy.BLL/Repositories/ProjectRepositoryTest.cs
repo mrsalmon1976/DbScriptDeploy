@@ -101,9 +101,9 @@ namespace Test.DbScriptDeploy.BLL.Repositories
                 ProjectModel projectUser = createProjectCommand.Execute("projectUser");
 
                 //create the user claims - linked to only one project
-                createUserClaimCommand.Execute(user.Id, ClaimNames.Administrator, null);
-                createUserClaimCommand.Execute(user.Id, ClaimNames.ProjectOwner, projectOwner.Id);
-                createUserClaimCommand.Execute(user.Id, ClaimNames.ProjectUser, projectUser.Id);
+                createUserClaimCommand.Execute(user.Id, Claims.Administrator, null);
+                createUserClaimCommand.Execute(user.Id, Claims.ProjectOwner, projectOwner.Id);
+                createUserClaimCommand.Execute(user.Id, Claims.ProjectUser, projectUser.Id);
 
 
                 List<ProjectModel> result = projectRepo.GetAllByUserId(user.Id).ToList();
@@ -119,8 +119,8 @@ namespace Test.DbScriptDeploy.BLL.Repositories
         /// <summary>
         /// Tests that the GetAllByUserId method only fetches the appropriate projects for project owners and project users
         /// </summary>
-        [TestCase(ClaimNames.ProjectOwner)]
-        [TestCase(ClaimNames.ProjectUser)]
+        [TestCase(Claims.ProjectOwner)]
+        [TestCase(Claims.ProjectUser)]
         public void GetAllByUserId_ProjectOwnerOrUser_Integration_ReturnsData(string claimName)
         {
             string filePath = Path.Combine(AppContext.BaseDirectory, Path.GetRandomFileName() + ".dbtest");

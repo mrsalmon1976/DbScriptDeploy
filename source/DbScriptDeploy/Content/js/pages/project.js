@@ -55,6 +55,7 @@ var projectEnvironmentApp = new Vue({
 
         // scripts information
         selectScriptToggle: false,
+        scriptEnvironment: '0',
     },
     mounted: function () {
 
@@ -183,6 +184,16 @@ var projectEnvironmentApp = new Vue({
                 })
             }
         },
+        onRunScriptClick: function (scriptId) {
+            this.runnableScripts.splice(0);
+            for (var i = 0; i < this.scripts.length; i++) {
+                if (this.scripts[i].id == scriptId) {
+                    this.runnableScripts.push(this.scripts[i]);
+                    break;
+                }
+            }
+            $('#dlgRunScripts').modal('show');
+        },
         onSelectedScriptsChange: function (e) {
             for (var i = 0; i < this.scripts.length; i++) {
                 this.scripts[i].checked = this.selectScriptToggle;
@@ -190,15 +201,18 @@ var projectEnvironmentApp = new Vue({
         },
         onTabChange: function (e) {
             var target = $(e.target).attr("href"); // activated tab
-            if (target == '#tab_environments') {
+            if (target === '#tab_environments') {
                 this.isAddButtonVisible = true;
             }
-            else if (target == '#tab_scripts') {
+            else if (target === '#tab_scripts') {
                 this.isAddButtonVisible = true;
             }
             else {
                 this.isAddButtonVisible = false;
             }
+        },
+        runScripts: function () {
+            alert(1);
         },
         saveEnvironment: function () {
             var that = this;

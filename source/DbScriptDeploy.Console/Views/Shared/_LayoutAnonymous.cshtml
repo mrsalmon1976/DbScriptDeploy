@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@ViewData["Title"] - DbScriptDeploy.Console</title>
+    <!-- Favicon-->
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" asp-append-version="false" />
+        <link rel="stylesheet" href="~/lib/node-waves/waves.css" asp-append-version="false" />
+        <link rel="stylesheet" href="~/lib/animate-css/animate.css" asp-append-version="false" />
+        <link rel="stylesheet" href="~/lib/sweetalert/sweetalert.css" asp-append-version="false" />
+        <link rel="stylesheet" href="~/css/materialize.css" asp-append-version="false" />
+        <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/styles_custom.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/all-themes.min.css" />
+        <link rel="stylesheet" href="~/css/theme-cyan.min.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/bundle.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body class="signup-page">
+    <div class="signup-box">
+        <div class="logo">
+            <a href="javascript:void(0);">DbScriptDeploy</a>
+            <small>A tool for migrating SQL scripts</small>
+        </div>
+        @RenderBody()
+    </div>
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="false"></script>
+        <script src="~/lib/bootstrap/js/bootstrap.js" asp-append-version="false"></script>
+        <script src="~/lib/node-waves/waves.js" asp-append-version="false"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="false"></script>
+        <script src="~/js/admin.js" asp-append-version="false"></script>
+        <script src="~/lib/vue/vue.js" asp-append-version="false"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/bundle.min.js" asp-append-version="true"></script>
+        <script src="~/lib/vue/vue.min.js" asp-append-version="false"></script>
+    </environment>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -46,7 +46,7 @@ namespace DbScriptDeploy.BLL.Commands
             if (user == null)
             {
                 user = _createUserCommand.Execute(AdminUserName, AdminDefaultPassword);
-                user.Claims.Add(_createUserClaimCommand.Execute(user.Id, ClaimNames.Administrator, null));
+                user.Claims.Add(_createUserClaimCommand.Execute(user.Id, Roles.Administrator, null));
             }
             return user;
         }

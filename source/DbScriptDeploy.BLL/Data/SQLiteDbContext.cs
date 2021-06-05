@@ -118,7 +118,13 @@ namespace DbScriptDeploy.BLL.Data
                 SQLiteConnection.CreateFile(_dbPath);
             }
 
-            string sql = this.ReadResource("DbScriptDeploy.BLL.Data.Scripts.SQLite.sql");
+            string sql = this.ReadResource("DbScriptDeploy.BLL.Data.Scripts.Identity.sql");
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, _conn))
+            {
+                cmd.ExecuteNonQuery();
+            }
+
+            sql = this.ReadResource("DbScriptDeploy.BLL.Data.Scripts.SQLite.sql");
             using (SQLiteCommand cmd = new SQLiteCommand(sql, _conn))
             {
                 cmd.ExecuteNonQuery();

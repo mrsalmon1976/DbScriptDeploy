@@ -8237,9 +8237,15 @@ html.ie11 .bs-searchbox .form-control {
     opacity: 100 !important;
     left: 0px !important;
 }
+.db-pointer {
+    cursor: pointer;
+}
 #db-script-body {
     padding: 0px;
     height: 100%;
     max-height: 300px;
     overflow: auto;
+}
+#db-script-body > .list-group {
+    margin-bottom: 0px;
 }

@@ -1,0 +1,37 @@
+﻿/* CUSTOM OVERRIDES */
+.anonymous-page {
+    background-color: #00BCD4 !important;
+    padding-left: 0;
+    max-width: 360px;
+    margin: 5% auto;
+    overflow-x: hidden;
+}
+.action-button {
+    margin-right: 5px;
+}
+.form-group {
+    margin-bottom: 10px;
+}
+.form-modal > .row {
+    margin-bottom: 20px;
+}
+.tag-label {
+    margin-right: 5px;
+}
+.db-checkbox-plain {
+    position: relative !important;
+    opacity: 100 !important;
+    left: 0px !important;
+}
+.db-pointer {
+    cursor: pointer;
+}
+#db-script-body {
+    padding: 0px;
+    height: 100%;
+    max-height: 300px;
+    overflow: auto;
+}
+#db-script-body > .list-group {
+    margin-bottom: 0px;
+}

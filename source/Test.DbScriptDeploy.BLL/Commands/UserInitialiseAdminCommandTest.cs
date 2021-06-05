@@ -78,10 +78,10 @@ namespace Test.DbScriptDeploy.BLL.Services
 
             UserClaimModel claim = new UserClaimModel();
             claim.UserId = user.Id;
-            claim.Name = ClaimNames.Administrator;
+            claim.Name = Claims.Administrator;
 
             _createUserCommand.Execute(user.UserName, user.Password).Returns(user);
-            _createUserClaimCommand.Execute(user.Id, ClaimNames.Administrator, null).Returns(claim);
+            _createUserClaimCommand.Execute(user.Id, Claims.Administrator, null).Returns(claim);
 
             // execute
             UserModel result = _userInitialiseAdminCommand.Execute();
@@ -89,7 +89,7 @@ namespace Test.DbScriptDeploy.BLL.Services
 
             _userRepo.Received(1).GetByUserName(user.UserName);
             _createUserCommand.Received(1).Execute(user.UserName, user.Password);
-            _createUserClaimCommand.Received(1).Execute(user.Id, ClaimNames.Administrator, null);
+            _createUserClaimCommand.Received(1).Execute(user.Id, Claims.Administrator, null);
         }
 
 

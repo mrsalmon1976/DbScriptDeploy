@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DbScriptDeploy.Services;
 
 namespace DbScriptDeploy
 {
@@ -31,6 +32,12 @@ namespace DbScriptDeploy
             RootPathProvider = new AppRootPathProvider(environment);
             _appSettings = appSettings;
 
+        }
+
+        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
+        {
+            base.ConfigureApplicationContainer(container);
+            container.Register<IModelBinderService, ModelBinderService>();
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)

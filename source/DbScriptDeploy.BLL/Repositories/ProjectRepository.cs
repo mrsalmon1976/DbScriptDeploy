@@ -37,7 +37,7 @@ namespace DbScriptDeploy.BLL.Repositories
         {
             // check if the user is a super admin
             string sql = "SELECT COUNT(*) FROM UserClaim WHERE UserId = @UserId AND Name = @Name";
-            int count = _dbContext.ExecuteScalar<int>(sql, new { UserId = userId, Name = ClaimNames.Administrator });
+            int count = _dbContext.ExecuteScalar<int>(sql, new { UserId = userId, Name = Roles.Administrator });
             bool isAdmin = (count > 0);
             if (isAdmin)
             {

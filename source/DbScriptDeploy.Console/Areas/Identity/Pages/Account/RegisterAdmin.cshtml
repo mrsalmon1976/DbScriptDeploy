@@ -1,0 +1,51 @@
+﻿@page
+@model RegisterAdminModel
+@{
+    ViewData["Title"] = "Register";
+}
+<div class="card">
+    <div class="body">
+        <form id="sign_up" method="POST">
+            <div class="msg">An admin account has not been set up yet.  Please enter details for the site admin account below.</div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="material-icons">person</i>
+                </span>
+                <div class="form-line">
+                    <input asp-for="Input.Email" class="form-control" placeholder="User Name" required autofocus />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="material-icons">lock</i>
+                </span>
+                <div class="form-line">
+                    <input asp-for="Input.Password" class="form-control" minlength="8" placeholder="Password" required />
+                </div>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="material-icons">lock</i>
+                </span>
+                <div class="form-line">
+                    <input asp-for="Input.ConfirmPassword" class="form-control" minlength="8" placeholder="Confirm Password" required />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="terms" id="terms" class="filled-in chk-col-pink">
+                <label for="terms">I read and agree to the <a href="javascript:void(0);">terms of usage</a>.</label>
+            </div>
+
+            <button class="btn btn-block btn-lg bg-pink waves-effect" type="submit">REGISTER</button>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -60,6 +60,7 @@
                         <i v-else class="material-icons" style="color:#F44336 !important">close</i>
                     </td>
                     <td>
+                        <i class="material-icons db-pointer" v-on:click="onRunScriptClick(s.id)">play_arrow</i>
                         <i class="material-icons">delete</i>
                     </td>
                 </tr>
@@ -84,9 +85,27 @@
                         </ul>
                     </div>
                 </div>
+                <form name="frmRunscripts">
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="scriptEnvironment">Environment</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <select id="scriptEnvironment" name="scriptEnvironment" class="form-control" v-model="scriptEnvironment" required>
+                                        <option v-for="e in environments" v-bind:value="e.id">
+                                            {{ e.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn waves-effect btn-danger" v-on:click="saveEnvironment" v-bind:disabled="isSavingEnvironment">RUN SCRIPTS</button>
+                <button type="button" class="btn waves-effect btn-danger" v-on:click="runScripts" v-bind:disabled="isSavingEnvironment">RUN SCRIPTS</button>
                 <button type="button" class="btn waves-effect" data-dismiss="modal">CANCEL</button>
             </div>
         </div>

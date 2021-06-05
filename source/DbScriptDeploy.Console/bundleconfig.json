@@ -1,0 +1,25 @@
+[
+  {
+    "outputFileName": "wwwroot/css/bundle.css",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/css/bootstrap.css",
+      "wwwroot/lib/node-waves/waves.css",
+      "wwwroot/lib/animate-css/animate.css",
+      "wwwroot/lib/sweetalert/sweetalert.css",
+      "wwwroot/css/materialize.css",
+      "wwwroot/css/styles.css",
+      "wwwroot/css/styles_custom.css",
+      "wwwroot/css/all-themes.min.css",
+      "wwwroot/css/theme-cyan.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/bundle.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery/dist/jquery.js",
+      "wwwroot/lib/bootstrap/js/bootstrap.js",
+      "wwwroot/lib/node-waves/waves.js",
+      "wwwroot/js/admin.js"
+    ]
+  }
+]
