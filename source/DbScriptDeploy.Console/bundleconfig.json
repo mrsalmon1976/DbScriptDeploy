@@ -18,8 +18,13 @@
     "inputFiles": [
       "wwwroot/lib/jquery/dist/jquery.js",
       "wwwroot/lib/bootstrap/js/bootstrap.js",
+      "wwwroot/lib/jquery-slimscroll/jquery.slimscroll.js",
+      "wwwroot/lib/sweetalert/sweetalert.min.js",
       "wwwroot/lib/node-waves/waves.js",
-      "wwwroot/js/admin.js"
+      "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+      "wwwroot/lib/dayjs/dayjs.min.js",
+      "wwwroot/js/admin.js",
+      "wwwroot/js/site.js"
     ]
   }
 ]

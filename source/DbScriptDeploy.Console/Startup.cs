@@ -20,6 +20,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using DbScriptDeploy.BLL.Commands;
+using DbScriptDeploy.BLL.Validators;
 
 namespace DbScriptDeploy.Console
 {
@@ -55,8 +58,17 @@ namespace DbScriptDeploy.Console
             services.AddControllersWithViews();
             services.AddScoped<IEmailSender, EmailSender>();
 
+            // automapper
+            services.AddAutoMapper(typeof(AppMappingProfile));
+
+            // validators
+            services.AddScoped<IProjectValidator, ProjectValidator>();
+
             // BLL services
             services.AddScoped<IEmailService, SendGridEmailService>();
+
+            // BLL commands
+            services.AddScoped<IProjectCreateCommand, ProjectCreateCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

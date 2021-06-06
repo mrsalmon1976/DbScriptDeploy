@@ -24,6 +24,18 @@ namespace DbScriptDeploy.BLL.Data
             _dbPath = filePath;
             _connString = String.Format("Data Source={0};Version=3;", filePath);
             _conn = new SQLiteConnection(_connString);
+
+            string dir = new FileInfo(_dbPath).Directory.FullName;
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            if (!System.IO.File.Exists(_dbPath))
+            {
+                SQLiteConnection.CreateFile(_dbPath);
+            }
+
             _conn.Open();
         }
 
@@ -107,17 +119,6 @@ namespace DbScriptDeploy.BLL.Data
         /// </summary>
         public override void Initialise()
         {
-            string dir = new FileInfo(_dbPath).Directory.FullName;
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            if (!System.IO.File.Exists(_dbPath))
-            {
-                SQLiteConnection.CreateFile(_dbPath);
-            }
-
             string sql = this.ReadResource("DbScriptDeploy.BLL.Data.Scripts.Identity.sql");
             using (SQLiteCommand cmd = new SQLiteCommand(sql, _conn))
             {

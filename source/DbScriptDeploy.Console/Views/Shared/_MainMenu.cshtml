@@ -1,0 +1,39 @@
+﻿<div id="master_menu" class="menu">
+    <ul class="list">
+        <li class="header">NAVIGATION</li>
+        <li>
+            <a href="/dashboard">
+                <i class="material-icons">home</i>
+                <span>Home</span>
+            </a>
+        </li>
+        <li class="active">
+            <a href="javascript:void(0);" class="menu-toggle">
+                <i class="material-icons">assignment</i>
+                <span>Projects</span>
+            </a>
+            <ul class="ml-menu">
+                <li v-if="isLoadingProjects"><a href="#"><img src="~/img/loading_16x11.gif" alt="Loading..." /></a></li>
+                <li v-for="p in projects">
+                    <a v-bind:href="'/project/'+ p.id">{{ p.name }}</a>
+                </li>
+                <li v-if="!isLoadingProjects">
+                    <a href="#" v-on:click="addProject"><i>Add new project</i></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="../../pages/helper-classes.html">
+                <i class="material-icons">face</i>
+                <span>Users</span>
+            </a>
+        </li>
+        <li>
+            <a href="../../pages/helper-classes.html">
+                <i class="material-icons">settings</i>
+                <span>Settings</span>
+            </a>
+        </li>
+
+    </ul>
+</div>

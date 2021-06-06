@@ -13,6 +13,9 @@
     <Content Remove="wwwroot\css\styles_custom.css" />
     <Content Remove="wwwroot\css\theme-cyan.min.css" />
     <Content Remove="wwwroot\favicon.ico" />
+    <Content Remove="wwwroot\img\loading_143x42.gif" />
+    <Content Remove="wwwroot\img\loading_16x11.gif" />
+    <Content Remove="wwwroot\img\loading_190x190.gif" />
     <Content Remove="wwwroot\js\admin.js" />
     <Content Remove="wwwroot\lib\animate-css\animate.css" />
     <Content Remove="wwwroot\lib\animate-css\animate.min.css" />
@@ -20,6 +23,11 @@
     <Content Remove="wwwroot\lib\bootstrap\css\bootstrap.min.css" />
     <Content Remove="wwwroot\lib\bootstrap\js\bootstrap.js" />
     <Content Remove="wwwroot\lib\bootstrap\js\bootstrap.min.js" />
+    <Content Remove="wwwroot\lib\dayjs\dayjs.min.js" />
+    <Content Remove="wwwroot\lib\jquery-slimscroll\jquery.slimscroll.js" />
+    <Content Remove="wwwroot\lib\jquery\dist\jquery.js" />
+    <Content Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
+    <Content Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
     <Content Remove="wwwroot\lib\node-waves\waves.css" />
     <Content Remove="wwwroot\lib\node-waves\waves.js" />
     <Content Remove="wwwroot\lib\node-waves\waves.min.css" />
@@ -35,6 +43,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
@@ -78,6 +88,13 @@
     <None Include="wwwroot\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="wwwroot\img\loading_143x42.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\img\loading_16x11.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\img\loading_190x190.gif" />
     <None Include="wwwroot\js\admin.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -95,6 +112,17 @@
     <None Include="wwwroot\lib\bootstrap\js\bootstrap.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="wwwroot\lib\dayjs\dayjs.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\lib\jquery-slimscroll\jquery.slimscroll.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\lib\jquery\dist\jquery.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
     <None Include="wwwroot\lib\node-waves\waves.css" />
     <None Include="wwwroot\lib\node-waves\waves.js" />
     <None Include="wwwroot\lib\node-waves\waves.min.css">

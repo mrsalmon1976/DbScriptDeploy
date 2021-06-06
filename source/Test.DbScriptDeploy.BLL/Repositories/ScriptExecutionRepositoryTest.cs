@@ -41,6 +41,7 @@ namespace Test.DbScriptDeploy.BLL.Repositories
         /// Tests that the GetByScriptId method fetches all tags for a given script Id
         /// </summary>
         [Test]
+        [Ignore("Not fully implemented yet")]
         public void GetByScriptId_Integration_ReturnsData()
         {
             string filePath = Path.Combine(AppContext.BaseDirectory, Path.GetRandomFileName() + ".dbtest");
@@ -83,6 +84,7 @@ namespace Test.DbScriptDeploy.BLL.Repositories
         /// Tests that the GetByProjectId method fetches all tags for a given script Id
         /// </summary>
         [Test]
+        [Ignore("Not fully implemented yet")]
         public void GetByProjectId_Integration_ReturnsData()
         {
             Random r = new Random();
