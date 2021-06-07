@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using DbScriptDeploy.BLL.Security;
+using System.Security.Claims;
 
 namespace DbScriptDeploy.Console.Areas.Identity.Pages.Account
 {
@@ -55,7 +56,7 @@ namespace DbScriptDeploy.Console.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -67,16 +68,17 @@ namespace DbScriptDeploy.Console.Areas.Identity.Pages.Account
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            var adminUsers = _userManager.GetUsersInRoleAsync(Roles.Administrator).Result;
+            var adminUsers = _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, Claims.Administrator)).Result;
             if (adminUsers.Count == 0)
             {
                 _logger.LogDebug("No admin users found, redirecting to admin registration page");
-                this.Redirect("/Identity/Account/RegisterAdmin");
+                return this.Redirect("/Identity/Account/RegisterAdmin");
             }
             else
             {
                 ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                 ReturnUrl = returnUrl;
+                return this.Page();
             }
         }
 

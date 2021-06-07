@@ -3,7 +3,9 @@ using DbScriptDeploy.BLL.Commands;
 using DbScriptDeploy.BLL.Data;
 using DbScriptDeploy.BLL.Encoding;
 using DbScriptDeploy.BLL.Models;
+using DbScriptDeploy.BLL.Repositories;
 using DbScriptDeploy.Console;
+using DbScriptDeploy.Console.AppCode.Security;
 using DbScriptDeploy.Console.Areas.Api;
 using DbScriptDeploy.Console.Models;
 using Microsoft.AspNetCore.Hosting;
@@ -32,8 +34,8 @@ namespace Test.DbScriptDeploy.Modules.Api
         private ILogger<ProjectController> _logger;
         private IDbContext _dbContext;
         private IMapper _mapper;
-        //private IProjectRepository _projectRepo;
         private IProjectCreateCommand _projectCreateCommand;
+        private IProjectRepository _projectRepo;
         //private IScriptCreateCommand _scriptCreateCommand;
         //private IProjectViewService _projectViewService;
         //private IModelBinderService _modelBinderService;
@@ -50,14 +52,45 @@ namespace Test.DbScriptDeploy.Modules.Api
             _logger = Substitute.For<ILogger<ProjectController>>();
             _dbContext = Substitute.For<IDbContext>();
             _mapper = new Mapper(mapperConfig);
-            //_projectRepo = Substitute.For<IProjectRepository>();
             _projectCreateCommand = Substitute.For<IProjectCreateCommand>();
+            _projectRepo = Substitute.For<IProjectRepository>();
             //_scriptCreateCommand = Substitute.For<IScriptCreateCommand>();
             //_projectViewService = Substitute.For<IProjectViewService>();
             //_modelBinderService = Substitute.For<IModelBinderService>();
 
-            _projectController = new ProjectController(_logger, _dbContext, _mapper, _projectCreateCommand);
+            _projectController = new ProjectController(_logger, _dbContext, _mapper, _projectCreateCommand, _projectRepo);
         }
+
+        #region GetUserProjects
+
+        [Test]
+        public void GetUserProjects_IsAdmin_GetsAllProjects()
+        {
+            // setup
+            IAppUser appUser = Substitute.For<IAppUser>();
+            appUser.IsAdmin.Returns(true);
+            _projectController.CurrentUser = appUser;
+
+
+            int projectId = new Random().Next(1, 1000);
+            List < ProjectModel> projects = new List<ProjectModel>();
+            projects.Add(new ProjectModel() { Id = projectId }); ;
+            _projectRepo.GetAll().Returns(projects);
+            //List<ProjectViewModel> projectViewModels = new List<ProjectViewModel>();
+            //projectViewModels.Add(new ProjectViewModel() { Id = Guid.NewGuid().ToString() });;
+            //_mapper.Map<IEnumerable<>
+
+            // execute
+            List<ProjectViewModel> result = _projectController.GetUserProjects().ToList();
+
+            // assert
+            _projectRepo.Received(1).GetAll();
+
+            Assert.AreEqual(result[0].Id, UrlUtility.EncodeNumber(projectId));
+
+        }
+
+        #endregion
 
         #region PostProject Tests
 

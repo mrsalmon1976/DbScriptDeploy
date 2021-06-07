@@ -111,10 +111,11 @@ namespace DbScriptDeploy.Modules.Api
 
         public dynamic LoadUserProjects()
         {
-            UserPrincipal userPrincipal = this.Context.CurrentUser as UserPrincipal;
-            List<ProjectModel> projects = _projectRepo.GetAllByUserId(userPrincipal.UserId).ToList();
-            IEnumerable<ProjectViewModel> result = projects.Select(x => ProjectViewModel.FromProjectModel(x));
-            return this.Response.AsJson(result);
+            throw new NotImplementedException();
+            //UserPrincipal userPrincipal = this.Context.CurrentUser as UserPrincipal;
+            //List<ProjectModel> projects = _projectRepo.GetAllByUserId(userPrincipal.UserId).ToList();
+            //IEnumerable<ProjectViewModel> result = projects.Select(x => ProjectViewModel.FromProjectModel(x));
+            //return this.Response.AsJson(result);
 
         }
 

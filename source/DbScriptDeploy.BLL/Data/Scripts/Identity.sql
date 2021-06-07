@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS AspNetRoles (
 	NormalizedName text NULL
 );
 CREATE TABLE IF NOT EXISTS AspNetUserClaims (
-	Id text PRIMARY KEY NOT NULL,
+	Id INTEGER PRIMARY KEY AUTOINCREMENT,
 	ClaimType text NULL,
 	ClaimValue text NULL,
 	UserId text NOT NULL

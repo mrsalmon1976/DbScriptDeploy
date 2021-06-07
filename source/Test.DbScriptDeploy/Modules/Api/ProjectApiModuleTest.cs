@@ -128,41 +128,7 @@ namespace Test.DbScriptDeploy.Modules.Api
 
         #region LoadUserProjects Tests
 
-        [Test]
-        public void LoadUserProjects_LoadsDataForCurrentUser()
-        {
-            // setup
-            Guid userId = Guid.NewGuid();
-            var currentUser = new UserPrincipal(userId, new GenericIdentity("Joe Soap"));
-            var browser = CreateBrowser(currentUser);
-
-            List<ProjectModel> userProjects = new List<ProjectModel>();
-            ProjectModel project1 = DataHelper.CreateProjectModel();
-            userProjects.Add(project1);
-            userProjects.Add(DataHelper.CreateProjectModel());
-            userProjects.Add(DataHelper.CreateProjectModel());
-            _projectRepo.GetAllByUserId(userId).Returns(userProjects);
-
-            // execute
-            var response = browser.Get(ProjectApiModule.Route_Get_Api_Projects_User, (with) =>
-            {
-                with.HttpRequest();
-                with.FormsAuth(userId, new FormsAuthenticationConfiguration());
-            }).Result;
-
-            // assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            _projectRepo.Received(1).GetAllByUserId(userId);
-
-            List<ProjectViewModel> result = JsonConvert.DeserializeObject<List<ProjectViewModel>>(response.Body.AsString());
-            Assert.AreEqual(userProjects.Count, result.Count);
-
-            ProjectViewModel pvm = result.First();
-            Assert.AreEqual(project1.Id, UrlUtility.DecodeNumber(pvm.Id));
-            Assert.AreEqual(project1.Name, pvm.Name);
-        }
-
-
+    
         #endregion
 
         #region LoadProjectScripts Tests

@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DbScriptDeploy.BLL.Commands;
 using DbScriptDeploy.BLL.Validators;
+using DbScriptDeploy.BLL.Repositories;
 
 namespace DbScriptDeploy.Console
 {
@@ -63,6 +64,9 @@ namespace DbScriptDeploy.Console
 
             // validators
             services.AddScoped<IProjectValidator, ProjectValidator>();
+
+            // repositories
+            services.AddScoped<IProjectRepository, ProjectRepository>();
 
             // BLL services
             services.AddScoped<IEmailService, SendGridEmailService>();

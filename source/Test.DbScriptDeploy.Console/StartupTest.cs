@@ -26,7 +26,7 @@ namespace Test.DbScriptDeploy.Console
                 .UseStartup<Startup>());
             HttpClient client = server.CreateClient();
 
-            var response = await client.GetAsync("/Identity/Account/Login");
+            var response = await client.GetAsync("/Identity/Account/RegisterAdmin");
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();

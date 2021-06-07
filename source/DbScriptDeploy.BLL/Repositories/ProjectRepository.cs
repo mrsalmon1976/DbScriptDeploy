@@ -11,9 +11,10 @@ namespace DbScriptDeploy.BLL.Repositories
 {
     public interface IProjectRepository
     {
+        IEnumerable<ProjectModel> GetAll();
+
         ProjectModel GetById(int id);
 
-        IEnumerable<ProjectModel> GetAllByUserId(Guid userId);
 
     }
 
@@ -27,34 +28,19 @@ namespace DbScriptDeploy.BLL.Repositories
             _dbContext = dbContext;
         }
 
+        public IEnumerable<ProjectModel> GetAll()
+        {
+            const string sql = @"SELECT * FROM Project p ORDER BY p.Name COLLATE NOCASE";
+            return _dbContext.Query<ProjectModel>(sql);
+        }
+
         public ProjectModel GetById(int id)
         {
             const string sql = "SELECT * FROM Project WHERE Id = @Id";
             return _dbContext.Query<ProjectModel>(sql, new { Id = id }).SingleOrDefault();
         }
 
-        public IEnumerable<ProjectModel> GetAllByUserId(Guid userId)
-        {
-            // check if the user is a super admin
-            string sql = "SELECT COUNT(*) FROM UserClaim WHERE UserId = @UserId AND Name = @Name";
-            int count = _dbContext.ExecuteScalar<int>(sql, new { UserId = userId, Name = Roles.Administrator });
-            bool isAdmin = (count > 0);
-            if (isAdmin)
-            {
-                // administrators get access to all projects
-                sql = @"SELECT * FROM Project p ORDER BY p.Name";
-            }
-            else
-            {
-                sql = @"SELECT p.* 
-                        FROM Project p 
-                        INNER JOIN UserClaim uc ON p.Id = uc.ProjectId 
-                        WHERE uc.UserId = @UserId
-                        AND uc.ProjectId IS NOT NULL
-                        ORDER BY p.Name";
-            }
-            return _dbContext.Query<ProjectModel>(sql, new { UserId = userId });
-        }
+
 
 
     }
